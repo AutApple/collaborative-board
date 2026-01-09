@@ -1,0 +1,36 @@
+{
+  "name": "collaborative-board",
+  "version": "1.0.0",
+  "description": "Real time collaborative drawing board application",
+  "keywords": [
+    "express",
+    "typescript",
+    "prisma",
+    "socketio"
+  ],
+  "homepage": "https://github.com/AutApple/collaborative-board#readme",
+  "bugs": {
+    "url": "https://github.com/AutApple/collaborative-board/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AutApple/collaborative-board.git"
+  },
+  "license": "MIT",
+  "author": "wwhhooami",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node src/index.js --watch"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/socket.io": "^3.0.1",
+    "@types/socket.io-client": "^1.4.36"
+  }
+}
