@@ -21,7 +21,7 @@
   "type": "module",
   "main": "src/index.js",
   "scripts": {
-    "test": "node --loader ts-node/esm src/index.ts --watch"
+    "dev": "node --loader ts-node/esm src/index.ts"
   },
   "dependencies": {
     "express": "^5.2.1",
