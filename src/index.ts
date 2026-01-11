@@ -5,6 +5,8 @@ import type { Socket } from 'socket.io';
 
 import path from 'path';
 import { fileURLToPath } from 'url';
+import type { Point } from './types/point.js';
+import { Stroke } from './types/stroke.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,8 +17,18 @@ const httpServer = createServer(app);
 
 const io = new Server(httpServer);
 
+const boardData: Stroke[] = [];
+
+
 io.on('connection', (socket: Socket) => {
     console.log('New client connected:', socket.id);
+    socket.emit('refreshBoard', boardData);
+    socket.on('stroke', (points: Point[]) => {
+        const stroke = new Stroke(points);
+        boardData.push(stroke);
+        // console.log('New stroke recieved! Sending update to all clients.');
+        socket.broadcast.emit('addStroke', stroke);
+    })
 });
 
 app.use(express.static(path.join(__dirname, '..', 'public')));

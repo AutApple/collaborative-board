@@ -7,10 +7,12 @@ const distanceThreshold = 3;
 const strokeSize = 3;
 
 export class Board {
-    constructor (canvas, w, h) {
+    constructor (canvas, socket, w, h) {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
         
+        this.socket = socket;
+
         this.resize(w, h);
     }
     
@@ -68,13 +70,35 @@ export class Board {
         this.#lastY = y;
     }
 
-    endDraw() {
+    endDraw(emit = true) {
         if (this.#drawing === false) return;
         
-        console.log(this.#points); // TODO: send on server
+        if (emit) this.socket.emit('stroke', this.#points);
         
         this.#drawing = false;
         this.#points = [];
+    }
+
+    appendStroke(stroke) {
+        const points = stroke.points; 
+        this.startDraw(points[0].x, points[0].y);
+        for (const point of points) {
+            this.draw(point.x, point.y);
+        }
+        this.endDraw(false);
+    }
+
+    refresh(data) {
+        this.#drawing = false;
+        this.#lastX = 0;
+        this.#lastY = 0;
+        this.#lastTime = 0;
+        this.#points = [];
+        
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // clear canvas
+
+        for (const stroke of data)
+            this.appendStroke(stroke);
     }
 }
 
