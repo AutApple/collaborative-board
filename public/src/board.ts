@@ -70,11 +70,14 @@ export class Board {
         this.lastCoords = { x: coords.x, y: coords.y };
     }
 
-    endDraw(emit = true) {
+    endDraw(cfg: BoardEndDrawConfiguration = { emit: true }) {
         if (this.drawing === false) return;
         
         if (emit) this.socket.emit('stroke', this.points);
         
+
+        if (cfg.emit) this.socket.emit('stroke', this.points);
+
         this.drawing = false;
         this.points = [];
     }
