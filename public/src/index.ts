@@ -3,6 +3,7 @@ import type { BoardData } from '../../shared/types/board-data.type.js';
 import type { Stroke } from '../../shared/types/stroke.type.js';
 import { Board } from './board.js';
 import { socket } from './socket.js';
+import { ServerBoardEvents } from '@shared/events/board.events.js';
 
 const canvas = document.getElementById('canvas');
 
@@ -18,5 +19,5 @@ canvas.addEventListener("mousemove", (e) => { board.draw({ x: e.offsetX, y: e.of
 canvas.addEventListener("mouseup", () => { board.endDraw(); }); 
 canvas.addEventListener("mouseleave", () => { board.endDraw(); });
 
-socket.on('addStroke', (stroke: Stroke) => board.appendStroke(stroke));
-socket.on('refreshBoard', (data: BoardData) => board.refresh(data));
+socket.on(ServerBoardEvents.AddStroke, (stroke: Stroke) => board.appendStroke(stroke));
+socket.on(ServerBoardEvents.RefreshBoard, (data: BoardData) => board.refresh(data));

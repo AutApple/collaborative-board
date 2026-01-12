@@ -3,6 +3,7 @@ import { distance } from '../../shared/utils/distance.js';
 import type { Point, Stroke } from '@shared/types';
 import type { BoardData } from '../../shared/types/board-data.type.js';
 import type { BoardEndDrawConfiguration } from './types/';
+import { ClientBoardEvents } from '@shared/events/board.events.js';
 
 // TODO: maybe put these constants in some config 
 const timeThreshold = 16;
@@ -44,7 +45,7 @@ export class Board {
         this.canvas.width = w;
         this.canvas.height = h;
 
-        this.socket.emit('requestRefresh');
+        this.socket.emit(ClientBoardEvents.RequestRefresh);
     }
 
     startDraw(coords: Point) {
@@ -80,7 +81,7 @@ export class Board {
     endDraw(cfg: BoardEndDrawConfiguration = { emit: true }) {
         if (this.drawing === false) return;
 
-        if (cfg.emit) this.socket.emit('stroke', this.points);
+        if (cfg.emit) this.socket.emit(ClientBoardEvents.Stroke, this.points);
 
         this.drawing = false;
         this.points = [];
