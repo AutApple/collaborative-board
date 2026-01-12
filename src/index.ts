@@ -32,6 +32,9 @@ io.on('connection', (socket: Socket) => {
         boardData.push(stroke);
         // console.log('New stroke recieved! Sending update to all clients.');
         socket.broadcast.emit('addStroke', stroke);
+    });
+    socket.on('requestRefresh', () => {
+        socket.emit('refreshBoard', boardData);
     })
 });
 

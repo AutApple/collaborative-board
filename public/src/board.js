@@ -38,6 +38,8 @@ export class Board {
     resize(w, h) {
         this.canvas.width = w;
         this.canvas.height = h;
+
+        this.socket.emit('requestRefresh');
     }
     
     startDraw(x, y) {
