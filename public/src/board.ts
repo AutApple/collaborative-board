@@ -2,6 +2,7 @@ import type { Socket } from 'socket.io-client';
 import { distance } from '../../shared/utils/distance.js';
 import type { Point, Stroke } from '@shared/types';
 import type { BoardData } from '../../shared/types/board-data.type.js';
+import type { BoardEndDrawConfiguration } from './types/';
 
 // TODO: maybe put these constants in some config 
 const timeThreshold = 16;
@@ -9,27 +10,26 @@ const distanceThreshold = 3;
 const strokeSize = 3;
 
 export class Board {
-    constructor (public canvas: HTMLCanvasElement, public socket: Socket, w: number, h: number) {
+    constructor(public canvas: HTMLCanvasElement, public socket: Socket, w: number, h: number) {
         this.ctx = canvas.getContext('2d');
         this.resize(w, h);
     }
-    private ctx: CanvasRenderingContext2D | null = null; 
+    private ctx: CanvasRenderingContext2D | null = null;
     private points: Point[] = [];
-    
-    private lastX = 0;
-    private lastY = 0;
-    
+
+    private lastCoords: Point = { x: 0, y: 0 };
+
     private lastTime = 0;
-    
+
     private drawing = false;
 
-    #checkTimeThreshold() {
+    private checkTimeThreshold() {
         const now = Date.now();
         if (now - this.lastTime < timeThreshold) return false;
         return true;
     }
-    #checkDistanceThreshold(x: number, y: number) {
-        if (distance(this.lastX, this.lastY, x, y) < distanceThreshold) return false;
+    private checkDistanceThreshold(coords: Point) {
+        if (distance(this.lastCoords.x, this.lastCoords.y, coords.x, coords.y) < distanceThreshold) return false;
         return true;
     }
 
@@ -39,37 +39,35 @@ export class Board {
 
         this.socket.emit('requestRefresh');
     }
-    
-    startDraw(x: number, y: number) {
+
+    startDraw(coords: Point) {
         this.drawing = true;
 
-        this.lastX = x;
-        this.lastY = y;
-        
-        this.points.push({ x, y });
+        this.lastCoords = { x: coords.x, y: coords.y };
+
+        this.points.push(coords);
     }
 
-    draw(x: number, y: number) {
+    draw(coords: Point) {
         if (!this.ctx) return;
 
         if (!this.drawing) return;
-        
-        if (!this.#checkTimeThreshold()) return;
-        if (!this.#checkDistanceThreshold(x, y)) return;
+
+        if (!this.checkTimeThreshold()) return;
+        if (!this.checkDistanceThreshold(coords)) return;
 
         this.ctx.lineWidth = strokeSize;
         this.ctx.lineCap = "round";
         this.ctx.strokeStyle = "black";
 
         this.ctx.beginPath();
-        this.ctx.moveTo(this.lastX, this.lastY);
-        this.ctx.lineTo(x, y);
+        this.ctx.moveTo(this.lastCoords.x, this.lastCoords.y);
+        this.ctx.lineTo(coords.x, coords.y);
         this.ctx.stroke();
-        
-        this.points.push({x, y});
 
-        this.lastX = x;
-        this.lastY = y;
+        this.points.push(coords);
+
+        this.lastCoords = { x: coords.x, y: coords.y };
     }
 
     endDraw(emit = true) {
@@ -83,16 +81,15 @@ export class Board {
 
     appendStroke(stroke: Stroke) {
         const points = stroke.points;
-        
+
         if (!points || points[0] === undefined) return;
 
-        this.startDraw(points[0].x, points[0].y);
-        
-        for (const point of points) {
-            this.draw(point.x, point.y);
-        }
-        
-        this.endDraw(false);
+        this.startDraw(points[0]);
+
+        for (const point of points)
+            this.draw(point);
+
+        this.endDraw({ emit: false });
     }
 
     refresh(data: BoardData) {

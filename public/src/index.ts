@@ -13,8 +13,8 @@ const board = new Board(canvas as HTMLCanvasElement, socket, window.innerWidth, 
 
 window.addEventListener("resize", () => { board.resize(window.innerWidth, window.innerHeight)} );
 
-canvas.addEventListener("mousedown", (e) => { board.startDraw(e.offsetX, e.offsetY); });
-canvas.addEventListener("mousemove", (e) => { board.draw(e.offsetX, e.offsetY); });
+canvas.addEventListener("mousedown", (e) => { board.startDraw({ x: e.offsetX, y: e.offsetY }); });
+canvas.addEventListener("mousemove", (e) => { board.draw({ x: e.offsetX, y: e.offsetY }); });
 canvas.addEventListener("mouseup", () => { board.endDraw(); }); 
 canvas.addEventListener("mouseleave", () => { board.endDraw(); });
 
