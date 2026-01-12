@@ -33,6 +33,13 @@ export class Board {
         return true;
     }
 
+    private resetData() {
+        this.drawing = false;
+        this.lastCoords = { x: 0, y: 0 }
+        this.lastTime = 0;
+        this.points = [];
+    }
+    
     resize(w: number, h: number) {
         this.canvas.width = w;
         this.canvas.height = h;
@@ -72,9 +79,6 @@ export class Board {
 
     endDraw(cfg: BoardEndDrawConfiguration = { emit: true }) {
         if (this.drawing === false) return;
-        
-        if (emit) this.socket.emit('stroke', this.points);
-        
 
         if (cfg.emit) this.socket.emit('stroke', this.points);
 
@@ -97,13 +101,8 @@ export class Board {
 
     refresh(data: BoardData) {
         if (!this.ctx) return;
-
-        this.drawing = false;
-        this.lastX = 0;
-        this.lastY = 0;
-        this.lastTime = 0;
-        this.points = [];
         
+        this.resetData();
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // clear canvas
 
         for (const stroke of data)
