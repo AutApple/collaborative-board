@@ -23,8 +23,7 @@ const boardData: Stroke[] = [];
 io.on('connection', (socket: Socket) => {
     console.log('New client connected:', socket.id);
     socket.emit(ServerBoardEvents.RefreshBoard, boardData);
-    socket.on(ClientBoardEvents.Stroke, (points: Point[]) => {
-        const stroke = new Stroke(points);
+    socket.on(ClientBoardEvents.Stroke, (stroke: Stroke) => {
         boardData.push(stroke);
         // console.log('New stroke recieved! Sending update to all clients.');
         socket.broadcast.emit(ServerBoardEvents.AddStroke, stroke);

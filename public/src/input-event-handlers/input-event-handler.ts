@@ -4,14 +4,15 @@ import type { Camera } from '../camera.js';
 import { BoardInputEventHandler } from './board-input-event-handler.js';
 import { CameraInputEventHandler } from './camera-input-event-handler.js';
 import type { Renderer } from '../renderer.js';
+import type { NetworkManager } from '../network-manager.js';
 
 export class InputEventHandler {
     private boardInputHandler: BoardInputEventHandler;
     private cameraInputHandler: CameraInputEventHandler;
 
-    constructor(private socket: Socket, private renderer: Renderer, private board: Board, private camera: Camera) {
-        this.boardInputHandler = new BoardInputEventHandler(board, camera, renderer, this.socket);
-        this.cameraInputHandler = new CameraInputEventHandler(camera, board, renderer, this.socket);
+    constructor(private networkManager: NetworkManager, private renderer: Renderer, private board: Board, private camera: Camera) {
+        this.boardInputHandler = new BoardInputEventHandler(board, camera, renderer, this.networkManager);
+        this.cameraInputHandler = new CameraInputEventHandler(camera, board, renderer);
     };
 
     public registerEvents(canvas: HTMLCanvasElement, target: EventTarget) {

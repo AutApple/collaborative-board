@@ -1,1 +1,0 @@
-export * from './board-end-draw-config.type.js';
