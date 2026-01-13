@@ -3,7 +3,7 @@ import { distance } from '../../shared/utils/distance.js';
 import type { Point, Stroke } from '@shared/types';
 import type { BoardData } from '../../shared/types/board-data.type.js';
 import type { BoardEndDrawConfiguration } from './types/';
-import { ClientBoardEvents } from '@shared/events/board.events.js';
+import { ClientBoardEvents } from '@shared/socket-events/board.socket-events.js';
 import type { Camera } from './camera.js';
 
 // TODO: maybe put these constants in some config 
@@ -110,7 +110,7 @@ export class Board {
             this.socket.emit(ClientBoardEvents.RequestRefresh);
             return;
         }
-        
+
         this.resetData();
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // clear canvas
 
