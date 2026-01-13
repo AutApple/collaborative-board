@@ -33,6 +33,6 @@ export class BoardInputEventManager {
     
     public handleResize(): boolean { 
         this.board.resize(window.innerWidth, window.innerHeight)
-        return false; //don't consume resize events 
+        return false; // don't consume resize events 
     }
 }
