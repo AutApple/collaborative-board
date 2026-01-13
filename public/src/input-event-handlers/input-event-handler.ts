@@ -1,17 +1,17 @@
 import type { Socket } from 'socket.io-client';
 import { Board } from '../board/board.js';
 import type { Camera } from '../camera.js';
-import { BoardInputEventManager } from './board-input-event-manager.js';
-import { CameraInputEventManager } from './camera-input-event-manager.js';
+import { BoardInputEventHandler } from './board-input-event-handler.js';
+import { CameraInputEventHandler } from './camera-input-event-handler.js';
 import type { Renderer } from '../renderer.js';
 
-export class InputEventManager {
-    private boardInputManager: BoardInputEventManager;
-    private cameraInputManager: CameraInputEventManager;
+export class InputEventHandler {
+    private boardInputHandler: BoardInputEventHandler;
+    private cameraInputHandler: CameraInputEventHandler;
 
     constructor(private socket: Socket, private renderer: Renderer, private board: Board, private camera: Camera) {
-        this.boardInputManager = new BoardInputEventManager(board, camera, renderer, this.socket);
-        this.cameraInputManager = new CameraInputEventManager(camera, board, renderer, this.socket);
+        this.boardInputHandler = new BoardInputEventHandler(board, camera, renderer, this.socket);
+        this.cameraInputHandler = new CameraInputEventHandler(camera, board, renderer, this.socket);
     };
 
     public registerEvents(canvas: HTMLCanvasElement, target: EventTarget) {
@@ -26,30 +26,30 @@ export class InputEventManager {
 
     public handleMouseDown(e: MouseEvent): void {
         e.preventDefault();
-        if (this.boardInputManager.handleMouseDown(e)) return;
-        if (this.cameraInputManager.handleMouseDown(e)) return;
+        if (this.boardInputHandler.handleMouseDown(e)) return;
+        if (this.cameraInputHandler.handleMouseDown(e)) return;
     }
     
     public handleMouseMove(e: MouseEvent): void {
-        if (this.boardInputManager.handleMouseMove(e)) return;
-        if (this.cameraInputManager.handleMouseMove(e)) return;
+        if (this.boardInputHandler.handleMouseMove(e)) return;
+        if (this.cameraInputHandler.handleMouseMove(e)) return;
     }
     
     public handleMouseUp(): void {
-        if (this.boardInputManager.handleMouseUp()) return;    
-        if (this.cameraInputManager.handleMouseUp()) return;    
+        if (this.boardInputHandler.handleMouseUp()) return;    
+        if (this.cameraInputHandler.handleMouseUp()) return;    
     }
 
     public handleMouseLeave(): void {
-        if (this.boardInputManager.handleMouseLeave()) return;
+        if (this.boardInputHandler.handleMouseLeave()) return;
     }
 
     public handleMouseWheel(e: WheelEvent): void {
         e.preventDefault();
-        if (this.cameraInputManager.handleMouseWheel(e)) return;
+        if (this.cameraInputHandler.handleMouseWheel(e)) return;
     }
 
     public handleResize() : void {
-        if (this.boardInputManager.handleResize()) return;
+        if (this.boardInputHandler.handleResize()) return;
     }
 }

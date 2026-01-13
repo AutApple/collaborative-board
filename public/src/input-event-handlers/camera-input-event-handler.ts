@@ -3,7 +3,7 @@ import type { Camera } from '../camera.js';
 import type { Board } from '../board/board.js';
 import type { Renderer } from '../renderer.js';
 
-export class CameraInputEventManager {
+export class CameraInputEventHandler {
     constructor (private camera: Camera, private board: Board, private renderer: Renderer, private socket: Socket) {}
     public handleMouseWheel (e: WheelEvent): boolean { 
         if (!e.ctrlKey) return false; // check if ctrl key is pressed
@@ -18,7 +18,6 @@ export class CameraInputEventManager {
         
         this.camera.startMove({ x: e.offsetX, y: e.offsetY });
         this.board.refresh();
-
 
         return true; 
     }

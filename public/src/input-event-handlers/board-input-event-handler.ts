@@ -3,7 +3,7 @@ import type { Board } from '../board/board.js';
 import type { Camera } from '../camera.js';
 import type { Renderer } from '../renderer.js';
 
-export class BoardInputEventManager {
+export class BoardInputEventHandler {
     constructor(private board: Board, private camera: Camera, private renderer: Renderer, private socket: Socket) { }
     
     private endDrawingHandler(): boolean {
@@ -39,7 +39,6 @@ export class BoardInputEventManager {
     }
     
     public handleResize(): boolean { 
-
         this.board.resize();
         this.renderer.resizeCanvas(window.innerWidth, window.innerHeight);
         

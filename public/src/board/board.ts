@@ -12,9 +12,9 @@ const distanceThreshold = 3;
 const strokeSize = 3;
 
 export class Board {
-    constructor(public socket: Socket, private camera: Camera, w: number, h: number) {
+    constructor(public socket: Socket, private camera: Camera) {
         // this.ctx = canvas.getContext('2d');
-        this.resize(w, h);
+        this.resize();
     }
 
     // private ctx: CanvasRenderingContext2D | null = null;
@@ -57,7 +57,7 @@ export class Board {
         return this.strokes;
     }
 
-    resize(w: number, h: number) {
+    resize() {
         // this.canvas.width = w;
         // this.canvas.height = h;
 

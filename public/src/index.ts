@@ -3,7 +3,7 @@ import type { BoardData } from '../../shared/types/board-data.type.js';
 import type { Stroke } from '../../shared/types/stroke.type.js';
 import { Board } from './board/board.js';
 import { Camera } from './camera.js';
-import { InputEventManager } from './input-event-managers/input-event-manager.js';
+import { InputEventHandler } from './input-event-handlers/input-event-handler.js';
 import { Renderer } from './renderer.js';
 import { socket } from './socket.js';
 import { ServerBoardEvents } from '@shared/socket-events/board.socket-events.js';
@@ -17,7 +17,7 @@ const camera = new Camera({x: 0, y: 0}, 1);
 const board = new Board(socket, camera);
 const renderer = new Renderer(canvas as HTMLCanvasElement);
 
-const inputManager = new InputEventManager(socket, renderer, board, camera);
+const inputManager = new InputEventHandler(socket, renderer, board, camera);
 
 inputManager.registerEvents(canvas as HTMLCanvasElement, window);
 
