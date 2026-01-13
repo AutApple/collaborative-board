@@ -43,6 +43,10 @@ export class Board {
         this.points = [];
     }
     
+    isDrawing() {
+        return this.drawing;
+    }
+    
     resize(w: number, h: number) {
         this.canvas.width = w;
         this.canvas.height = h;

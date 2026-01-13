@@ -6,7 +6,7 @@ import type { Socket } from 'socket.io';
 import path from 'path';
 import { __rootdir } from './utils/path.utils.js';
 import { type Point, Stroke } from '@shared/types/index.js';
-import { ClientBoardEvents, ServerBoardEvents } from '@shared/events/board.events.js';
+import { ClientBoardEvents, ServerBoardEvents } from '@shared/socket-events/board.socket-events.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
