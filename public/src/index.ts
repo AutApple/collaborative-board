@@ -1,7 +1,7 @@
 
 import type { BoardData } from '../../shared/types/board-data.type.js';
 import type { Stroke } from '../../shared/types/stroke.type.js';
-import { Board } from './board.js';
+import { Board } from './board/board.js';
 import { Camera } from './camera.js';
 import { InputEventManager } from './input-managers/input-event-manager.js';
 import { socket } from './socket.js';

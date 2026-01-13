@@ -1,5 +1,5 @@
 import type { Socket } from 'socket.io-client';
-import { Board } from '../board.js';
+import { Board } from '../board/board.js';
 import type { Camera } from '../camera.js';
 import { BoardInputEventManager } from './board-input-event-manager.js';
 import { CameraInputEventManager } from './camera-input-event-manager.js';

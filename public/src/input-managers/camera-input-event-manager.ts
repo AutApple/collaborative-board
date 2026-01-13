@@ -1,6 +1,6 @@
 import type { Socket } from 'socket.io-client';
 import type { Camera } from '../camera.js';
-import type { Board } from '../board.js';
+import type { Board } from '../board/board.js';
 
 export class CameraInputEventManager {
     constructor (private camera: Camera, private board: Board, private socket: Socket) {}
