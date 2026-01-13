@@ -1,6 +1,6 @@
 import type { Socket } from 'socket.io-client';
 import { distance } from '../../../shared/utils/distance.js';
-import type { Point, Stroke } from '@shared/types';
+import { Stroke, type Point } from '@shared/types';
 import type { BoardData } from '../../../shared/types/board-data.type.js';
 import type { BoardEndDrawConfiguration } from './types/';
 import { ClientBoardEvents } from '@shared/socket-events/board.socket-events.js';
@@ -12,13 +12,15 @@ const distanceThreshold = 3;
 const strokeSize = 3;
 
 export class Board {
-    constructor(private canvas: HTMLCanvasElement, public socket: Socket, private camera: Camera, w: number, h: number) {
-        this.ctx = canvas.getContext('2d');
+    constructor(public socket: Socket, private camera: Camera, w: number, h: number) {
+        // this.ctx = canvas.getContext('2d');
         this.resize(w, h);
     }
 
-    private ctx: CanvasRenderingContext2D | null = null;
-    private points: Point[] = [];
+    // private ctx: CanvasRenderingContext2D | null = null;
+    
+    private strokeBuffer: Point[] = []; // for currently drawn stroke (TODO: convert it into StrokeStream board element)
+    private strokes: Stroke[] = [];
 
     private lastCoords: Point = { x: 0, y: 0 };
 
@@ -38,61 +40,59 @@ export class Board {
 
     private resetData() {
         this.drawing = false;
+        this.strokes = [];
         this.lastCoords = { x: 0, y: 0 }
         this.lastTime = 0;
-        this.points = [];
+        this.strokeBuffer = [];
     }
     
     isDrawing() {
         return this.drawing;
     }
     
+    getStrokeBuffer() {
+        return this.strokeBuffer;
+    }
+    getStrokes() {
+        return this.strokes;
+    }
+
     resize(w: number, h: number) {
-        this.canvas.width = w;
-        this.canvas.height = h;
+        // this.canvas.width = w;
+        // this.canvas.height = h;
 
         this.socket.emit(ClientBoardEvents.RequestRefresh);
     }
 
-    startDraw(worldCoords: Point) {
+    startConstructingStroke(worldCoords: Point) {
         this.drawing = true;
-        this.lastCoords = { x: worldCoords.x, y: worldCoords.y };
+        this.lastCoords = { ...worldCoords };
 
-        this.points.push(worldCoords);
+        this.strokeBuffer.push(worldCoords);
     }
 
-    draw(worldCoords: Point) {
-        if (!this.ctx) return;
+    processConstructingStroke(worldCoords: Point) {
+       // if (!this.ctx) return;
 
         if (!this.drawing) return;
 
         if (!this.checkTimeThreshold()) return;
         if (!this.checkDistanceThreshold(worldCoords)) return;
 
-        const screenCoords = this.camera.worldToScreen(worldCoords);
-        const lastScreenCoords = this.camera.worldToScreen({ x: this.lastCoords.x, y: this.lastCoords.y });
+        this.strokeBuffer.push(worldCoords); // PUSH WORLD COORDS AS DATA
 
-        this.ctx.lineWidth = strokeSize;
-        this.ctx.lineCap = "round";
-        this.ctx.strokeStyle = "black";
-
-        this.ctx.beginPath(); // RENDER IN SCREEN COORDS
-        this.ctx.moveTo(lastScreenCoords.x, lastScreenCoords.y);
-        this.ctx.lineTo(screenCoords.x, screenCoords.y);
-        this.ctx.stroke();
-
-        this.points.push(worldCoords); // PUSH WORLD COORDS AS DATA
-
-        this.lastCoords = { x: worldCoords.x, y: worldCoords.y };
+        this.lastCoords = { ...worldCoords };
     }
 
-    endDraw(cfg: BoardEndDrawConfiguration = { emit: true }) {
+    endConstructingStroke(cfg: BoardEndDrawConfiguration = { emit: true }) {
         if (this.drawing === false) return;
+        
+        this.strokes.push(new Stroke(this.strokeBuffer));
 
-        if (cfg.emit) this.socket.emit(ClientBoardEvents.Stroke, this.points);
+        if (cfg.emit) this.socket.emit(ClientBoardEvents.Stroke, this.strokeBuffer);
 
         this.drawing = false;
-        this.points = [];
+        this.strokeBuffer = [];
     }
 
     appendStroke(stroke: Stroke) {
@@ -100,23 +100,23 @@ export class Board {
 
         if (!points || points[0] === undefined) return;
 
-        this.startDraw(points[0]);
+        this.startConstructingStroke(points[0]);
 
         for (const point of points)
-            this.draw(point);
+            this.processConstructingStroke(point);
 
-        this.endDraw({ emit: false });
+        this.endConstructingStroke({ emit: false });
     }
 
     refresh(data?: BoardData) {
-        if (!this.ctx) return;
+        // if (!this.ctx) return;
         if (!data) {
             this.socket.emit(ClientBoardEvents.RequestRefresh);
             return;
         }
 
         this.resetData();
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // clear canvas
+        // this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // clear canvas
 
         for (const stroke of data)
             this.appendStroke(stroke);
