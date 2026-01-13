@@ -6,7 +6,7 @@ export class BoardInputEventManager {
     constructor(private board: Board, private camera: Camera, private socket: Socket) { }
     
     private endDrawingHandler(): boolean {
-        if (!this.board.isDrawing()) return false; //if board isnt being drawn on, don't consume event 
+        if (!this.board.isDrawing()) return false; // if board isnt being drawn on, don't consume event 
         this.board.endDraw();
         return true;
     }

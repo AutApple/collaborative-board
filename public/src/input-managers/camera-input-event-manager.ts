@@ -11,12 +11,25 @@ export class CameraInputEventManager {
         return true;
     }
     public handleMouseDown (e: MouseEvent): boolean { 
-        return false; 
+        if (e.button !== 1) return false; // handle mouse down only on middle button
+        this.camera.startMove({ x: e.offsetX, y: e.offsetY });
+        this.board.refresh();
+        return true; 
     }
     public handleMouseMove(e: MouseEvent): boolean { 
-        return false; 
+        if (e.button !== 1 && !this.camera.isPanning()) return false; // handle mouse move only on middle button and only if camera is being panned
+        
+        this.camera.move({ x: e.offsetX, y: e.offsetY });
+        this.board.refresh();
+        
+        return true; 
     }
     public handleMouseUp(): boolean { 
-        return false; 
+        if (!this.camera.isPanning()) return false;
+       
+        this.camera.endMove();
+        this.board.refresh();
+       
+        return true; 
     }
 }
