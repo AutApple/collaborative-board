@@ -2,7 +2,7 @@ import type { Socket } from 'socket.io-client';
 import { distance } from '../../../shared/utils/distance.js';
 import { Stroke, type Point } from '@shared/types';
 import type { BoardData } from '../../../shared/types/board-data.type.js';
-import type { Camera } from '../camera.js';
+import type { Camera } from '../camera/camera.js';
 
 // TODO: maybe put these constants in some config 
 const timeThreshold = 16;

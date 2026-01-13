@@ -1,17 +1,16 @@
-import type { Socket } from 'socket.io-client';
-import { Board } from '../board/board.js';
-import type { Camera } from '../camera.js';
-import { BoardInputEventHandler } from './board-input-event-handler.js';
-import { CameraInputEventHandler } from './camera-input-event-handler.js';
-import type { Renderer } from '../renderer.js';
-import type { NetworkManager } from '../network-manager.js';
+import { Board } from './board/board.js';
+import type { Camera } from './camera/camera.js';
+import { BoardInputEventHandler } from './board/board.input-event-handler.js';
+import { CameraInputEventHandler } from './camera/camera.input-event-handler.js';
+import type { Renderer } from './renderer.js';
+import type { NetworkManager } from './network-manager.js';
 
 export class InputEventHandler {
     private boardInputHandler: BoardInputEventHandler;
     private cameraInputHandler: CameraInputEventHandler;
 
     constructor(private networkManager: NetworkManager, private renderer: Renderer, private board: Board, private camera: Camera) {
-        this.boardInputHandler = new BoardInputEventHandler(board, camera, renderer, this.networkManager);
+        this.boardInputHandler = new BoardInputEventHandler(board, camera, renderer, networkManager);
         this.cameraInputHandler = new CameraInputEventHandler(camera, board, renderer);
     };
 

@@ -1,6 +1,6 @@
 import type { Socket } from 'socket.io-client';
-import type { Board } from '../board/board.js';
-import type { Camera } from '../camera.js';
+import type { Board } from './board.js';
+import type { Camera } from '../camera/camera.js';
 import type { Renderer } from '../renderer.js';
 import type { NetworkManager } from '../network-manager.js';
 

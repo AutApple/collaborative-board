@@ -3,7 +3,7 @@ import type { Board } from './board/board.js';
 import type { Renderer } from './renderer.js';
 import { ServerBoardEvents } from '../../shared/socket-events/board.socket-events.js';
 import type { Stroke } from '../../shared/types/stroke.type.js';
-import type { Camera } from './camera.js';
+import type { Camera } from './camera/camera.js';
 import type { BoardData } from '../../shared/types/board-data.type.js';
 
 export class NetworkEventHandler {

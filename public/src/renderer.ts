@@ -1,7 +1,7 @@
 import type { Point } from '../../shared/types/point.type.js';
 import { Stroke } from '../../shared/types/stroke.type.js';
 import type { Board } from './board/board.js';
-import type { Camera } from './camera.js';
+import type { Camera } from './camera/camera.js';
 
 export class Renderer {
     private ctx: CanvasRenderingContext2D;
