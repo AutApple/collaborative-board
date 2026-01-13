@@ -4,6 +4,7 @@ import type { Point, Stroke } from '@shared/types';
 import type { BoardData } from '../../shared/types/board-data.type.js';
 import type { BoardEndDrawConfiguration } from './types/';
 import { ClientBoardEvents } from '@shared/events/board.events.js';
+import type { Camera } from './camera.js';
 
 // TODO: maybe put these constants in some config 
 const timeThreshold = 16;
@@ -11,10 +12,11 @@ const distanceThreshold = 3;
 const strokeSize = 3;
 
 export class Board {
-    constructor(public canvas: HTMLCanvasElement, public socket: Socket, w: number, h: number) {
+    constructor(private canvas: HTMLCanvasElement, public socket: Socket, private camera: Camera, w: number, h: number) {
         this.ctx = canvas.getContext('2d');
         this.resize(w, h);
     }
+
     private ctx: CanvasRenderingContext2D | null = null;
     private points: Point[] = [];
 
@@ -29,8 +31,8 @@ export class Board {
         if (now - this.lastTime < timeThreshold) return false;
         return true;
     }
-    private checkDistanceThreshold(coords: Point) {
-        if (distance(this.lastCoords.x, this.lastCoords.y, coords.x, coords.y) < distanceThreshold) return false;
+    private checkDistanceThreshold(worldCoords: Point) {
+        if (distance(this.camera.worldToScreen(this.lastCoords), this.camera.worldToScreen(worldCoords)) < distanceThreshold) return false;
         return true;
     }
 
@@ -48,34 +50,36 @@ export class Board {
         this.socket.emit(ClientBoardEvents.RequestRefresh);
     }
 
-    startDraw(coords: Point) {
+    startDraw(worldCoords: Point) {
         this.drawing = true;
+        this.lastCoords = { x: worldCoords.x, y: worldCoords.y };
 
-        this.lastCoords = { x: coords.x, y: coords.y };
-
-        this.points.push(coords);
+        this.points.push(worldCoords);
     }
 
-    draw(coords: Point) {
+    draw(worldCoords: Point) {
         if (!this.ctx) return;
 
         if (!this.drawing) return;
 
         if (!this.checkTimeThreshold()) return;
-        if (!this.checkDistanceThreshold(coords)) return;
+        if (!this.checkDistanceThreshold(worldCoords)) return;
+
+        const screenCoords = this.camera.worldToScreen(worldCoords);
+        const lastScreenCoords = this.camera.worldToScreen({ x: this.lastCoords.x, y: this.lastCoords.y });
 
         this.ctx.lineWidth = strokeSize;
         this.ctx.lineCap = "round";
         this.ctx.strokeStyle = "black";
 
-        this.ctx.beginPath();
-        this.ctx.moveTo(this.lastCoords.x, this.lastCoords.y);
-        this.ctx.lineTo(coords.x, coords.y);
+        this.ctx.beginPath(); // RENDER IN SCREEN COORDS
+        this.ctx.moveTo(lastScreenCoords.x, lastScreenCoords.y);
+        this.ctx.lineTo(screenCoords.x, screenCoords.y);
         this.ctx.stroke();
 
-        this.points.push(coords);
+        this.points.push(worldCoords); // PUSH WORLD COORDS AS DATA
 
-        this.lastCoords = { x: coords.x, y: coords.y };
+        this.lastCoords = { x: worldCoords.x, y: worldCoords.y };
     }
 
     endDraw(cfg: BoardEndDrawConfiguration = { emit: true }) {
@@ -100,8 +104,12 @@ export class Board {
         this.endDraw({ emit: false });
     }
 
-    refresh(data: BoardData) {
+    refresh(data?: BoardData) {
         if (!this.ctx) return;
+        if (!data) {
+            this.socket.emit(ClientBoardEvents.RequestRefresh);
+            return;
+        }
         
         this.resetData();
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // clear canvas
