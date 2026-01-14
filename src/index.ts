@@ -5,7 +5,7 @@ import type { Socket } from 'socket.io';
 
 import path from 'path';
 import { __rootdir } from './utils/path.utils.js';
-import { type Point, Stroke } from '@shared/types/index.js';
+import { StrokeBoardElement } from '@shared/board-elements/stroke.board-element.js';
 import { ClientBoardEvents, ServerBoardEvents } from '@shared/socket-events/board.socket-events.js';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -17,15 +17,15 @@ const httpServer = createServer(app);
 
 const io = new Server(httpServer);
 
-const boardData: Stroke[] = [];
+const boardData: StrokeBoardElement[] = [];
 
 
 io.on('connection', (socket: Socket) => {
     console.log('New client connected:', socket.id);
     socket.emit(ServerBoardEvents.RefreshBoard, boardData);
-    socket.on(ClientBoardEvents.Stroke, (stroke: Stroke) => {
+    socket.on(ClientBoardEvents.Stroke, (stroke: StrokeBoardElement) => {
         boardData.push(stroke);
-        // console.log('New stroke recieved! Sending update to all clients.');
+        console.log('New stroke recieved! Sending update to all clients.');
         socket.broadcast.emit(ServerBoardEvents.AddStroke, stroke);
     });
     socket.on(ClientBoardEvents.RequestRefresh, () => {

@@ -1,104 +1,53 @@
-import type { Socket } from 'socket.io-client';
-import { distance } from '../../../shared/utils/distance.js';
-import { Stroke, type Point } from '@shared/types';
-import type { BoardData } from '../../../shared/types/board-data.type.js';
-import type { Camera } from '../camera/camera.js';
-
-// TODO: maybe put these constants in some config 
-const timeThreshold = 16;
-const distanceThreshold = 3;
-const strokeSize = 3;
+import { type Point } from '@shared/types';
+import { BaseBoardElement, StrokeBoardElement } from '@shared/board-elements'
 
 export class Board {
-    constructor(private camera: Camera) { }
+    constructor() { }
 
-    // private ctx: CanvasRenderingContext2D | null = null;
-    
-    private strokeBuffer: Point[] = []; // for currently drawn stroke (TODO: convert it into StrokeStream board element)
-    private strokes: Stroke[] = [];
-
-    private lastCoords: Point = { x: 0, y: 0 };
-
-    private lastTime = 0;
-
-    private constructingStroke = false;
-
-    private checkTimeThreshold() {
-        const now = Date.now();
-        if (now - this.lastTime < timeThreshold) return false;
-        return true;
-    }
-    private checkDistanceThreshold(worldCoords: Point) {
-        if (distance(this.camera.worldToScreen(this.lastCoords), this.camera.worldToScreen(worldCoords)) < distanceThreshold) return false;
-        return true;
-    }
+    private elements: BaseBoardElement[] = [];
+    private constructingStrokePointer: StrokeBoardElement | null = null;
 
     private resetData() {
-        this.constructingStroke = false;
-        this.strokes = [];
-        this.lastCoords = { x: 0, y: 0 }
-        this.lastTime = 0;
-        this.strokeBuffer = [];
+        this.constructingStrokePointer = null;
+        this.elements = [];
     }
     
     isConstructingStroke() {
-        return this.constructingStroke;
-    }
-    
-    getStrokeBuffer() {
-        return this.strokeBuffer;
-    }
-    getStrokes() {
-        return this.strokes;
+        return !(this.constructingStrokePointer === null);
     }
 
-    getLastStroke(): Stroke | undefined {
-        if (this.strokes.length === 0) return undefined;
-        return this.strokes[this.strokes.length - 1];
+    getElements() {
+        return this.elements;
+    }
+
+    getLastElement(): BaseBoardElement | undefined {
+        if (this.elements.length === 0) return undefined;
+        return this.elements[this.elements.length - 1];
     }
     
-   
     startConstructingStroke(worldCoords: Point) {
-        this.constructingStroke = true;
-        this.lastCoords = { ...worldCoords };
-
-        this.strokeBuffer.push(worldCoords);
+        const stroke = new StrokeBoardElement(worldCoords, [{ x: 0, y: 0 }]);
+        this.constructingStrokePointer = stroke;
+        this.elements.push(stroke);
     }
 
     processConstructingStroke(worldCoords: Point) {
-        if (!this.constructingStroke) return;
-
-        if (!this.checkTimeThreshold()) return;
-        if (!this.checkDistanceThreshold(worldCoords)) return;
-
-        this.strokeBuffer.push(worldCoords); 
-
-        this.lastCoords = { ...worldCoords };
+        if (!this.isConstructingStroke()) return;
+        this.constructingStrokePointer?.addPoint(worldCoords); 
     }
 
-    endConstructingStroke() {
-        if (this.constructingStroke === false) return;
-        
-        this.strokes.push(new Stroke(this.strokeBuffer));
-
-        this.constructingStroke = false;
-        this.strokeBuffer = [];
+    endConstructingStroke(): StrokeBoardElement | null {
+        if (!this.isConstructingStroke()) return null;
+        const ret = this.constructingStrokePointer;
+        this.constructingStrokePointer = null;
+        return ret;
     }
 
-    appendStroke(stroke: Stroke) {
-        const points = stroke.points;
-
-        if (!points || points[0] === undefined) return;
-
-        this.startConstructingStroke(points[0]);
-
-        for (const point of points)
-            this.processConstructingStroke(point);
-
-        this.endConstructingStroke();
+    appendStroke(stroke: StrokeBoardElement) {
+        this.elements.push(stroke);
     }
 
-    refresh(data: BoardData) {
+    refresh(data: StrokeBoardElement[]) {
         this.resetData();
         for (const stroke of data)
             this.appendStroke(stroke);

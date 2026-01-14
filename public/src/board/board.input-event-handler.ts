@@ -1,4 +1,3 @@
-import type { Socket } from 'socket.io-client';
 import type { Board } from './board.js';
 import type { Camera } from '../camera/camera.js';
 import type { Renderer } from '../renderer.js';
@@ -7,14 +6,13 @@ import type { NetworkManager } from '../network-manager.js';
 export class BoardInputEventHandler {
     constructor(private board: Board, private camera: Camera, private renderer: Renderer, private networkManager: NetworkManager) { }
     
-    private endDrawingHandler(): boolean {
+    private endDrawingHandler(): boolean { // TODO: Drawing logic and element type depends on 
         if (!this.board.isConstructingStroke()) return false; // if board isnt being drawn on, don't consume event 
         
-        this.board.endConstructingStroke();
+        const stroke = this.board.endConstructingStroke();
         this.renderer.renderBoard(this.board, this.camera);
-        const stroke = this.board.getLastStroke();
-        if (stroke !== undefined)
-            this.networkManager.addStrokeToBoard(stroke);
+        if (stroke !== null)
+            this.networkManager.addStrokeToBoard(stroke); 
            
         return true;
     }

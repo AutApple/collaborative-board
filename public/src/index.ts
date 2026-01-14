@@ -12,7 +12,7 @@ if (!canvas) throw Error('Can\'t get a canvas element!');
 
 const camera = new Camera({x: 0, y: 0}, 1);
 
-const board = new Board(camera);
+const board = new Board();
 const renderer = new Renderer(canvas as HTMLCanvasElement);
 const networkManager = new NetworkManager(socket);
 

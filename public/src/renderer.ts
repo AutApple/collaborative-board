@@ -1,5 +1,5 @@
 import type { Point } from '../../shared/types/point.type.js';
-import { Stroke } from '../../shared/types/stroke.type.js';
+import { BaseBoardElement } from '@shared/board-elements/';
 import type { Board } from './board/board.js';
 import type { Camera } from './camera/camera.js';
 
@@ -17,15 +17,15 @@ export class Renderer {
         this.canvas.height = h;
     }
 
-    private renderStroke(stroke: Stroke, camera: Camera) {
-        const points = stroke.points;
+    private renderElement(element: BaseBoardElement, camera: Camera) {
+        const points = element.getPoints();
         if (points[0] === undefined) return;
         let lastScreenCoords: Point =  camera.worldToScreen(points[0]);
         for (const point of points) {
             // convert world coords to local coords
             const screenCoords = camera.worldToScreen(point);
             
-            // TODO: STORING STROKE DATA IN STROKE CLASS
+            // TODO: STORING WIDTH/COLOR DATA IN ELEMENTS CLASS
             this.ctx.lineWidth = 6;
             this.ctx.lineCap = "round";
             this.ctx.strokeStyle = "black";
@@ -41,13 +41,9 @@ export class Renderer {
     
     public renderBoard (board: Board, camera: Camera) {
         this.clear();
-        const strokes: Stroke[] = board.getStrokes();
-        const strokeBuffer: Point[] = board.getStrokeBuffer();
-
-        for (const stroke of strokes)
-           this.renderStroke(stroke, camera);
-    
-        this.renderStroke(new Stroke(strokeBuffer), camera); // unless i add StreamableStrokeElement, i'll use that workaround of dynamically creaing stroke
+        const elements: BaseBoardElement[] = board.getElements();        
+        for (const element of elements)
+           this.renderElement(element, camera);
     }
     
     public clear() {

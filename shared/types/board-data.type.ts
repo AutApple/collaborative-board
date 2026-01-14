@@ -1,3 +1,3 @@
-import type { Stroke } from './stroke.type.js';
+import { StrokeBoardElement } from '../board-elements/stroke.board-element.js';
 
-export type BoardData = Stroke[];
+export type BoardData = StrokeBoardElement[];
