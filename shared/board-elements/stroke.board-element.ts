@@ -2,6 +2,7 @@ import type { Point } from '../types/point.type.js';
 import { distance } from '../utils/distance.js';
 import { BaseBoardElement } from './base.board-element.js';
 import type { RawStrokeBoardElement } from './raw/stroke.board-element.raw.js';
+import { BoardElementType } from './raw/types/board-element-type.js';
 
 // TODO: put these constants in some config 
 const timeThreshold = 16;
@@ -43,16 +44,25 @@ export class StrokeBoardElement extends BaseBoardElement {
         return this.pos;
     }
 
+    public getOffsets(): Point[] { 
+        return this.offsets;
+    }
+    
     public override getPoints(): Point[] {
         return this.offsets.map(off => { return {x: off.x + this.pos.x, y: off.y + this.pos.y}}); // convert offsets to positions
     }
 
-    public getOffsets(): Point[] { 
-        return this.offsets;
+    public static override fromRaw(raw: RawStrokeBoardElement) {
+        return new StrokeBoardElement(raw.pos, raw.offsets);
     }
 
-     
-    public static fromRaw(raw: RawStrokeBoardElement) {
-        return new StrokeBoardElement(raw.pos, raw.offsets);
+    public override toRaw(): RawStrokeBoardElement {
+            return {
+                type: BoardElementType.Stroke, 
+                pos: this.pos, 
+                lastCoords: this.lastCoords, 
+                lastTime: this.lastTime, 
+                offsets: this.offsets
+            };
     }
 }

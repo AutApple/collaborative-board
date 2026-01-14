@@ -1,9 +1,9 @@
 export enum ServerBoardEvents {
-    AddStroke = 'addStroke',
+    AddElement = 'addElement',
     RefreshBoard = 'refreshBoard',
 }
 
 export enum ClientBoardEvents {
-    Stroke = 'stroke',
+    AddElement = 'addElement',
     RequestRefresh = 'requestRefresh'
 }

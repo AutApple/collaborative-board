@@ -43,14 +43,14 @@ export class Board {
         return ret;
     }
 
-    appendStroke(stroke: StrokeBoardElement) {
-        this.elements.push(stroke);
+    appendElement(element: BaseBoardElement) {
+        this.elements.push(element);
     }
 
-    refresh(data: StrokeBoardElement[]) {
+    refresh(data: BaseBoardElement[]) {
         this.resetData();
-        for (const stroke of data)
-            this.appendStroke(stroke);
+        for (const element of data)
+            this.appendElement(element);
     }
 }
 

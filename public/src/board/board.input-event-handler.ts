@@ -12,7 +12,7 @@ export class BoardInputEventHandler {
         const stroke = this.board.endConstructingStroke();
         this.renderer.renderBoard(this.board, this.camera);
         if (stroke !== null)
-            this.networkManager.addStrokeToBoard(stroke); 
+            this.networkManager.addElementToBoard(stroke); 
            
         return true;
     }
