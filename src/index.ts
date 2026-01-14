@@ -25,7 +25,7 @@ io.on('connection', (socket: Socket) => {
     socket.emit(ServerBoardEvents.RefreshBoard, boardData);
     socket.on(ClientBoardEvents.Stroke, (stroke: StrokeBoardElement) => {
         boardData.push(stroke);
-        console.log('New stroke recieved! Sending update to all clients.');
+        // console.log('New stroke recieved! Sending update to all clients.');
         socket.broadcast.emit(ServerBoardEvents.AddStroke, stroke);
     });
     socket.on(ClientBoardEvents.RequestRefresh, () => {
