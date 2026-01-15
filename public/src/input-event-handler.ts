@@ -6,7 +6,7 @@ export class InputEventHandler {
     private boardInputHandler: BoardInputEventHandler;
     private cameraInputHandler: CameraInputEventHandler;
 
-    constructor(private appContext: AppContext) {
+    constructor(appContext: AppContext) {
         this.boardInputHandler = new BoardInputEventHandler(appContext);
         this.cameraInputHandler = new CameraInputEventHandler(appContext);
     };
