@@ -10,4 +10,29 @@ canvas {
     display: block;
     background: #fff;
     cursor: crosshair;
+    z-index: 999;
+}
+
+
+#toolbox {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    z-index: 1000;
+    top: 0.5rem;
+    left: 0.5rem;
+    width: 3rem;
+    height: 10rem;
+    background-color: #2a2a2a6a;
+    border-radius: 0.2rem;
+    color: white;
+}
+
+.toolbox-button {
+    cursor: pointer;
+    margin: 0.2rem;
+}
+
+.active {
+    color: rgb(183, 239, 183);
 }
