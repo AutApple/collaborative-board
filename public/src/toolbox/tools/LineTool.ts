@@ -1,8 +1,8 @@
-import type { BaseBoardElement } from '../../../shared/board-elements/base.board-element.js';
-import { LineBoardElement } from '../../../shared/board-elements/line-board-element.js';
-import { StrokeBoardElement } from '../../../shared/board-elements/stroke.board-element.js';
-import type { Point } from '../../../shared/types/point.type.js';
-import type { Board } from '../board/board.js';
+import type { BaseBoardElement } from '../../../../shared/board-elements/base.board-element.js';
+import { LineBoardElement } from '../../../../shared/board-elements/line-board-element.js';
+import { StrokeBoardElement } from '../../../../shared/board-elements/stroke.board-element.js';
+import type { Point } from '../../../../shared/types/point.type.js';
+import type { Board } from '../../board/board.js';
 import { BaseTool } from './BaseTool.js';
 
 export class LineTool extends BaseTool{

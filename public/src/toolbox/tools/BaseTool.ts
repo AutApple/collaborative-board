@@ -1,6 +1,6 @@
-import type { BaseBoardElement } from '../../../shared/board-elements/base.board-element.js';
-import type { Point } from '../../../shared/types/point.type.js';
-import type { Board } from '../board/board.js';
+import type { BaseBoardElement } from '../../../../shared/board-elements/base.board-element.js';
+import type { Point } from '../../../../shared/types/point.type.js';
+import type { Board } from '../../board/board.js';
 
 export class BaseTool {
     constructor (protected board: Board) {}
