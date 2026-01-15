@@ -5,15 +5,9 @@ export class Board {
     constructor() { }
 
     private elements: BaseBoardElement[] = [];
-    private constructingStrokePointer: StrokeBoardElement | null = null;
-
+   
     private resetData() {
-        this.constructingStrokePointer = null;
         this.elements = [];
-    }
-    
-    isConstructingStroke() {
-        return !(this.constructingStrokePointer === null);
     }
 
     getElements() {
@@ -23,24 +17,6 @@ export class Board {
     getLastElement(): BaseBoardElement | undefined {
         if (this.elements.length === 0) return undefined;
         return this.elements[this.elements.length - 1];
-    }
-    
-    startConstructingStroke(worldCoords: Point) {
-        const stroke = new StrokeBoardElement(worldCoords, [{ x: 0, y: 0 }]);
-        this.constructingStrokePointer = stroke;
-        this.elements.push(stroke);
-    }
-
-    processConstructingStroke(worldCoords: Point) {
-        if (!this.isConstructingStroke()) return;
-        this.constructingStrokePointer?.addPoint(worldCoords); 
-    }
-
-    endConstructingStroke(): StrokeBoardElement | null {
-        if (!this.isConstructingStroke()) return null;
-        const ret = this.constructingStrokePointer;
-        this.constructingStrokePointer = null;
-        return ret;
     }
 
     appendElement(element: BaseBoardElement) {
