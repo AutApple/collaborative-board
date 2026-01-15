@@ -1,5 +1,4 @@
-import { type Point } from '@shared/types';
-import { BaseBoardElement, StrokeBoardElement } from '@shared/board-elements'
+import { BaseBoardElement } from '@shared/board-elements'
 
 export class Board {
     constructor() { }

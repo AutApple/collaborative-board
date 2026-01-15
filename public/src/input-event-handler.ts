@@ -1,17 +1,14 @@
-import { Board } from './board/board.js';
-import type { Camera } from './camera/camera.js';
 import { BoardInputEventHandler } from './board/board.input-event-handler.js';
 import { CameraInputEventHandler } from './camera/camera.input-event-handler.js';
-import type { Renderer } from './renderer.js';
-import type { NetworkManager } from './network-manager.js';
+import type { AppContext } from './app-context.js';
 
 export class InputEventHandler {
     private boardInputHandler: BoardInputEventHandler;
     private cameraInputHandler: CameraInputEventHandler;
 
-    constructor(private networkManager: NetworkManager, private renderer: Renderer, private board: Board, private camera: Camera) {
-        this.boardInputHandler = new BoardInputEventHandler(board, camera, renderer, networkManager);
-        this.cameraInputHandler = new CameraInputEventHandler(camera, board, renderer);
+    constructor(private appContext: AppContext) {
+        this.boardInputHandler = new BoardInputEventHandler(appContext);
+        this.cameraInputHandler = new CameraInputEventHandler(appContext);
     };
 
     public registerEvents(canvas: HTMLCanvasElement, target: EventTarget) {

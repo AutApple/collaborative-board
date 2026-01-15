@@ -1,0 +1,22 @@
+import type { Socket } from 'socket.io-client';
+import { Board } from './board/board.js';
+import { Renderer } from './renderer.js';
+import { Camera } from './camera/camera.js';
+import { NetworkManager } from './network-manager.js';
+import { Toolbox } from './toolbox/Toolbox.js';
+
+export class AppContext {
+    public board: Board; 
+    public renderer: Renderer;
+    public camera: Camera;
+    public networkManager: NetworkManager;
+    public toolbox: Toolbox;
+
+    constructor (canvas: HTMLCanvasElement, socket: Socket) {
+        this.board = new Board();
+        this.renderer = new Renderer(canvas);
+        this.camera = new Camera({x: 0, y: 0}, 1);
+        this.networkManager = new NetworkManager(socket);
+        this.toolbox = new Toolbox(this.board);
+    }
+}
