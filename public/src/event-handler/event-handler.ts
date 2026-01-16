@@ -5,6 +5,8 @@ import { EventBus, SemanticEvents, type SemanticEventMap } from '../event-bus';
 import type { Socket } from 'socket.io-client';
 import { ServerBoardEvents } from '../../../shared/socket-events/board.socket-events.js';
 import type { RawBoardElement } from '../../../shared/board-elements/raw/index.js';
+
+//TODO: split into NetworkAdapter, CanvasAdapter, WindowAdapter, DOMAdapter ... and unify in EventHandler 
 export class EventHandler {
     private boardInputHandler: BoardEventHandler;
     private cameraInputHandler: CameraEventHandler;

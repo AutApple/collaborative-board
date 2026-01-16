@@ -4,6 +4,8 @@ import { EventHandler } from './event-handler/event-handler.js';
 import { EventBus, type SemanticEventMap } from './event-bus';
 import { BoardController } from './board/board.controller.js';
 import { CameraController } from './camera/camera.controller.js';
+import { ToolboxUiAdapter } from './toolbox/toolbox.ui-adapter.js';
+import { ToolboxController } from './toolbox/toolbox.controller.js';
 
 export class App {
     constructor(private document: Document) {}
@@ -31,11 +33,15 @@ export class App {
         const eventHandler = new EventHandler(appContext, semanticEventBus); // raw events to semantic events + event consumption
         eventHandler.registerEvents(canvas, window, socket);
 
+        const toolboxUiAdapter = new ToolboxUiAdapter(this.document, semanticEventBus);
 
         const boardController = new BoardController(appContext);
         const cameraController = new CameraController(appContext);
+        console.log(toolboxUiAdapter);
+        const toolboxController = new ToolboxController(appContext, toolboxUiAdapter);
 
         boardController.subscribe(semanticEventBus);
         cameraController.subscribe(semanticEventBus);
+        toolboxController.subscribe(semanticEventBus);
     }
 }

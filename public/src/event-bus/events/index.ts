@@ -1,5 +1,6 @@
 import type { RawBoardElement } from '@shared/board-elements/raw/index.js';
 import type { Point } from '@shared/types/point.type.js';
+import type { ToolboxTools } from '../../toolbox/enums/toolbox-tools.enum.js';
 
 export enum SemanticEvents {
     BoardStartDrawing,
@@ -12,7 +13,9 @@ export enum SemanticEvents {
     CameraProcessPanning,
     CameraStartPanning,
     CameraEndPanning,
-    CameraZoom
+    CameraZoom,
+
+    ToolboxChangeTool,
 }
 
 
@@ -28,6 +31,8 @@ export type CameraProcessPanningEvent = { screenCoords: Point; };
 export type CameraEndPanningEvent = {};
 export type CameraZoomEvent = { screenCoords: Point; delta: number; };
 
+export type ToolboxChangeToolEvent = { tool: ToolboxTools }; 
+
 export type SemanticEventMap = {
     // board
     [SemanticEvents.BoardStartDrawing]: BoardStartDrawingEvent,
@@ -41,5 +46,6 @@ export type SemanticEventMap = {
     [SemanticEvents.CameraProcessPanning]: CameraProcessPanningEvent,
     [SemanticEvents.CameraEndPanning]: CameraEndPanningEvent,
     [SemanticEvents.CameraZoom]: CameraZoomEvent,
-    
+    // toolbox
+    [SemanticEvents.ToolboxChangeTool]: ToolboxChangeToolEvent
 };
