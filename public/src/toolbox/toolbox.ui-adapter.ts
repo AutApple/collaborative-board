@@ -25,7 +25,7 @@ export class ToolboxUiAdapter {
         for (const tool of Object.keys(this.buttonIdMap) as ToolboxTools[]) {
             const element = this.document.getElementById(this.getDOMElementId(tool));
             if (element)
-                element.addEventListener('click', e => { console.log('heaven'); this.semanticEventBus.emit(SemanticEvents.ToolboxChangeTool, { tool })});
+                element.addEventListener('click', _ => { this.semanticEventBus.emit(SemanticEvents.ToolboxChangeTool, { tool })});
         }
     }
 
