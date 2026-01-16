@@ -7,21 +7,29 @@ import { CameraController } from './camera/camera.controller.js';
 
 export class App {
     constructor(private document: Document) {}
+    
+    private getCanvas(id: string): HTMLCanvasElement {
+        const el = document.getElementById(id);
+        if (!(el instanceof HTMLCanvasElement))
+            throw new Error(`Element #${id} is not a canvas`);
+        return el;
+    }
+
     run() {
         const socket = io();
         socket.on('connect', () => {
             console.log('Connected to localhost:3000', socket.id);
         }); 
 
-        const canvas = this.document.getElementById('canvas') as HTMLCanvasElement;
+        const canvas = this.getCanvas('canvas');
 
         if (!canvas) throw Error('Can\'t get a canvas element!');
 
         const appContext = new AppContext(canvas, socket);
         const semanticEventBus = new EventBus<SemanticEventMap>();
 
-        const eventHandler = new EventHandler(appContext, semanticEventBus); // raw events to semantic events 
-        eventHandler.registerEvents(canvas as HTMLCanvasElement, window, socket);
+        const eventHandler = new EventHandler(appContext, semanticEventBus); // raw events to semantic events + event consumption
+        eventHandler.registerEvents(canvas, window, socket);
 
 
         const boardController = new BoardController(appContext);
