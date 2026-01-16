@@ -1,14 +1,14 @@
-import { BoardInputEventHandler } from './board/board.input-event-handler.js';
-import { CameraInputEventHandler } from './camera/camera.input-event-handler.js';
-import type { AppContext } from './app-context.js';
+import { BoardEventHandler } from './handlers/board.event-handler.js';
+import { CameraEventHandler } from './handlers/camera.event-handler.js';
+import type { AppContext } from '../app-context.js';
+import { EventBus, type SemanticEventMap } from '../event-bus';
+export class EventHandler {
+    private boardInputHandler: BoardEventHandler;
+    private cameraInputHandler: CameraEventHandler;
 
-export class InputEventHandler {
-    private boardInputHandler: BoardInputEventHandler;
-    private cameraInputHandler: CameraInputEventHandler;
-
-    constructor(appContext: AppContext) {
-        this.boardInputHandler = new BoardInputEventHandler(appContext);
-        this.cameraInputHandler = new CameraInputEventHandler(appContext);
+    constructor(appContext: AppContext, private semanticEventBus: EventBus<SemanticEventMap>) {
+        this.boardInputHandler = new BoardEventHandler(appContext, semanticEventBus);
+        this.cameraInputHandler = new CameraEventHandler(appContext, semanticEventBus);
     };
 
     public registerEvents(canvas: HTMLCanvasElement, target: EventTarget) {

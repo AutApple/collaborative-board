@@ -3,7 +3,7 @@ import { Board } from './board/board.js';
 import { Renderer } from './renderer.js';
 import { Camera } from './camera/camera.js';
 import { NetworkManager } from './network-manager.js';
-import { Toolbox } from './toolbox/Toolbox.js';
+import { Toolbox } from './toolbox/toolbox.js';
 
 export class AppContext {
     public board: Board; 
