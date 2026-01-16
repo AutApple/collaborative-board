@@ -13,7 +13,6 @@ canvas {
     z-index: 999;
 }
 
-
 #toolbox {
     display: flex;
     flex-direction: column;
