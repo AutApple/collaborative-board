@@ -24,8 +24,9 @@ export class ToolboxUiAdapter {
 
         for (const tool of Object.keys(this.buttonIdMap) as ToolboxTools[]) {
             const element = this.document.getElementById(this.getDOMElementId(tool));
-            if (element)
-                element.addEventListener('click', _ => { this.semanticEventBus.emit(SemanticEvents.ToolboxChangeTool, { tool })});
+            if (!element)
+                throw new Error(`Toolbox button not found: ${tool}`);
+            element.addEventListener('click', _ => { this.semanticEventBus.emit(SemanticEvents.ToolboxChangeTool, { tool })});
         }
     }
 
