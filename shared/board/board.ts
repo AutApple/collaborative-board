@@ -22,6 +22,10 @@ export class Board {
         this.elements.push(element);
     }
 
+    removeElement(elementId: string) {
+        this.elements = this.elements.filter(el => el.getId !== elementId);
+    }
+
     refresh(data: BaseBoardElement[]) {
         this.resetData();
         for (const element of data)

@@ -30,6 +30,7 @@ export class StrokeTool extends BaseTool{
 
     public override endConstructing(): BaseBoardElement | null {
         if (!this.isConstructing()) return null;
+        this.board.removeElement(this.constructingStrokePointer!.getId);
         const ret = this.constructingStrokePointer;
         this.constructingStrokePointer = null;
         return ret;

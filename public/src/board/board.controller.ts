@@ -22,9 +22,9 @@ export class BoardController {
 
     private onBoardEndDrawing () {
         const element = this.appContext.toolbox.endConstructing();
-        this.appContext.renderer.renderBoard(this.appContext.board, this.appContext.camera);
         if (element !== null)
             this.appContext.networkManager.addElementToBoard(element);
+        // this.appContext.renderer.renderBoard(this.appContext.board, this.appContext.camera); // being rendered on addElement now
     }
 
     private onBoardMouseMove(e: BoardProcessDrawingEvent) {
@@ -40,6 +40,7 @@ export class BoardController {
 
     private onBoardElementAdd(e: BoardElementAddEvent) {
         const element = rawElementToInstance(e.rawElementData);
+
         this.appContext.board.appendElement(element);
         this.appContext.renderer.renderBoard(this.appContext.board, this.appContext.camera);
     }

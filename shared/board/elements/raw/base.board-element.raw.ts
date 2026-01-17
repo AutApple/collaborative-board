@@ -3,5 +3,6 @@ import type { BoardElementType } from './types/board-element-type.js';
 
 export interface RawBaseBoardElement {
     type: BoardElementType;
+    id: string;
     pos: Point;
 }

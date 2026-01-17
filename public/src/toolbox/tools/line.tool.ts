@@ -30,6 +30,7 @@ export class LineTool extends BaseTool{
 
     public override endConstructing(): BaseBoardElement | null {
         if (!this.isConstructing()) return null;
+        this.board.removeElement(this.constructingLinePointer!.getId);
         const ret = this.constructingLinePointer;
         this.constructingLinePointer = null;
         return ret;

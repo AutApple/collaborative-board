@@ -5,6 +5,7 @@ import { BoardElementType } from './raw/types/board-element-type.js';
 export class BaseBoardElement {
     private id: string;
     constructor (protected pos: Point) { this.id = crypto.randomUUID(); }
+    protected id: string;
     
     public get getId() {
         return this.id;
@@ -14,5 +15,6 @@ export class BaseBoardElement {
     public static fromRaw(raw: RawBaseBoardElement) { return new BaseBoardElement(raw.pos); }
     public toRaw(): RawBaseBoardElement {
         return {type: BoardElementType.Null, pos: this.pos}
+        return {id: this.id, type: BoardElementType.Null, pos: this.pos}
     }
 }

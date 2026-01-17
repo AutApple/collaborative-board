@@ -29,7 +29,7 @@ io.on('connection', (socket: Socket) => {
         board.appendElement(element);
 
         // console.log('New board element recieved! Sending update to all clients.');
-        socket.broadcast.emit(ServerBoardEvents.AddElement, element.toRaw());
+        io.emit(ServerBoardEvents.AddElement, element.toRaw());
     });
     socket.on(ClientBoardEvents.RequestRefresh, () => {
         socket.emit(ServerBoardEvents.RefreshBoard, board.getElements().map(element => element.toRaw()));
