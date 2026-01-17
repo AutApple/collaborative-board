@@ -1,4 +1,4 @@
-export enum ToolboxTools {
+export enum Tools {
     Pen = 'pen',
     Line = 'line'
 };

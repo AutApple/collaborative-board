@@ -1,6 +1,6 @@
 import type { Socket } from 'socket.io-client';
 import { ClientBoardEvents } from '@shared/socket-events/board.socket-events.js';
-import type { BaseBoardElement } from '@shared/board/elements/base.board-element.js';
+import type { BoardMutationList } from '@shared/board/board-mutation.js';
 
 export class NetworkManager {
     constructor (private socket: Socket) {}
@@ -8,8 +8,11 @@ export class NetworkManager {
     requestBoardRefresh() { 
         this.socket.emit(ClientBoardEvents.RequestRefresh); 
     }
-    addElementToBoard(element: BaseBoardElement) {
-        this.socket.emit(ClientBoardEvents.AddElement, element.toRaw()); 
+    // addElementToBoard(element: BaseBoardElement) {
+    //     this.socket.emit(ClientBoardEvents.AddElement, element.toRaw()); 
+    // }
+    sendBoardMutationList(mutations: BoardMutationList) {
+        this.socket.emit(ClientBoardEvents.BoardMutations, mutations);
     }
 
 }

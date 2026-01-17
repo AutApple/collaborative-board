@@ -1,8 +1,9 @@
-import type { BaseBoardElement } from '@shared/board/elements/base.board-element.js';
 import { LineBoardElement } from '@shared/board/elements/line-board-element.js';
 import type { Point } from '@shared/types/point.type.js';
 import type { Board } from '@shared/board/board.js';
 import { BaseTool } from './base.tool.js';
+import { BoardMutationType, type BoardMutationList, type CreateBoardMutation } from '@shared/board/board-mutation.js';
+import { BoardElementType } from '@shared/board/elements/raw/types/board-element-type.js';
 
 export class LineTool extends BaseTool{
     constructor (protected board: Board) {
@@ -28,11 +29,17 @@ export class LineTool extends BaseTool{
         this.constructingLinePointer?.setPosition2(worldCoords); 
     }
 
-    public override endConstructing(): BaseBoardElement | null {
+    public override endConstructing(): BoardMutationList | null {
         if (!this.isConstructing()) return null;
+        const points = this.constructingLinePointer!.getPoints();
+        const mutation: CreateBoardMutation = {
+            type: BoardMutationType.Create,
+            elementType: BoardElementType.Line,
+            points
+        }
+
         this.board.removeElement(this.constructingLinePointer!.getId);
-        const ret = this.constructingLinePointer;
         this.constructingLinePointer = null;
-        return ret;
+        return [mutation];
     }
 }

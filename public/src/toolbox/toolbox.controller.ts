@@ -1,11 +1,11 @@
 import type { AppContext } from '../app-context.js';
 import type { EventBus } from '../event-bus/event-bus.js';
 import { SemanticEvents, type SemanticEventMap, type ToolboxChangeToolEvent } from '../event-bus/index.js';
-import { ToolboxTools } from './enums/toolbox-tools.enum.js';
+import { Tools } from './enums/tools.enum.js';
 import type { ToolboxUiAdapter } from './toolbox.ui-adapter.js';
 
 export class ToolboxController {
-    private currentTool: ToolboxTools = ToolboxTools.Pen;
+    private currentTool: Tools = Tools.Pen;
     
     constructor (private appContext: AppContext, private uiAdapter: ToolboxUiAdapter) {}
     

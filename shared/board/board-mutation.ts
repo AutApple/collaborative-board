@@ -1,0 +1,64 @@
+import type { Point } from '@shared/types/point.type.js';
+import type { Board } from './board.js';
+import { BoardElementType } from './elements/raw/types/board-element-type.js';
+import { BaseBoardElement, LineBoardElement, StrokeBoardElement } from './elements/index.js';
+
+
+const constructorMap = {
+    [BoardElementType.Null]: BaseBoardElement,
+    [BoardElementType.Line]: LineBoardElement,
+    [BoardElementType.Stroke]: StrokeBoardElement
+}
+
+export enum BoardMutationType {
+    Create, 
+    Update, 
+    Remove
+};
+
+export interface BaseBoardMutation {
+    type: BoardMutationType; 
+};
+
+export interface CreateBoardMutation extends BaseBoardMutation {
+    type: BoardMutationType.Create;
+    id?: string;
+    elementType: BoardElementType;
+    points: Point[];
+}
+
+export interface UpdateBoardMutation extends BaseBoardMutation {
+    type: BoardMutationType.Update;
+    id: string, 
+    points: Point[]
+}
+
+export interface RemoveBoardMutation extends BaseBoardMutation {
+    type: BoardMutationType.Remove;
+    id: string, 
+}
+
+export type BoardMutationList = Array<BaseBoardMutation> 
+
+
+export function applyBoardMutation(mutation: BaseBoardMutation, board: Board): { appliedMutation?: BaseBoardMutation; newElementId?: string } {
+    switch (mutation.type) {
+        case BoardMutationType.Create: 
+            const createMutation = mutation as CreateBoardMutation;
+            if (!createMutation.elementType || !createMutation.points || !createMutation.points[0]) throw Error('Wrong create board mutation signature'); // TODO: generic centralized messages
+            const element = constructorMap[createMutation.elementType].fromPoints(createMutation.points, createMutation.id);
+            board.appendElement(element);
+            return {appliedMutation: mutation, newElementId: element.getId}
+        case BoardMutationType.Remove: 
+            const removeMutation = mutation as RemoveBoardMutation;
+            if (!removeMutation.id) throw Error('Wrong remove board mutation signature');
+            board.removeElement(removeMutation.id);
+            return {appliedMutation: mutation}
+        case BoardMutationType.Update:
+            const updateMutation = mutation as UpdateBoardMutation;
+            if (!updateMutation.id || !updateMutation.points) throw Error('Wrong remove board mutation signature');
+            board.updateElement(updateMutation.id, updateMutation.points);
+            return {appliedMutation: mutation}
+    }
+}
+

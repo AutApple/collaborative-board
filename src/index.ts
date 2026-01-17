@@ -7,9 +7,10 @@ import path from 'path';
 import { __rootdir } from './utils/path.utils.js';
 import { ClientBoardEvents, ServerBoardEvents } from '@shared/socket-events/board.socket-events.js';
 import dotenv from 'dotenv';
-import { rawElementToInstance } from '@shared/board/elements/utils/raw-element-to-instance.js';
-import type { RawBoardElement } from '@shared/board/elements/raw/index.js';
+// import { rawElementToInstance } from '@shared/board/elements/utils/raw-element-to-instance.js';
+// import type { RawBoardElement } from '@shared/board/elements/raw/index.js';
 import { Board } from '@shared/board/board.js';
+import { applyBoardMutation, type BoardMutationList, type CreateBoardMutation } from '@shared/board/board-mutation.js';
 
 
 dotenv.config();
@@ -24,13 +25,25 @@ const board: Board = new Board();
 io.on('connection', (socket: Socket) => {
     console.log('New client connected:', socket.id);
     socket.emit(ServerBoardEvents.RefreshBoard, board.getElements().map(element => element.toRaw()));
-    socket.on(ClientBoardEvents.AddElement, (rawElement: RawBoardElement) => {
-        const element = rawElementToInstance(rawElement);
-        board.appendElement(element);
+    // socket.on(ClientBoardEvents.AddElement, (rawElement: RawBoardElement) => {
+    //     const element = rawElementToInstance(rawElement);
+    //     board.appendElement(element);
 
-        // console.log('New board element recieved! Sending update to all clients.');
-        io.emit(ServerBoardEvents.AddElement, element.toRaw());
-    });
+    //     // console.log('New board element recieved! Sending update to all clients.');
+    //     io.emit(ServerBoardEvents.AddElement, element.toRaw());
+    // });
+    socket.on(ClientBoardEvents.BoardMutations, (mutations: BoardMutationList) => {
+        const broadcastMutations: BoardMutationList = [];
+        for (const mutation of mutations) {            
+            const result = applyBoardMutation(mutation, board);
+            if (result.newElementId)
+                broadcastMutations.push({ ...mutation, id: result.newElementId } as CreateBoardMutation);
+            else 
+                broadcastMutations.push(mutation);
+        }
+        io.emit(ServerBoardEvents.BoardMutations, broadcastMutations);
+    })
+
     socket.on(ClientBoardEvents.RequestRefresh, () => {
         socket.emit(ServerBoardEvents.RefreshBoard, board.getElements().map(element => element.toRaw()));
     });

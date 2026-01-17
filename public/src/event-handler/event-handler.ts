@@ -5,6 +5,7 @@ import { EventBus, SemanticEvents, type SemanticEventMap } from '../event-bus';
 import type { Socket } from 'socket.io-client';
 import { ServerBoardEvents } from '@shared/socket-events/board.socket-events.js';
 import type { RawBoardElement } from '@shared/board/elements/raw/index.js';
+import type { BoardMutationList } from '@shared/board/board-mutation.js';
 
 //TODO: split into NetworkAdapter, CanvasAdapter, WindowAdapter, DOMAdapter ... and unify in EventHandler 
 export class EventHandler {
@@ -57,8 +58,9 @@ export class EventHandler {
     }
 
     public registerNetworkEvents(socket: Socket) {
-        socket.on(ServerBoardEvents.AddElement, (raw: RawBoardElement) => this.semanticEventBus.emit(SemanticEvents.BoardElementAdd, { rawElementData: raw }));
+        // socket.on(ServerBoardEvents.AddElement, (raw: RawBoardElement) => this.semanticEventBus.emit(SemanticEvents.BoardElementAdd, { rawElementData: raw }));
         socket.on(ServerBoardEvents.RefreshBoard, (raw: RawBoardElement[]) => this.semanticEventBus.emit(SemanticEvents.BoardRefresh, { rawData: raw }));
+        socket.on(ServerBoardEvents.BoardMutations, (mutations: BoardMutationList) => this.semanticEventBus.emit(SemanticEvents.BoardMutations, { mutations }));
     }
 
 }

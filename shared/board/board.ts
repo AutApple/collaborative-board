@@ -1,3 +1,4 @@
+import type { Point } from '../types/point.type.js';
 import { BaseBoardElement } from './elements/index.js'
 
 export class Board {
@@ -24,6 +25,12 @@ export class Board {
 
     removeElement(elementId: string) {
         this.elements = this.elements.filter(el => el.getId !== elementId);
+    }
+
+    updateElement(elementId: string, points: Point[]) { 
+        const element = this.elements.find(e => e.getId === elementId);
+        if (!element) return;
+        element.setPoints(points);
     }
 
     refresh(data: BaseBoardElement[]) {

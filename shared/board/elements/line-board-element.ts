@@ -4,9 +4,19 @@ import type { RawLineBoardElement } from './raw/line.board-element.raw.js';
 import { BoardElementType } from './raw/types/board-element-type.js';
 
 export class LineBoardElement extends BaseBoardElement {
-    constructor(protected pos: Point, protected pos2: Point) {
-        super(pos);
+    constructor(protected pos: Point, protected pos2: Point, id?: string | undefined) {
+        super(pos, id);
         this.pos2 = pos2;
+    }
+
+    protected static override validatePoints(points: Point[]): boolean {
+        return !(points.length !== 2 || !points[0] || !points[1])
+    } 
+
+    
+    public static override fromPoints(points: Point[], id?: string | undefined): LineBoardElement {
+        if(!LineBoardElement.validatePoints(points)) throw Error('Can\'t create line element from the specified points array');
+        return new LineBoardElement(points[0]!, points[1]!, id);
     }
 
     public setPosition2(worldCoords: Point) {
@@ -27,9 +37,15 @@ export class LineBoardElement extends BaseBoardElement {
     public override getPoints(): Point[] {
         return [this.pos, this.pos2];
     }
+    public override setPoints(points: Point[]) {
+        if (!LineBoardElement.validatePoints(points))
+                throw Error('Wrong points array signature'); // TODO: replace with centralized messages
+        this.pos = points[0]!;
+        this.pos2 = points[1]!;
+    }
 
-    public static override fromRaw(raw: RawLineBoardElement) {
-        return new LineBoardElement(raw.pos, raw.pos2);
+    public static override fromRaw(raw: RawLineBoardElement, id?: string | undefined) {
+        return new LineBoardElement(raw.pos, raw.pos2, id);
     }
 
     public override toRaw(): RawLineBoardElement {

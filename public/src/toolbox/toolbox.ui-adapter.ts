@@ -1,5 +1,5 @@
 import { SemanticEvents, type EventBus, type SemanticEventMap } from '../event-bus/index.js';
-import { ToolboxTools } from './enums/toolbox-tools.enum.js';
+import { Tools } from './enums/tools.enum.js';
 
 
 interface ToolboxButtonDOMIds {
@@ -8,7 +8,7 @@ interface ToolboxButtonDOMIds {
 }
 
 export class ToolboxUiAdapter {
-    private buttonIdMap: Record<ToolboxTools, string>;
+    private buttonIdMap: Record<Tools, string>;
 
     constructor(
         private document: Document,
@@ -18,11 +18,11 @@ export class ToolboxUiAdapter {
             line: 'toolbox-button-line'
         }) {
         this.buttonIdMap = {
-            [ToolboxTools.Pen]: toolboxUiElementIds.pen,
-            [ToolboxTools.Line]: toolboxUiElementIds.line
+            [Tools.Pen]: toolboxUiElementIds.pen,
+            [Tools.Line]: toolboxUiElementIds.line
         };
 
-        for (const tool of Object.keys(this.buttonIdMap) as ToolboxTools[]) {
+        for (const tool of Object.keys(this.buttonIdMap) as Tools[]) {
             const element = this.document.getElementById(this.getDOMElementId(tool));
             if (!element)
                 throw new Error(`Toolbox button not found: ${tool}`);
@@ -30,19 +30,19 @@ export class ToolboxUiAdapter {
         }
     }
 
-    private getDOMElementId(button: ToolboxTools): string {
+    private getDOMElementId(button: Tools): string {
         const ret = this.buttonIdMap[button];
         if (!ret)
             throw Error('Toolbox button id is not defined');
         return ret;
     }
 
-    public setActive(button: ToolboxTools) {
+    public setActive(button: Tools) {
         const el = this.document.getElementById(this.getDOMElementId(button));
         if (el)
             el.classList.add("active");
     }
-    public setInactive(button: ToolboxTools) {
+    public setInactive(button: Tools) {
         const el = this.document.getElementById(this.getDOMElementId(button));
         if (el)
             el.classList.remove("active");
