@@ -7,9 +7,9 @@ import path from 'path';
 import { __rootdir } from './utils/path.utils.js';
 import { ClientBoardEvents, ServerBoardEvents } from '@shared/socket-events/board.socket-events.js';
 import dotenv from 'dotenv';
-import type { BaseBoardElement } from '@shared/board-elements/';
-import { rawElementToInstance } from '@shared/board-elements/utils/raw-element-to-instance.js';
-import type { RawBoardElement } from '@shared/board-elements/raw/index.js';
+import { rawElementToInstance } from '@shared/board/elements/utils/raw-element-to-instance.js';
+import type { RawBoardElement } from '@shared/board/elements/raw/index.js';
+import { Board } from '@shared/board/board.js';
 
 
 dotenv.config();
@@ -19,20 +19,20 @@ const httpServer = createServer(app);
 
 const io = new Server(httpServer);
 
-const boardData: BaseBoardElement[] = [];
+const board: Board = new Board();
 
 io.on('connection', (socket: Socket) => {
     console.log('New client connected:', socket.id);
-    socket.emit(ServerBoardEvents.RefreshBoard, boardData.map(data => data.toRaw()));
+    socket.emit(ServerBoardEvents.RefreshBoard, board.getElements().map(element => element.toRaw()));
     socket.on(ClientBoardEvents.AddElement, (rawElement: RawBoardElement) => {
         const element = rawElementToInstance(rawElement);
-        boardData.push(element);
+        board.appendElement(element);
 
         // console.log('New board element recieved! Sending update to all clients.');
         socket.broadcast.emit(ServerBoardEvents.AddElement, element.toRaw());
     });
     socket.on(ClientBoardEvents.RequestRefresh, () => {
-        socket.emit(ServerBoardEvents.RefreshBoard, boardData.map(data => data.toRaw()));
+        socket.emit(ServerBoardEvents.RefreshBoard, board.getElements().map(element => element.toRaw()));
     });
 });
 

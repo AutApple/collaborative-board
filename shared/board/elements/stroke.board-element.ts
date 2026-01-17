@@ -1,5 +1,5 @@
-import type { Point } from '../types/point.type.js';
-import { distance } from '../utils/distance.js';
+import type { Point } from '../../types/point.type.js';
+import { distance } from '../../utils/distance.js';
 import { BaseBoardElement } from './base.board-element.js';
 import type { RawStrokeBoardElement } from './raw/stroke.board-element.raw.js';
 import { BoardElementType } from './raw/types/board-element-type.js';

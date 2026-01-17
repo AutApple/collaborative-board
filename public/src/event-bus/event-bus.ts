@@ -1,8 +1,3 @@
-import type { BoardElementAddEvent, BoardEndDrawingEvent, BoardProcessDrawingEvent, BoardRefreshEvent, BoardResizeEvent, BoardStartDrawingEvent, SemanticEvents } from './events/index.js';
-
-
-
-
 export class EventBus<Events extends Record<string, any>> {
     private listeners = new Map<keyof Events, Array<(payload: any) => void>>();
 

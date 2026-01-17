@@ -1,4 +1,4 @@
-import type { Point } from '../types/point.type.js';
+import type { Point } from '../../types/point.type.js';
 import { BaseBoardElement } from './base.board-element.js';
 import type { RawLineBoardElement } from './raw/line.board-element.raw.js';
 import { BoardElementType } from './raw/types/board-element-type.js';

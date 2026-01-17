@@ -1,6 +1,6 @@
-import type { BaseBoardElement } from '../../../shared/board-elements/base.board-element.js';
-import type { Point } from '../../../shared/types/point.type.js';
-import type { Board } from '../board/board.js';
+import type { BaseBoardElement } from '@shared/board/elements/base.board-element.js';
+import type { Point } from '@shared/types/point.type.js';
+import type { Board } from '@shared/board/board.js';
 import { ToolboxTools } from './enums/toolbox-tools.enum.js';
 import type { BaseTool } from './tools/base.tool.js';
 import { LineTool } from './tools/line.tool.js';

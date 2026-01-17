@@ -1,5 +1,5 @@
 import type { AppContext } from '../app-context.js';
-import { rawElementToInstance } from '@shared/board-elements/utils/raw-element-to-instance.js';
+import { rawElementToInstance } from '@shared/board/elements/utils/raw-element-to-instance.js';
 import { SemanticEvents, type BoardElementAddEvent, type BoardProcessDrawingEvent, type BoardRefreshEvent, type BoardResizeEvent, type BoardStartDrawingEvent } from '../event-bus/events/index.js';
 import type { EventBus, SemanticEventMap } from '../event-bus';
 

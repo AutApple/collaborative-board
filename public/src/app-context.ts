@@ -1,5 +1,5 @@
 import type { Socket } from 'socket.io-client';
-import { Board } from './board/board.js';
+import { Board } from '@shared/board/board.js';
 import { Renderer } from './renderer.js';
 import { Camera } from './camera/camera.js';
 import { NetworkManager } from './network-manager.js';

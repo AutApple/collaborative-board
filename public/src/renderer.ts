@@ -1,6 +1,6 @@
-import type { Point } from '../../shared/types/point.type.js';
-import { BaseBoardElement } from '@shared/board-elements/';
-import type { Board } from './board/board.js';
+import type { Point } from '@shared/types/point.type.js';
+import { BaseBoardElement } from '@shared/board/elements/';
+import type { Board } from '@shared/board/board.js';
 import type { Camera } from './camera/camera.js';
 
 export class Renderer {

@@ -1,4 +1,4 @@
-import { BaseBoardElement } from '@shared/board-elements'
+import { BaseBoardElement } from './elements/index.js'
 
 export class Board {
     constructor() { }

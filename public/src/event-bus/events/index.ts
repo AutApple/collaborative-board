@@ -1,4 +1,4 @@
-import type { RawBoardElement } from '@shared/board-elements/raw/index.js';
+import type { RawBoardElement } from '@shared/board/elements/raw/index.js';
 import type { Point } from '@shared/types/point.type.js';
 import type { ToolboxTools } from '../../toolbox/enums/toolbox-tools.enum.js';
 
