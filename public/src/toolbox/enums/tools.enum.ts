@@ -1,4 +1,5 @@
 export enum Tools {
     Pen = 'pen',
-    Line = 'line'
+    Line = 'line',
+    Eraser = 'eraser'
 };

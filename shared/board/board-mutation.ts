@@ -2,6 +2,8 @@ import type { Point } from '@shared/types/point.type.js';
 import type { Board } from './board.js';
 import { BoardElementType } from './elements/raw/types/board-element-type.js';
 import { BaseBoardElement, LineBoardElement, StrokeBoardElement } from './elements/index.js';
+import type { RawBoardElement } from './elements/raw/index.js';
+import { rawElementToInstance } from './elements/utils/raw-element-to-instance.js';
 
 
 const constructorMap = {
@@ -22,9 +24,8 @@ export interface BaseBoardMutation {
 
 export interface CreateBoardMutation extends BaseBoardMutation {
     type: BoardMutationType.Create;
-    id?: string;
-    elementType: BoardElementType;
-    points: Point[];
+    id: string;
+    raw: RawBoardElement
 }
 
 export interface UpdateBoardMutation extends BaseBoardMutation {
@@ -45,9 +46,10 @@ export function applyBoardMutation(mutation: BaseBoardMutation, board: Board): {
     switch (mutation.type) {
         case BoardMutationType.Create: 
             const createMutation = mutation as CreateBoardMutation;
-            if (!createMutation.elementType || !createMutation.points || !createMutation.points[0]) throw Error('Wrong create board mutation signature'); // TODO: generic centralized messages
-            const element = constructorMap[createMutation.elementType].fromPoints(createMutation.points, createMutation.id);
+            if (!createMutation.raw) throw Error('Wrong create board mutation signature'); // TODO: generic centralized messages
+            const element = rawElementToInstance(createMutation.raw, createMutation.id);
             board.appendElement(element);
+            console.log('Created element with id ', element.getId);
             return {appliedMutation: mutation, newElementId: element.getId}
         case BoardMutationType.Remove: 
             const removeMutation = mutation as RemoveBoardMutation;

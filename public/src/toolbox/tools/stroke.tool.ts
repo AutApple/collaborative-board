@@ -31,13 +31,12 @@ export class StrokeTool extends BaseTool{
 
     public override endConstructing(): BoardMutationList | null {
         if (!this.isConstructing()) return null;
-        const points = this.constructingStrokePointer!.getPoints();
+        const raw = this.constructingStrokePointer!.toRaw();
         const mutation: CreateBoardMutation = {
             type: BoardMutationType.Create,
-            elementType: BoardElementType.Stroke,
-            points,
+            id: this.constructingStrokePointer!.getId,
+            raw
         }
-        this.board.removeElement(this.constructingStrokePointer!.getId);
         this.constructingStrokePointer = null;
         return [ mutation ];
     }

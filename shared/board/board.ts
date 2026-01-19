@@ -33,6 +33,19 @@ export class Board {
         element.setPoints(points);
     }
 
+    findClosestElementTo(worldCoords: Point): BaseBoardElement | undefined {
+        let minDistance = Infinity;
+        let minElement: BaseBoardElement | undefined = undefined;
+        for (const element of this.elements) {
+            const closestPoint = element.findClosestPointTo(worldCoords);
+            const isNewMinDistance = (minDistance > closestPoint.distance);
+            minDistance = isNewMinDistance ? closestPoint.distance : minDistance;
+            minElement = isNewMinDistance ? element : minElement;  
+        }
+        return minElement;
+    }
+
+
     refresh(data: BaseBoardElement[]) {
         this.resetData();
         for (const element of data)

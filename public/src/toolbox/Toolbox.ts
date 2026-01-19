@@ -5,6 +5,7 @@ import { Tools } from './enums/tools.enum.js';
 import type { BaseTool } from './tools/base.tool.js';
 import { LineTool } from './tools/line.tool.js';
 import { StrokeTool } from './tools/stroke.tool.js';
+import { EraserTool } from './tools/eraser.tool.js';
 
 export class Toolbox {
     private currentTool: BaseTool;   
@@ -15,7 +16,8 @@ export class Toolbox {
         // make instances of a tools
         this.toolInstances = {
             [Tools.Pen]: new StrokeTool(board),
-            [Tools.Line]: new LineTool(board)
+            [Tools.Line]: new LineTool(board),
+            [Tools.Eraser]: new EraserTool(board)
         }
     }
     

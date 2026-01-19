@@ -31,14 +31,12 @@ export class LineTool extends BaseTool{
 
     public override endConstructing(): BoardMutationList | null {
         if (!this.isConstructing()) return null;
-        const points = this.constructingLinePointer!.getPoints();
+        const raw = this.constructingLinePointer!.toRaw();
         const mutation: CreateBoardMutation = {
             type: BoardMutationType.Create,
-            elementType: BoardElementType.Line,
-            points
+            id: this.constructingLinePointer!.getId,
+            raw
         }
-
-        this.board.removeElement(this.constructingLinePointer!.getId);
         this.constructingLinePointer = null;
         return [mutation];
     }

@@ -35,13 +35,18 @@ io.on('connection', (socket: Socket) => {
     socket.on(ClientBoardEvents.BoardMutations, (mutations: BoardMutationList) => {
         const broadcastMutations: BoardMutationList = [];
         for (const mutation of mutations) {            
-            const result = applyBoardMutation(mutation, board);
-            if (result.newElementId)
-                broadcastMutations.push({ ...mutation, id: result.newElementId } as CreateBoardMutation);
-            else 
-                broadcastMutations.push(mutation);
+            // console.log('Got mutation: ', mutation);
+            // TODO: validate id and structure to be precise. Also validate point array length, etc etc. only then apply mutations. reject on weird data 
+            applyBoardMutation(mutation, board);
+            
+            
+            //     if (result.newElementId) {
+        //         broadcastMutations.push({ ...mutation, id: result.newElementId } as CreateBoardMutation);
+        //         // console.log('Created element with id ', result.newElementId);
+        //     } else 
+        //         broadcastMutations.push(mutation);
         }
-        io.emit(ServerBoardEvents.BoardMutations, broadcastMutations);
+        socket.broadcast.emit(ServerBoardEvents.BoardMutations, mutations);
     })
 
     socket.on(ClientBoardEvents.RequestRefresh, () => {

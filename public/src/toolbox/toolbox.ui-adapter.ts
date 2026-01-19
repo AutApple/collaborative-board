@@ -4,7 +4,8 @@ import { Tools } from './enums/tools.enum.js';
 
 interface ToolboxButtonDOMIds {
     pen: string,
-    line: string;
+    line: string,
+    eraser: string
 }
 
 export class ToolboxUiAdapter {
@@ -15,11 +16,13 @@ export class ToolboxUiAdapter {
         private semanticEventBus: EventBus<SemanticEventMap>,
         toolboxUiElementIds: ToolboxButtonDOMIds = {
             pen: 'toolbox-button-pen',
-            line: 'toolbox-button-line'
+            line: 'toolbox-button-line',
+            eraser: 'toolbox-button-eraser'
         }) {
         this.buttonIdMap = {
             [Tools.Pen]: toolboxUiElementIds.pen,
-            [Tools.Line]: toolboxUiElementIds.line
+            [Tools.Line]: toolboxUiElementIds.line,
+            [Tools.Eraser]: toolboxUiElementIds.eraser
         };
 
         for (const tool of Object.keys(this.buttonIdMap) as Tools[]) {

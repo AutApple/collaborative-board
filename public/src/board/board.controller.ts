@@ -16,7 +16,6 @@ export class BoardController {
         bus.on(SemanticEvents.BoardMutations, this.onBoardMutations.bind(this));
     }
 
-
     private onBoardStartDrawing (e: BoardStartDrawingEvent) {
         this.appContext.toolbox.startConstructing(this.appContext.camera.screenToWorld(e.screenCoords));
     }
@@ -41,7 +40,7 @@ export class BoardController {
     }
 
     private onBoardRefresh(e: BoardRefreshEvent) {
-        const data = e.rawData.map((raw) => rawElementToInstance(raw));
+        const data = e.rawData.map((raw) => rawElementToInstance(raw, raw.id));
         this.appContext.board.refresh(data);
         this.appContext.renderer.renderBoard(this.appContext.board, this.appContext.camera);
     }

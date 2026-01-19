@@ -16,6 +16,10 @@ export class StrokeBoardElement extends BaseBoardElement {
         super(pos, id);
         this.lastCoords = pos;
     }
+    
+    public override clone(): StrokeBoardElement {
+        return new StrokeBoardElement(this.pos, this.offsets);
+    }
 
     private checkTimeThreshold() {
         const now = Date.now();
@@ -27,6 +31,24 @@ export class StrokeBoardElement extends BaseBoardElement {
         if (distance(this.lastCoords, worldCoords) < distanceThreshold) return false;
         return true;
     }
+
+    
+    public override findClosestPointTo(worldCoords: Point): {point: Point, distance: number} {
+        const points = this.getPoints();
+        
+        let point = this.pos;
+        let minDistance = Infinity;
+
+        for (const p of points) {
+            const dist = distance(p, worldCoords); 
+            if (dist < minDistance) {
+                minDistance = dist;
+                point = p;
+            }
+        }
+        return {point, distance: minDistance};
+    }
+
 
     private static pointToOffset(point: Point, pos: Point): Point {
         return {x: point.x - pos.x, y: point.y - pos.y}
@@ -53,7 +75,7 @@ export class StrokeBoardElement extends BaseBoardElement {
         return this.offsets;
     }
     
-    public override getPoints(): Point[] {
+    public override getPoints(): readonly Point[] {
         return this.offsets.map(off => { return {x: off.x + this.pos.x, y: off.y + this.pos.y}}); // convert offsets to positions
     }
     

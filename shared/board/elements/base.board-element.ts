@@ -1,4 +1,5 @@
 import type { Point } from '../../types/point.type.js';
+import { distance } from '../../utils/distance.js';
 import type { RawBaseBoardElement } from './raw/base.board-element.raw.js';
 import { BoardElementType } from './raw/types/board-element-type.js';
 
@@ -11,11 +12,18 @@ export class BaseBoardElement {
         return this.id;
     }
 
+    public clone(): BaseBoardElement {
+        return new BaseBoardElement(this.pos);
+    }
+    public findClosestPointTo(worldCoords: Point): {point: Point, distance: number} {
+        return { point: this.pos, distance: distance(this.pos, worldCoords) };
+    }
+
     protected static validatePoints(points: Point[]) {
         return points.length >= 1;
     }
 
-    public getPoints(): Point[] { return []; }
+    public getPoints(): readonly Point[] { return []; }
     public setPoints(points: Point[]) {
         if (!BaseBoardElement.validatePoints(points))
                 console.log('Can\'t validate points');

@@ -1,6 +1,6 @@
 import type { Point } from '@shared/types/point.type.js';
 import type { Board } from '@shared/board/board.js';
-import type { BoardMutationList } from '@shared/tools/tool-mutation.js';
+import type { BoardMutationList } from '@shared/board/board-mutation.js';
 
 export class BaseTool {
     constructor (protected board: Board) {}

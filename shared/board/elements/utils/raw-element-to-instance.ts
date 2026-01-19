@@ -6,12 +6,12 @@ import { BoardElementType } from '../raw/types/board-element-type.js';
 import { StrokeBoardElement } from '../stroke.board-element.js';
 
 
-export function rawElementToInstance (raw: RawBoardElement): BaseBoardElement {
+export function rawElementToInstance (raw: RawBoardElement, id?: string): BaseBoardElement {
     switch (raw.type) {
         case BoardElementType.Stroke: 
-            return StrokeBoardElement.fromRaw(raw as RawStrokeBoardElement);
+            return StrokeBoardElement.fromRaw(raw as RawStrokeBoardElement, id);
         case BoardElementType.Line:
-            return LineBoardElement.fromRaw(raw as RawLineBoardElement);
+            return LineBoardElement.fromRaw(raw as RawLineBoardElement, id);
         default: 
             throw Error (`Unrecognized raw board element type with a type ${raw.type}. Does board element registered properly?`);
     }    
