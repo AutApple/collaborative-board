@@ -23,7 +23,7 @@ export class BoardController {
         const mutations = this.appContext.toolbox.endConstructing();
         if (mutations !== null)
             this.appContext.networkManager.sendBoardMutationList(mutations);
-        // this.appContext.renderer.renderBoard(this.appContext.board, this.appContext.camera); // being rendered on board mutations now
+        this.appContext.renderer.renderBoard(this.appContext.board, this.appContext.camera);
     }
 
     private onBoardMouseMove(e: BoardProcessDrawingEvent) {
