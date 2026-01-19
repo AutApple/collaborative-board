@@ -13,6 +13,6 @@ export function rawElementToInstance (raw: RawBoardElement): BaseBoardElement {
         case BoardElementType.Line:
             return LineBoardElement.fromRaw(raw as RawLineBoardElement, raw.id);
         default: 
-            throw Error (`Unrecognized raw board element type with a type ${raw.type}. Does board element registered properly?`);
+            throw Error (`Unrecognized raw board element. Does board element registered properly?`);
     }    
 }

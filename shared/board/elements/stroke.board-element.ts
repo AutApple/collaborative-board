@@ -105,7 +105,7 @@ export class StrokeBoardElement extends BaseBoardElement {
     
     public override toRaw(): RawStrokeBoardElement {
             return {
-                id: this.id,
+                id: this._id,
                 type: BoardElementType.Stroke, 
                 pos: this.pos, 
                 lastCoords: this.lastCoords, 

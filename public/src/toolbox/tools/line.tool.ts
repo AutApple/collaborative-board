@@ -34,7 +34,7 @@ export class LineTool extends BaseTool{
         const raw = this.constructingLinePointer!.toRaw();
         const mutation: CreateBoardMutation = {
             type: BoardMutationType.Create,
-            id: this.constructingLinePointer!.getId,
+            id: this.constructingLinePointer!.id,
             raw
         }
         this.constructingLinePointer = null;

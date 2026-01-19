@@ -34,7 +34,7 @@ export class StrokeTool extends BaseTool{
         const raw = this.constructingStrokePointer!.toRaw();
         const mutation: CreateBoardMutation = {
             type: BoardMutationType.Create,
-            id: this.constructingStrokePointer!.getId,
+            id: this.constructingStrokePointer!.id,
             raw
         }
         this.constructingStrokePointer = null;

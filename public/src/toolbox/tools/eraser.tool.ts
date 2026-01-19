@@ -37,12 +37,12 @@ export class EraserTool extends BaseTool{
             const updatedPoints =  allPoints.filter((_, i) => i !== idx);
             
             if (updatedPoints.length < 1) 
-                return [ this.removeElementAndMakeMutation(closestElement.getId) ];
+                return [ this.removeElementAndMakeMutation(closestElement.id) ];
             
-            this.board.updateElement(closestElement.getId, updatedPoints);
+            this.board.updateElement(closestElement.id, updatedPoints);
             let resMutation: UpdateBoardMutation = {
                 type: BoardMutationType.Update,
-                id: closestElement.getId,
+                id: closestElement.id,
                 points: updatedPoints,
             }
             return [resMutation];  
@@ -50,7 +50,7 @@ export class EraserTool extends BaseTool{
         console.log('Erasing in-between');
         const left = allPoints.slice(0, idx);
         const right = allPoints.slice(idx + 1);
-        this.board.updateElement(closestElement.getId, left);
+        this.board.updateElement(closestElement.id, left);
         
         const newElement = closestElement.clone();
         newElement.setPoints(right);
@@ -58,12 +58,12 @@ export class EraserTool extends BaseTool{
 
         const updateMutation: UpdateBoardMutation = {
             type: BoardMutationType.Update,
-            id: closestElement.getId,
+            id: closestElement.id,
             points: left
         }
         const createMutation: CreateBoardMutation = {
            type: BoardMutationType.Create,
-           id: newElement.getId,
+           id: newElement.id,
            raw: newElement.toRaw() 
         }
         return [updateMutation, createMutation];

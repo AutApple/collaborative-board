@@ -1,13 +1,12 @@
 import type { Point } from '@shared/types/point.type.js';
 import type { Board } from './board.js';
 import { BoardElementType } from './elements/raw/types/board-element-type.js';
-import { BaseBoardElement, LineBoardElement, StrokeBoardElement } from './elements/index.js';
+import { LineBoardElement, StrokeBoardElement } from './elements/index.js';
 import type { RawBoardElement } from './elements/raw/index.js';
 import { rawElementToInstance } from './elements/utils/raw-element-to-instance.js';
 
 
 const constructorMap = {
-    [BoardElementType.Null]: BaseBoardElement,
     [BoardElementType.Line]: LineBoardElement,
     [BoardElementType.Stroke]: StrokeBoardElement
 }
@@ -49,8 +48,8 @@ export function applyBoardMutation(mutation: BaseBoardMutation, board: Board): {
             if (!createMutation.raw) throw Error('Wrong create board mutation signature'); // TODO: generic centralized messages
             const element = rawElementToInstance(createMutation.raw);
             board.appendElement(element);
-            console.log('Created element with id ', element.getId);
-            return {appliedMutation: mutation, newElementId: element.getId}
+            console.log('Created element with id ', element.id);
+            return {appliedMutation: mutation, newElementId: element.id}
         case BoardMutationType.Remove: 
             const removeMutation = mutation as RemoveBoardMutation;
             if (!removeMutation.id) throw Error('Wrong remove board mutation signature');

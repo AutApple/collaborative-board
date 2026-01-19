@@ -61,7 +61,7 @@ export class LineBoardElement extends BaseBoardElement {
 
     public override toRaw(): RawLineBoardElement {
         return {
-            id: this.id,
+            id: this._id,
             type: BoardElementType.Line,
             pos: this.pos,
             pos2: this.pos2

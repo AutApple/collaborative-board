@@ -24,11 +24,11 @@ export class Board {
     }
 
     removeElement(elementId: string) {
-        this.elements = this.elements.filter(el => el.getId !== elementId);
+        this.elements = this.elements.filter(el => el.id !== elementId);
     }
 
     updateElement(elementId: string, points: Point[]) { 
-        const element = this.elements.find(e => e.getId === elementId);
+        const element = this.elements.find(e => e.id === elementId);
         if (!element) return;
         element.setPoints(points);
     }
