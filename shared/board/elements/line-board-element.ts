@@ -22,7 +22,7 @@ export class LineBoardElement extends BaseBoardElement {
     public override findClosestPointTo(worldCoords: Point): {point: Point, distance: number} {
         const distA = distance(this.pos, worldCoords);
         const distB = distance(this.pos2, worldCoords);
-        return distA > distB ? {point: this.pos, distance: distA}: {point: this.pos2, distance: distB};
+        return distA < distB ? {point: this.pos, distance: distA}: {point: this.pos2, distance: distB};
     }
 
     public static override fromPoints(points: Point[], id?: string | undefined): LineBoardElement {
