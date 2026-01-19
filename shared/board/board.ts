@@ -1,5 +1,7 @@
 import type { Point } from '../types/point.type.js';
+import { BoardMutationType, type BaseBoardMutation, type CreateBoardMutation, type RemoveBoardMutation, type UpdateBoardMutation } from './board-mutation.js';
 import { BaseBoardElement } from './elements/index.js'
+import { rawElementToInstance } from './elements/utils/raw-element-to-instance.js';
 
 export class Board {
     constructor() { }
@@ -45,11 +47,32 @@ export class Board {
         return minElement;
     }
 
-
     refresh(data: BaseBoardElement[]) {
         this.resetData();
         for (const element of data)
             this.appendElement(element);
+    }
+
+    applyMutation(mutation: BaseBoardMutation, board: Board) {
+        switch (mutation.type) {
+            case BoardMutationType.Create:
+                const createMutation = mutation as CreateBoardMutation;
+                if (!createMutation.raw) throw Error('Wrong create board mutation signature'); // TODO: generic centralized messages
+                const element = rawElementToInstance(createMutation.raw);
+                board.appendElement(element);
+                console.log('Created element with id ', element.id);
+                break;
+            case BoardMutationType.Remove:
+                const removeMutation = mutation as RemoveBoardMutation;
+                if (!removeMutation.id) throw Error('Wrong remove board mutation signature');
+                board.removeElement(removeMutation.id);
+                break;
+            case BoardMutationType.Update:
+                const updateMutation = mutation as UpdateBoardMutation;
+                if (!updateMutation.id || !updateMutation.points) throw Error('Wrong remove board mutation signature');
+                board.updateElement(updateMutation.id, updateMutation.points);
+                break;
+        }
     }
 }
 
