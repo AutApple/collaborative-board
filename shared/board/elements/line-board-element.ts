@@ -15,7 +15,7 @@ export class LineBoardElement extends BaseBoardElement {
     }
 
     protected static override validatePoints(points: Point[]): boolean {
-        return !(points.length !== 2 || !points[0] || !points[1])
+        return !(points.length > 2 || !points[0] || !points[1])
     } 
 
     
