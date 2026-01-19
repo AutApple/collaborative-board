@@ -39,3 +39,9 @@ export interface RemoveBoardMutation extends BaseBoardMutation {
 }
 
 export type BoardMutationList = Array<BaseBoardMutation>;
+export function optimizeMutations(list: BoardMutationList) {
+    // if there are different CHANGE operations on the same id - should keep only the last one.
+    // if the object with some id essentially gets deleted - any other operations with that object before doesn't make sense, thus can be removed.
+    // if the object is created and then have some changes, there is no point in applying these changes. just create an object with the points that are in the last change mutation
+
+}

@@ -4,9 +4,9 @@ import { SemanticEvents, type BoardProcessDrawingEvent, type BoardRefreshEvent, 
 import type { BoardMutationsEvent, EventBus, SemanticEventMap } from '../event-bus';
 
 export class BoardController {
-    constructor (private appContext: AppContext) {}
-    
-    public subscribe(bus: EventBus<SemanticEventMap>) { 
+    constructor(private appContext: AppContext) { }
+
+    public subscribe(bus: EventBus<SemanticEventMap>) {
         bus.on(SemanticEvents.BoardStartDrawing, this.onBoardStartDrawing.bind(this));
         bus.on(SemanticEvents.BoardProcessDrawing, this.onBoardMouseMove.bind(this));
         bus.on(SemanticEvents.BoardEndDrawing, this.onBoardEndDrawing.bind(this));
@@ -15,11 +15,11 @@ export class BoardController {
         bus.on(SemanticEvents.BoardMutations, this.onBoardMutations.bind(this));
     }
 
-    private onBoardStartDrawing (e: BoardStartDrawingEvent) {
+    private onBoardStartDrawing(e: BoardStartDrawingEvent) {
         this.appContext.toolbox.startConstructing(this.appContext.camera.screenToWorld(e.screenCoords));
     }
 
-    private onBoardEndDrawing () {
+    private onBoardEndDrawing() {
         const mutations = this.appContext.toolbox.endConstructing();
         if (mutations !== null)
             this.appContext.networkManager.sendBoardMutationList(mutations);
@@ -30,7 +30,7 @@ export class BoardController {
         this.appContext.toolbox.stepConstructing(this.appContext.camera.screenToWorld(e.screenCoords));
         this.appContext.renderer.renderBoard(this.appContext.board, this.appContext.camera);
     }
-    
+
     private onBoardMutations(e: BoardMutationsEvent) {
         // console.log(`Got mutations!: ${e.mutations}`);
         for (const mutation of e.mutations)
@@ -47,5 +47,5 @@ export class BoardController {
     private onBoardResize(e: BoardResizeEvent) {
         this.appContext.renderer.resizeCanvas(e.w, e.h);
         this.appContext.networkManager.requestBoardRefresh();
-    }  
+    }
 }

@@ -1,14 +1,22 @@
 {
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
-    "lib": ["DOM", "ES2020"],
+    "lib": [
+      "DOM",
+      "ES2020"
+    ],
     "types": [],
     "baseUrl": ".",
     "paths": {
-      "@shared/*": ["../shared/*"]
+      "@shared/*": [
+        "../shared/*"
+      ]
     }
   },
-  "include": [  
-    "src/**/*.ts"
-, "../shared/board/board.ts", "src/toolbox/enums/tools.enum.ts", "../shared/board/board-mutation.ts"  ]
+  "include": [
+    "src/**/*.ts",
+    "../shared/board/board.ts",
+    "src/toolbox/enums/tools.enum.ts",
+    "../shared/board/board-mutation.ts"
+  ]
 }

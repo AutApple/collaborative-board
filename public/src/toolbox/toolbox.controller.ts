@@ -6,12 +6,12 @@ import type { ToolboxUiAdapter } from './toolbox.ui-adapter.js';
 
 export class ToolboxController {
     private currentTool: Tools = Tools.Pen;
-    
-    constructor (private appContext: AppContext, private uiAdapter: ToolboxUiAdapter) {}
-    
+
+    constructor(private appContext: AppContext, private uiAdapter: ToolboxUiAdapter) { }
+
     public subscribe(bus: EventBus<SemanticEventMap>) {
         bus.on(SemanticEvents.ToolboxChangeTool, this.onToolboxChangeTool.bind(this));
-    } 
+    }
 
     public onToolboxChangeTool(e: ToolboxChangeToolEvent) {
         this.uiAdapter.setInactive(this.currentTool);

@@ -5,7 +5,7 @@ import { Tools } from './enums/tools.enum.js';
 interface ToolboxButtonDOMIds {
     pen: string,
     line: string,
-    eraser: string
+    eraser: string;
 }
 
 export class ToolboxUiAdapter {
@@ -29,7 +29,7 @@ export class ToolboxUiAdapter {
             const element = this.document.getElementById(this.getDOMElementId(tool));
             if (!element)
                 throw new Error(`Toolbox button not found: ${tool}`);
-            element.addEventListener('click', _ => { this.semanticEventBus.emit(SemanticEvents.ToolboxChangeTool, { tool })});
+            element.addEventListener('click', _ => { this.semanticEventBus.emit(SemanticEvents.ToolboxChangeTool, { tool }); });
         }
     }
 

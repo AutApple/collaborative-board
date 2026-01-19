@@ -8,8 +8,8 @@ import { ToolboxUiAdapter } from './toolbox/toolbox.ui-adapter.js';
 import { ToolboxController } from './toolbox/toolbox.controller.js';
 
 export class BoardClient {
-    constructor(private document: Document) {}
-    
+    constructor(private document: Document) { }
+
     private getCanvas(id: string): HTMLCanvasElement {
         const el = document.getElementById(id);
         if (!(el instanceof HTMLCanvasElement))
@@ -21,7 +21,7 @@ export class BoardClient {
         const socket = io();
         socket.on('connect', () => {
             console.log('Connected to localhost:3000', socket.id);
-        }); 
+        });
 
         const canvas = this.getCanvas('canvas');
 

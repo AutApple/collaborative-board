@@ -8,19 +8,19 @@ import { StrokeTool } from './tools/stroke.tool.js';
 import { EraserTool } from './tools/eraser.tool.js';
 
 export class Toolbox {
-    private currentTool: BaseTool;   
+    private currentTool: BaseTool;
 
     public toolInstances: Record<Tools, BaseTool>;
-    constructor(private board: Board) { 
+    constructor(private board: Board) {
         this.currentTool = new StrokeTool(board);
         // make instances of a tools
         this.toolInstances = {
             [Tools.Pen]: new StrokeTool(board),
             [Tools.Line]: new LineTool(board),
             [Tools.Eraser]: new EraserTool(board)
-        }
+        };
     }
-    
+
     changeTool(tool: Tools) {
         this.currentTool = this.toolInstances[tool];
     }

@@ -5,17 +5,17 @@ import { BaseTool } from './base.tool.js';
 import { BoardMutationType, type BoardMutationList, type CreateBoardMutation } from '@shared/board/board-mutation.js';
 import { BoardElementType } from '@shared/board/elements/raw/types/board-element-type.js';
 
-export class StrokeTool extends BaseTool{
-    constructor (protected board: Board) {
+export class StrokeTool extends BaseTool {
+    constructor(protected board: Board) {
         super(board);
     }
 
     private constructingStrokePointer: StrokeBoardElement | null = null;
-    
+
     public override isConstructing(): boolean {
         return !(this.constructingStrokePointer === null);
     }
-    
+
     public override startConstructing(worldCoords: Point): void {
         if (this.isConstructing()) return;
 
@@ -23,10 +23,10 @@ export class StrokeTool extends BaseTool{
         this.constructingStrokePointer = stroke;
         this.board.appendElement(stroke);
     }
-    
+
     public override stepConstructing(worldCoords: Point): void {
         if (!this.isConstructing()) return;
-        this.constructingStrokePointer?.addPoint(worldCoords); 
+        this.constructingStrokePointer?.addPoint(worldCoords);
     }
 
     public override endConstructing(): BoardMutationList | null {
@@ -36,8 +36,8 @@ export class StrokeTool extends BaseTool{
             type: BoardMutationType.Create,
             id: this.constructingStrokePointer!.id,
             raw
-        }
+        };
         this.constructingStrokePointer = null;
-        return [ mutation ];
+        return [mutation];
     }
 }

@@ -21,7 +21,7 @@ export class EventHandler {
         target.addEventListener("resize", this.handleResize.bind(this));
         canvas.addEventListener("mousedown", this.handleMouseDown.bind(this));
         canvas.addEventListener("mousemove", this.handleMouseMove.bind(this));
-        canvas.addEventListener("mouseup", this.handleMouseUp.bind(this)); 
+        canvas.addEventListener("mouseup", this.handleMouseUp.bind(this));
         canvas.addEventListener("mouseleave", this.handleMouseLeave.bind(this));
 
         canvas.addEventListener("wheel", this.handleMouseWheel.bind(this));
@@ -33,15 +33,15 @@ export class EventHandler {
         if (this.boardInputHandler.handleMouseDown(e)) return;
         if (this.cameraInputHandler.handleMouseDown(e)) return;
     }
-    
+
     public handleMouseMove(e: MouseEvent): void {
         if (this.boardInputHandler.handleMouseMove(e)) return;
         if (this.cameraInputHandler.handleMouseMove(e)) return;
     }
-    
+
     public handleMouseUp(): void {
-        if (this.boardInputHandler.handleMouseUp()) return;    
-        if (this.cameraInputHandler.handleMouseUp()) return;    
+        if (this.boardInputHandler.handleMouseUp()) return;
+        if (this.cameraInputHandler.handleMouseUp()) return;
     }
 
     public handleMouseLeave(): void {
@@ -53,7 +53,7 @@ export class EventHandler {
         if (this.cameraInputHandler.handleMouseWheel(e)) return;
     }
 
-    public handleResize() : void {
+    public handleResize(): void {
         if (this.boardInputHandler.handleResize()) return;
     }
 

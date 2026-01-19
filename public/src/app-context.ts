@@ -6,16 +6,16 @@ import { NetworkManager } from './network-manager.js';
 import { Toolbox } from './toolbox/toolbox.js';
 
 export class AppContext {
-    public board: Board; 
+    public board: Board;
     public renderer: Renderer;
     public camera: Camera;
     public networkManager: NetworkManager;
     public toolbox: Toolbox;
 
-    constructor (canvas: HTMLCanvasElement, socket: Socket) {
+    constructor(canvas: HTMLCanvasElement, socket: Socket) {
         this.board = new Board();
         this.renderer = new Renderer(canvas);
-        this.camera = new Camera({x: 0, y: 0}, 1);
+        this.camera = new Camera({ x: 0, y: 0 }, 1);
         this.networkManager = new NetworkManager(socket);
         this.toolbox = new Toolbox(this.board);
     }

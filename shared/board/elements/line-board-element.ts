@@ -18,7 +18,7 @@ export class LineBoardElement extends BaseBoardElement {
 
     protected static override validatePoints(points: Point[]): boolean {
         return points.length <= 2;
-    } 
+    }
 
     private recalculatePoints(): void {
         // TODO: in-between points
@@ -28,17 +28,17 @@ export class LineBoardElement extends BaseBoardElement {
 
     private recalculatePositions(): void {
         this.pos = this.points[0]!;
-        this.pos2 = this.points[this.points.length-1]!;
+        this.pos2 = this.points[this.points.length - 1]!;
     }
 
-    public override findClosestPointTo(worldCoords: Point): {point: Point, distance: number} {
+    public override findClosestPointTo(worldCoords: Point): { point: Point, distance: number; } {
         const distA = distance(this.pos, worldCoords);
         const distB = distance(this.pos2, worldCoords);
-        return distA < distB ? {point: this.pos, distance: distA}: {point: this.pos2, distance: distB};
+        return distA < distB ? { point: this.pos, distance: distA } : { point: this.pos2, distance: distB };
     }
 
     public static override fromPoints(points: Point[], id?: string | undefined): LineBoardElement {
-        if(!LineBoardElement.validatePoints(points)) throw Error('Can\'t create line element from the specified points array');
+        if (!LineBoardElement.validatePoints(points)) throw Error('Can\'t create line element from the specified points array');
         return new LineBoardElement(points[0]!, points[1]!, id);
     }
 
@@ -48,7 +48,7 @@ export class LineBoardElement extends BaseBoardElement {
     }
 
     public setPosition(worldCoords: Point) {
-        this.pos = { ... worldCoords };
+        this.pos = { ...worldCoords };
         this.recalculatePoints();
     }
     public getPosition() {
@@ -64,8 +64,8 @@ export class LineBoardElement extends BaseBoardElement {
     }
     public override setPoints(points: Point[]) {
         if (!LineBoardElement.validatePoints(points))
-                throw Error('Wrong points array signature'); // TODO: replace with centralized messages
-        this.points = points; 
+            throw Error('Wrong points array signature'); // TODO: replace with centralized messages
+        this.points = points;
         this.recalculatePositions();
     }
 

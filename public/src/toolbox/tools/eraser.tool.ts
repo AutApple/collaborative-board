@@ -3,27 +3,27 @@ import type { Board } from '@shared/board/board.js';
 import { BoardMutationType, type BoardMutationList, type CreateBoardMutation, type RemoveBoardMutation, type UpdateBoardMutation } from '@shared/board/board-mutation.js';
 import { BaseTool } from './base.tool.js';
 
-export class EraserTool extends BaseTool{
+export class EraserTool extends BaseTool {
     private erasing: boolean = false;
     private resultingMutationList: BoardMutationList;
     private eraserRadius = 6; // TODO: controller by stroke size
 
-    constructor (protected board: Board) { 
+    constructor(protected board: Board) {
         super(board);
-        this.resultingMutationList = []; 
+        this.resultingMutationList = [];
     }
     private removeElementAndMakeMutation(elementId: string): RemoveBoardMutation {
         this.board.removeElement(elementId);
         return {
             type: BoardMutationType.Remove,
             id: elementId
-        }
+        };
     }
 
     private erase(worldCoords: Point): BoardMutationList {
         const closestElement = this.board.findClosestElementTo(worldCoords);
         if (!closestElement) return [];
-        const {point, distance} = closestElement.findClosestPointTo(worldCoords);
+        const { point, distance } = closestElement.findClosestPointTo(worldCoords);
         if (distance > this.eraserRadius) return [];
         // 2 cases  
         // 1 - point is either first or last point of the element. then we just remove the point.
@@ -33,25 +33,25 @@ export class EraserTool extends BaseTool{
         const allPoints = closestElement.getPoints();
         const idx = allPoints.findIndex(p => p.x === point.x && p.y === point.y);
         if (idx === 0 || idx === (allPoints.length - 1)) {
-            console.log('Erasing end')
-            const updatedPoints =  allPoints.filter((_, i) => i !== idx);
-            
-            if (updatedPoints.length < 1) 
-                return [ this.removeElementAndMakeMutation(closestElement.id) ];
-            
+            console.log('Erasing end');
+            const updatedPoints = allPoints.filter((_, i) => i !== idx);
+
+            if (updatedPoints.length < 1)
+                return [this.removeElementAndMakeMutation(closestElement.id)];
+
             this.board.updateElement(closestElement.id, updatedPoints);
             let resMutation: UpdateBoardMutation = {
                 type: BoardMutationType.Update,
                 id: closestElement.id,
                 points: updatedPoints,
-            }
-            return [resMutation];  
+            };
+            return [resMutation];
         }
         console.log('Erasing in-between');
         const left = allPoints.slice(0, idx);
         const right = allPoints.slice(idx + 1);
         this.board.updateElement(closestElement.id, left);
-        
+
         const newElement = closestElement.clone();
         newElement.setPoints(right);
         this.board.appendElement(newElement);
@@ -60,35 +60,35 @@ export class EraserTool extends BaseTool{
             type: BoardMutationType.Update,
             id: closestElement.id,
             points: left
-        }
+        };
         const createMutation: CreateBoardMutation = {
-           type: BoardMutationType.Create,
-           id: newElement.id,
-           raw: newElement.toRaw() 
-        }
+            type: BoardMutationType.Create,
+            id: newElement.id,
+            raw: newElement.toRaw()
+        };
         return [updateMutation, createMutation];
     }
 
-    public override isConstructing(): boolean { 
-        return this.erasing; 
-    }
-    
-    public override startConstructing(worldCoords: Point): void { 
-        this.erasing = true;
-        const mutations = this.erase(worldCoords);
-        this.resultingMutationList.push(... mutations);
-    } 
-    
-    public override stepConstructing(worldCoords: Point): void { 
-        const mutations = this.erase(worldCoords);
-        this.resultingMutationList.push(... mutations);
+    public override isConstructing(): boolean {
+        return this.erasing;
     }
 
-    public override endConstructing(): BoardMutationList | null { 
+    public override startConstructing(worldCoords: Point): void {
+        this.erasing = true;
+        const mutations = this.erase(worldCoords);
+        this.resultingMutationList.push(...mutations);
+    }
+
+    public override stepConstructing(worldCoords: Point): void {
+        const mutations = this.erase(worldCoords);
+        this.resultingMutationList.push(...mutations);
+    }
+
+    public override endConstructing(): BoardMutationList | null {
         this.erasing = false;
-        const returnValue = [...this.resultingMutationList]
+        const returnValue = [...this.resultingMutationList];
         this.resultingMutationList = [];
         console.log('return value: ', returnValue);
-        return returnValue; 
+        return returnValue;
     }
 }

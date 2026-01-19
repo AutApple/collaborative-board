@@ -13,13 +13,13 @@ export class BoardEventHandler {
 
     public handleMouseDown(e: MouseEvent): boolean {
         if (e.button !== 0) return false; // if it's not left button, don't consume event and pass it to the next handler
-        this.semanticEventBus.emit(SemanticEvents.BoardStartDrawing, { screenCoords: {x: e.offsetX, y: e.offsetY }})
+        this.semanticEventBus.emit(SemanticEvents.BoardStartDrawing, { screenCoords: { x: e.offsetX, y: e.offsetY } });
         return true;
     }
 
     public handleMouseMove(e: MouseEvent): boolean {
         if (!this.appContext.toolbox.isConstructing()) return false; // don't consume event, if board is not being  drawn on rn
-        this.semanticEventBus.emit(SemanticEvents.BoardProcessDrawing, { screenCoords: {x: e.offsetX, y: e.offsetY } });
+        this.semanticEventBus.emit(SemanticEvents.BoardProcessDrawing, { screenCoords: { x: e.offsetX, y: e.offsetY } });
         return true;
     }
 

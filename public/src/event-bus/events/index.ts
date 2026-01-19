@@ -27,14 +27,14 @@ export type BoardProcessDrawingEvent = { screenCoords: Point; };
 export type BoardRefreshEvent = { rawData: RawBoardElement[]; };
 export type BoardEndDrawingEvent = {};
 export type BoardResizeEvent = { w: number, h: number; };
-export type BoardMutationsEvent = { mutations: BoardMutationList }
+export type BoardMutationsEvent = { mutations: BoardMutationList; };
 
 export type CameraStartPanningEvent = { screenCoords: Point; };
 export type CameraProcessPanningEvent = { screenCoords: Point; };
 export type CameraEndPanningEvent = {};
 export type CameraZoomEvent = { screenCoords: Point; delta: number; };
 
-export type ToolboxChangeToolEvent = { tool: Tools }; 
+export type ToolboxChangeToolEvent = { tool: Tools; };
 
 export type SemanticEventMap = {
     // board
@@ -44,7 +44,7 @@ export type SemanticEventMap = {
     // [SemanticEvents.BoardElementAdd]: BoardElementAddEvent,
     [SemanticEvents.BoardRefresh]: BoardRefreshEvent,
     [SemanticEvents.BoardResize]: BoardResizeEvent,
-    [SemanticEvents.BoardMutations]: BoardMutationsEvent
+    [SemanticEvents.BoardMutations]: BoardMutationsEvent;
 
     // camera
     [SemanticEvents.CameraStartPanning]: CameraStartPanningEvent,
@@ -52,5 +52,5 @@ export type SemanticEventMap = {
     [SemanticEvents.CameraEndPanning]: CameraEndPanningEvent,
     [SemanticEvents.CameraZoom]: CameraZoomEvent,
     // toolbox
-    [SemanticEvents.ToolboxChangeTool]: ToolboxChangeToolEvent
+    [SemanticEvents.ToolboxChangeTool]: ToolboxChangeToolEvent;
 };

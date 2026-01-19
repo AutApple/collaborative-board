@@ -3,9 +3,9 @@ import type { EventBus } from '../event-bus/event-bus.js';
 import { SemanticEvents, type CameraEndPanningEvent, type CameraProcessPanningEvent, type CameraStartPanningEvent, type CameraZoomEvent, type SemanticEventMap } from '../event-bus/index.js';
 
 export class CameraController {
-    constructor (private appContext: AppContext) {}
+    constructor(private appContext: AppContext) { }
 
-    public subscribe (bus: EventBus<SemanticEventMap>) {
+    public subscribe(bus: EventBus<SemanticEventMap>) {
         bus.on(SemanticEvents.CameraStartPanning, this.onCameraStartPanning.bind(this));
         bus.on(SemanticEvents.CameraProcessPanning, this.onCameraProcessPanning.bind(this));
         bus.on(SemanticEvents.CameraEndPanning, this.onCameraEndPanning.bind(this));
