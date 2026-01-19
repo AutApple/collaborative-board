@@ -40,7 +40,7 @@ export class BoardController {
     }
 
     private onBoardRefresh(e: BoardRefreshEvent) {
-        const data = e.rawData.map((raw) => rawElementToInstance(raw, raw.id));
+        const data = e.rawData.map((raw) => rawElementToInstance(raw));
         this.appContext.board.refresh(data);
         this.appContext.renderer.renderBoard(this.appContext.board, this.appContext.camera);
     }

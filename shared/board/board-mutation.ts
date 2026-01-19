@@ -47,7 +47,7 @@ export function applyBoardMutation(mutation: BaseBoardMutation, board: Board): {
         case BoardMutationType.Create: 
             const createMutation = mutation as CreateBoardMutation;
             if (!createMutation.raw) throw Error('Wrong create board mutation signature'); // TODO: generic centralized messages
-            const element = rawElementToInstance(createMutation.raw, createMutation.id);
+            const element = rawElementToInstance(createMutation.raw);
             board.appendElement(element);
             console.log('Created element with id ', element.getId);
             return {appliedMutation: mutation, newElementId: element.getId}
