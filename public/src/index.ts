@@ -1,4 +1,4 @@
-import { App } from './app.js';
+import { BoardClient } from './app.js';
 
-const app = new App(document);
+const app = new BoardClient(document);
 app.run();

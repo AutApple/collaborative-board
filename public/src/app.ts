@@ -7,7 +7,7 @@ import { CameraController } from './camera/camera.controller.js';
 import { ToolboxUiAdapter } from './toolbox/toolbox.ui-adapter.js';
 import { ToolboxController } from './toolbox/toolbox.controller.js';
 
-export class App {
+export class BoardClient {
     constructor(private document: Document) {}
     
     private getCanvas(id: string): HTMLCanvasElement {
