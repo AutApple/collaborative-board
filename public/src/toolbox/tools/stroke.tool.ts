@@ -12,7 +12,7 @@ export class StrokeTool extends BaseTool{
 
     private constructingStrokePointer: StrokeBoardElement | null = null;
     
-    public isConstructing(): boolean {
+    public override isConstructing(): boolean {
         return !(this.constructingStrokePointer === null);
     }
     

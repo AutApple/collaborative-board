@@ -69,27 +69,26 @@ export class EraserTool extends BaseTool{
         return [updateMutation, createMutation];
     }
 
-    public isConstructing(): boolean { 
+    public override isConstructing(): boolean { 
         return this.erasing; 
     }
     
-    public startConstructing(worldCoords: Point): void { 
+    public override startConstructing(worldCoords: Point): void { 
         this.erasing = true;
         const mutations = this.erase(worldCoords);
         this.resultingMutationList.push(... mutations);
     } 
     
-    public stepConstructing(worldCoords: Point): void { 
+    public override stepConstructing(worldCoords: Point): void { 
         const mutations = this.erase(worldCoords);
         this.resultingMutationList.push(... mutations);
     }
 
-    public endConstructing(): BoardMutationList | null { 
+    public override endConstructing(): BoardMutationList | null { 
         this.erasing = false;
         const returnValue = [...this.resultingMutationList]
         this.resultingMutationList = [];
         console.log('return value: ', returnValue);
         return returnValue; 
     }
-
 }

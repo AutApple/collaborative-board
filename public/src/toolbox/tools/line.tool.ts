@@ -12,7 +12,7 @@ export class LineTool extends BaseTool{
 
     private constructingLinePointer: LineBoardElement | null = null;
     
-    public isConstructing(): boolean {
+    public override isConstructing(): boolean {
         return !(this.constructingLinePointer === null);
     }
     
