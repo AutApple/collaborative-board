@@ -22,7 +22,7 @@ export class BoardServer {
                 for (const mutation of mutations) {            
                     // console.log('Got mutation: ', mutation);
                     // TODO: validate id and structure to be precise. Also validate point array length, etc etc. only then apply mutations. reject on weird data 
-                    this.appContext.board.applyMutation(mutation, this.appContext.board);
+                    this.appContext.board.applyMutation(mutation);
                 }
                 socket.broadcast.emit(ServerBoardEvents.BoardMutations, mutations);
             })

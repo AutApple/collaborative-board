@@ -34,7 +34,7 @@ export class BoardController {
     private onBoardMutations(e: BoardMutationsEvent) {
         // console.log(`Got mutations!: ${e.mutations}`);
         for (const mutation of e.mutations)
-            this.appContext.board.applyMutation(mutation, this.appContext.board);
+            this.appContext.board.applyMutation(mutation);
         this.appContext.renderer.renderBoard(this.appContext.board, this.appContext.camera);
     }
 

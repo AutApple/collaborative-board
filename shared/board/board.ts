@@ -53,24 +53,24 @@ export class Board {
             this.appendElement(element);
     }
 
-    applyMutation(mutation: BaseBoardMutation, board: Board) {
+    applyMutation(mutation: BaseBoardMutation) {
         switch (mutation.type) {
             case BoardMutationType.Create:
                 const createMutation = mutation as CreateBoardMutation;
                 if (!createMutation.raw) throw Error('Wrong create board mutation signature'); // TODO: generic centralized messages
                 const element = rawElementToInstance(createMutation.raw);
-                board.appendElement(element);
+                this.appendElement(element);
                 console.log('Created element with id ', element.id);
                 break;
             case BoardMutationType.Remove:
                 const removeMutation = mutation as RemoveBoardMutation;
                 if (!removeMutation.id) throw Error('Wrong remove board mutation signature');
-                board.removeElement(removeMutation.id);
+                this.removeElement(removeMutation.id);
                 break;
             case BoardMutationType.Update:
                 const updateMutation = mutation as UpdateBoardMutation;
                 if (!updateMutation.id || !updateMutation.points) throw Error('Wrong remove board mutation signature');
-                board.updateElement(updateMutation.id, updateMutation.points);
+                this.updateElement(updateMutation.id, updateMutation.points);
                 break;
         }
     }
