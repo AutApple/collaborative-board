@@ -1,3 +1,4 @@
+import { validate, version } from 'uuid';
 import type { Point } from '../types/point.type.js';
 import { BoardMutationType, type BaseBoardMutation, type CreateBoardMutation, type RemoveBoardMutation, type UpdateBoardMutation } from './board-mutation.js';
 import { BaseBoardElement } from './elements/index.js'
@@ -11,6 +12,10 @@ export class Board {
     private resetData() {
         this.elements = [];
     }
+    
+    private validateId(id: string) {
+        return (validate(id) && version(id) === 4);
+    }
 
     getElements() {
         return this.elements;
@@ -22,6 +27,7 @@ export class Board {
     }
 
     appendElement(element: BaseBoardElement) {
+        if (!this.validateId(element.id)) return; // Check if element's id is valid
         this.elements.push(element);
     }
 
