@@ -7,7 +7,7 @@ import type { StrokeData } from '../../../../shared/board/elements/types/stroke-
 export class EraserTool extends BaseTool {
     private erasing: boolean = false;
     private resultingMutationList: BoardMutationList;
-    private eraserRadius = 6; // TODO: controller by stroke size
+    private eraserRadius = 6; // TODO: controlled by stroke size
 
     constructor(protected board: Board) {
         super(board);
@@ -34,7 +34,6 @@ export class EraserTool extends BaseTool {
         const allPoints = closestElement.getPoints();
         const idx = allPoints.findIndex(p => p.x === point.x && p.y === point.y);
         if (idx === 0 || idx === (allPoints.length - 1)) {
-            console.log('Erasing end');
             const updatedPoints = allPoints.filter((_, i) => i !== idx);
 
             if (updatedPoints.length < 1)
@@ -48,7 +47,6 @@ export class EraserTool extends BaseTool {
             };
             return [resMutation];
         }
-        console.log('Erasing in-between');
         const left = allPoints.slice(0, idx);
         const right = allPoints.slice(idx + 1);
         this.board.updateElement(closestElement.id, left);
@@ -74,8 +72,9 @@ export class EraserTool extends BaseTool {
         return this.erasing;
     }
 
-    public override startConstructing(worldCoords: Point, _: StrokeData): void {
+    public override startConstructing(worldCoords: Point, {size}: StrokeData): void {
         this.erasing = true;
+        this.eraserRadius = size;
         const mutations = this.erase(worldCoords);
         this.resultingMutationList.push(...mutations);
     }
