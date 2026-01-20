@@ -47,10 +47,7 @@ export function optimizeMutations(mutations: BoardMutationList): BoardMutationLi
     for (let i = 0; i < mutations.length; i++) 
         if (mutations[i]!.type === BoardMutationType.Create)
             createMutationsIdxDictionary.set(mutations[i]!.id, i);
-        
     
-
-
     // create id and delete id where ids are equal => nothing happens, cancel these out
     // create id and change id where ids are equal => merge into single create id 
     const idxToDelete: Map<number, boolean> = new Map();
