@@ -2,6 +2,7 @@ import type { AppContext } from '../app-context.js';
 import { rawElementToInstance } from '@shared/board/elements/utils/raw-element-to-instance.js';
 import { SemanticEvents, type BoardProcessDrawingEvent, type BoardRefreshEvent, type BoardResizeEvent, type BoardStartDrawingEvent } from '../event-bus/events/index.js';
 import type { BoardMutationsEvent, EventBus, SemanticEventMap } from '../event-bus';
+import { optimizeMutations } from '@shared/board/board-mutation.js';
 
 export class BoardController {
     constructor(private appContext: AppContext) { }
@@ -21,8 +22,8 @@ export class BoardController {
 
     private onBoardEndDrawing() {
         const mutations = this.appContext.toolbox.endConstructing();
-        if (mutations !== null)
-            this.appContext.networkManager.sendBoardMutationList(mutations);
+        if (mutations !== null) 
+            this.appContext.networkManager.sendBoardMutationList(optimizeMutations(mutations));
         this.appContext.renderer.renderBoard(this.appContext.board, this.appContext.camera);
     }
 
