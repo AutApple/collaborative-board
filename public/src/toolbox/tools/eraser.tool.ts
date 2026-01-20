@@ -2,6 +2,7 @@ import type { Point } from '@shared/types/point.type.js';
 import type { Board } from '@shared/board/board.js';
 import { BoardMutationType, type BoardMutationList, type CreateBoardMutation, type RemoveBoardMutation, type UpdateBoardMutation } from '@shared/board/board-mutation.js';
 import { BaseTool } from './base.tool.js';
+import type { StrokeData } from '../../../../shared/board/elements/types/stroke-data.type.js';
 
 export class EraserTool extends BaseTool {
     private erasing: boolean = false;
@@ -73,7 +74,7 @@ export class EraserTool extends BaseTool {
         return this.erasing;
     }
 
-    public override startConstructing(worldCoords: Point): void {
+    public override startConstructing(worldCoords: Point, _: StrokeData): void {
         this.erasing = true;
         const mutations = this.erase(worldCoords);
         this.resultingMutationList.push(...mutations);

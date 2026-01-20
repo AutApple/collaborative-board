@@ -6,19 +6,35 @@ import type { BaseTool } from './tools/base.tool.js';
 import { LineTool } from './tools/line.tool.js';
 import { StrokeTool } from './tools/stroke.tool.js';
 import { EraserTool } from './tools/eraser.tool.js';
+import type { StrokeData } from '@shared/board/elements/types/stroke-data.type.js';
 
 export class Toolbox {
     private currentTool: BaseTool;
-
+    private currentStrokeData: StrokeData;
     public toolInstances: Record<Tools, BaseTool>;
+    
+    
     constructor(private board: Board) {
         this.currentTool = new StrokeTool(board);
+        
+        this.currentStrokeData = {
+            color: 'black',
+            size: 3
+        };
+
         // make instances of a tools
         this.toolInstances = {
             [Tools.Pen]: new StrokeTool(board),
             [Tools.Line]: new LineTool(board),
             [Tools.Eraser]: new EraserTool(board)
         };
+    }
+    
+    changeColor(color: string) {
+        this.currentStrokeData.color = color;
+    } 
+    changeSize(size: number) {
+        this.currentStrokeData.size = size;
     }
 
     changeTool(tool: Tools) {
@@ -30,7 +46,7 @@ export class Toolbox {
     }
 
     startConstructing(worldCoords: Point): void {
-        return this.currentTool.startConstructing(worldCoords);
+        return this.currentTool.startConstructing(worldCoords, this.currentStrokeData);
     }
     stepConstructing(worldCoords: Point): void {
         return this.currentTool.stepConstructing(worldCoords);

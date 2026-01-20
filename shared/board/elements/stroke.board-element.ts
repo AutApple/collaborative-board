@@ -3,6 +3,7 @@ import { distance } from '../../utils/distance.js';
 import { BaseBoardElement } from './base.board-element.js';
 import type { RawStrokeBoardElement } from './raw/stroke.board-element.raw.js';
 import { BoardElementType } from './raw/types/board-element-type.js';
+import type { StrokeData } from './types/stroke-data.type.js';
 
 // TODO: put these constants in some config 
 const timeThreshold = 16;
@@ -12,13 +13,13 @@ export class StrokeBoardElement extends BaseBoardElement {
     private lastCoords: Point = { x: 0, y: 0 };
     private lastTime = 0;
 
-    constructor(protected pos: Point, protected offsets: Point[] = [], id?: string | undefined) { // store individual points as offsets
-        super(pos, id);
+    constructor(protected pos: Point, protected strokeData: StrokeData, protected offsets: Point[] = [], id?: string | undefined) { // store individual points as offsets
+        super(pos, strokeData, id);
         this.lastCoords = pos;
     }
 
     public override clone(): StrokeBoardElement {
-        return new StrokeBoardElement(this.pos, this.offsets);
+        return new StrokeBoardElement(this.pos, this.strokeData, this.offsets);
     }
 
     private checkTimeThreshold() {
@@ -88,18 +89,8 @@ export class StrokeBoardElement extends BaseBoardElement {
         });
     }
 
-    public static override  fromPoints(points: Point[], id?: string | undefined): StrokeBoardElement {
-        if (!StrokeBoardElement.validatePoints(points))
-            throw Error('Can\'t create stroke element from the specified points array');
-        const pos = points[0]!;
-        const offsets = points.map(p => {
-            return StrokeBoardElement.pointToOffset(p, pos);
-        });
-        return new StrokeBoardElement(pos, offsets, id);
-    }
-
-    public static override fromRaw(raw: RawStrokeBoardElement, id?: string | undefined) {
-        return new StrokeBoardElement(raw.pos, raw.offsets, id);
+    public static override fromRaw(raw: RawStrokeBoardElement, id?: string) {
+        return new StrokeBoardElement(raw.pos, raw.strokeData, raw.offsets, id);
     }
 
 
@@ -110,7 +101,9 @@ export class StrokeBoardElement extends BaseBoardElement {
             pos: this.pos,
             lastCoords: this.lastCoords,
             lastTime: this.lastTime,
-            offsets: this.offsets
+            offsets: this.offsets,
+
+            strokeData: this.strokeData
         };
     }
 }

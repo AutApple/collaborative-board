@@ -3,17 +3,18 @@ import { distance } from '../../utils/distance.js';
 import { BaseBoardElement } from './base.board-element.js';
 import type { RawLineBoardElement } from './raw/line.board-element.raw.js';
 import { BoardElementType } from './raw/types/board-element-type.js';
+import type { StrokeData } from './types/stroke-data.type.js';
 
 export class LineBoardElement extends BaseBoardElement {
     private points: Point[];
-    constructor(protected pos: Point, protected pos2: Point, id?: string | undefined) {
-        super(pos, id);
+    constructor(protected pos: Point, protected pos2: Point, protected strokeData: StrokeData, id?: string) {
+        super(pos, strokeData, id);
         this.points = [];
         this.recalculatePoints();
     }
 
     public override clone(): LineBoardElement {
-        return new LineBoardElement(this.pos, this.pos2);
+        return new LineBoardElement(this.pos, this.pos2, this.strokeData);
     }
 
     protected static override validatePoints(points: Point[]): boolean {
@@ -35,11 +36,6 @@ export class LineBoardElement extends BaseBoardElement {
         const distA = distance(this.pos, worldCoords);
         const distB = distance(this.pos2, worldCoords);
         return distA < distB ? { point: this.pos, distance: distA } : { point: this.pos2, distance: distB };
-    }
-
-    public static override fromPoints(points: Point[], id?: string | undefined): LineBoardElement {
-        if (!LineBoardElement.validatePoints(points)) throw Error('Can\'t create line element from the specified points array');
-        return new LineBoardElement(points[0]!, points[1]!, id);
     }
 
     public setPosition2(worldCoords: Point) {
@@ -70,7 +66,7 @@ export class LineBoardElement extends BaseBoardElement {
     }
 
     public static override fromRaw(raw: RawLineBoardElement, id?: string | undefined) {
-        return new LineBoardElement(raw.pos, raw.pos2, id);
+        return new LineBoardElement(raw.pos, raw.pos2, raw.strokeData, id);
     }
 
     public override toRaw(): RawLineBoardElement {
@@ -78,7 +74,9 @@ export class LineBoardElement extends BaseBoardElement {
             id: this._id,
             type: BoardElementType.Line,
             pos: this.pos,
-            pos2: this.pos2
+            pos2: this.pos2,
+            
+            strokeData: this.strokeData,
         };
     }
 }

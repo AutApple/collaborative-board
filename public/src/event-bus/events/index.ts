@@ -18,6 +18,8 @@ export enum SemanticEvents {
     CameraZoom,
 
     ToolboxChangeTool,
+    ToolboxChangeStrokeColor,
+    ToolboxChangeStrokeSize,
 }
 
 
@@ -35,6 +37,8 @@ export type CameraEndPanningEvent = {};
 export type CameraZoomEvent = { screenCoords: Point; delta: number; };
 
 export type ToolboxChangeToolEvent = { tool: Tools; };
+export type ToolboxChangeStrokeColorEvent = { value: string };
+export type ToolboxChangeStrokeSizeEvent = { value: number };
 
 export type SemanticEventMap = {
     // board
@@ -53,4 +57,6 @@ export type SemanticEventMap = {
     [SemanticEvents.CameraZoom]: CameraZoomEvent,
     // toolbox
     [SemanticEvents.ToolboxChangeTool]: ToolboxChangeToolEvent;
+    [SemanticEvents.ToolboxChangeStrokeColor]: ToolboxChangeStrokeColorEvent;
+    [SemanticEvents.ToolboxChangeStrokeSize]: ToolboxChangeStrokeSizeEvent;
 };

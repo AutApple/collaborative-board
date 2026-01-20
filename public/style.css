@@ -28,6 +28,49 @@ canvas {
     align-items: center;
 }
 
+#toolbox-settings {
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    z-index: 1000;
+    bottom: 0.5rem;
+    left: 0.5rem;
+    width: 10rem;
+    height: 3rem;
+    background-color: #2a2a2a6a;
+    border-radius: 0.2rem;
+    color: white;
+    align-items: center;
+    justify-content: center;
+}
+
+#toolbox-setting-color {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    width: 1.2rem;              
+    height: 1.2rem;
+    border-radius: 50%;       
+    border: 1px solid #ccc;   
+    cursor: pointer;
+    overflow: hidden;
+
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+#toolbox-setting-color::-webkit-color-swatch-wrapper {
+    padding: 0;
+    border-radius: 50%;
+    background: none;
+}
+
+#toolbox-setting-color::-webkit-color-swatch {
+    border: none;
+    border-radius: 50%;
+    background: currentColor; /* forces swatch to match input value */
+}
+
 .toolbox-button {
     cursor: pointer;
     padding-top: 0.3rem;

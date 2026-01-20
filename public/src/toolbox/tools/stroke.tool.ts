@@ -3,7 +3,7 @@ import type { Point } from '@shared/types/point.type.js';
 import type { Board } from '@shared/board/board.js';
 import { BaseTool } from './base.tool.js';
 import { BoardMutationType, type BoardMutationList, type CreateBoardMutation } from '@shared/board/board-mutation.js';
-import { BoardElementType } from '@shared/board/elements/raw/types/board-element-type.js';
+import type { StrokeData } from '@shared/board/elements/types/stroke-data.type.js';
 
 export class StrokeTool extends BaseTool {
     constructor(protected board: Board) {
@@ -16,10 +16,10 @@ export class StrokeTool extends BaseTool {
         return !(this.constructingStrokePointer === null);
     }
 
-    public override startConstructing(worldCoords: Point): void {
+    public override startConstructing(worldCoords: Point, strokeData: StrokeData): void {
         if (this.isConstructing()) return;
 
-        const stroke = new StrokeBoardElement(worldCoords, [{ x: 0, y: 0 }]);
+        const stroke = new StrokeBoardElement(worldCoords, {... strokeData}, [{ x: 0, y: 0 }]);
         this.constructingStrokePointer = stroke;
         this.board.appendElement(stroke);
     }

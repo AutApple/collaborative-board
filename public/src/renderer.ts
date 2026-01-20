@@ -25,10 +25,10 @@ export class Renderer {
             // convert world coords to local coords
             const screenCoords = camera.worldToScreen(point);
 
-            // TODO: STORING WIDTH/COLOR DATA IN ELEMENTS CLASS
-            this.ctx.lineWidth = 6;
+            const {color, size} = element.getStrokeData();
+            this.ctx.lineWidth = size;
             this.ctx.lineCap = "round";
-            this.ctx.strokeStyle = "black";
+            this.ctx.strokeStyle = color;
 
             this.ctx.beginPath();
             this.ctx.moveTo(lastScreenCoords.x, lastScreenCoords.y);
