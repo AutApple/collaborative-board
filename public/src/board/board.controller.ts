@@ -22,6 +22,8 @@ export class BoardController {
     }
 
     private onBoardEndDrawing() {
+        // TODO: besides mutations, tools can and will generate semantic events.
+        // This can come in handy when doing tools like color picker, for example
         const mutations = this.appContext.toolbox.endConstructing();
         if (mutations !== null && mutations.length > 0){
             const optimizedMutations = optimizeMutations(mutations);
@@ -32,6 +34,7 @@ export class BoardController {
     }
 
     private onBoardMouseMove(e: BoardProcessDrawingEvent) {
+        // TODO: stroke streaming 
         this.appContext.toolbox.stepConstructing(this.appContext.camera.screenToWorld(e.screenCoords));
         this.appContext.renderer.renderBoard(this.appContext.board, this.appContext.camera);
     }
