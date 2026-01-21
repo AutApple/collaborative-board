@@ -22,7 +22,7 @@ export enum SemanticEvents {
 
     BoardHistoryUndoAction,
     BoardHistoryRedoAction,
-    BoardHistoryMutation
+    BoardHistoryMutations
 }
 
 
@@ -44,7 +44,7 @@ export type ToolboxChangeStrokeSizeEvent = { value: number; };
 
 export type BoardHistoryUndoActionEvent = {};
 export type BoardHistoryRedoActionEvent = {};
-export type BoardHistoryMutationEvent = { mutation: BaseBoardMutation; };
+export type BoardHistoryMutationsEvent = { mutations: BoardMutationList; };
 
 export type SemanticEventMap = {
     // board
@@ -64,7 +64,7 @@ export type SemanticEventMap = {
     [SemanticEvents.ToolboxChangeStrokeColor]: ToolboxChangeStrokeColorEvent;
     [SemanticEvents.ToolboxChangeStrokeSize]: ToolboxChangeStrokeSizeEvent;
     // board history
-    [SemanticEvents.BoardHistoryMutation]: BoardHistoryMutationEvent;
+    [SemanticEvents.BoardHistoryMutations]: BoardHistoryMutationsEvent;
     [SemanticEvents.BoardHistoryRedoAction]: BoardHistoryRedoActionEvent;
     [SemanticEvents.BoardHistoryUndoAction]: BoardHistoryUndoActionEvent;
 };

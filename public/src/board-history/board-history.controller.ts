@@ -14,18 +14,17 @@ export class BoardHistoryController {
 
     private onRedoAction(_: BoardHistoryRedoActionEvent) {
         if (!this.bus) return;
-        console.log('Goes to controller')
-        const mutation = this.appContext.boardHistory.retrieveRedo();
-        if (!mutation) return;
-        this.bus.emit(SemanticEvents.BoardHistoryMutation, { mutation });
+        
+        const mutations = this.appContext.boardHistory.retrieveRedo();
+        if (!mutations) return;
+        this.bus.emit(SemanticEvents.BoardHistoryMutations, { mutations });
     }
 
     private onUndoAction(_: BoardHistoryUndoActionEvent) {
         if (!this.bus) return;
-        console.log('Goes to controller')
         
-        const mutation = this.appContext.boardHistory.retrieveUndo();
-        if (!mutation) return;
-        this.bus.emit(SemanticEvents.BoardHistoryMutation, { mutation });
+        const mutations = this.appContext.boardHistory.retrieveUndo();
+        if (!mutations) return;
+        this.bus.emit(SemanticEvents.BoardHistoryMutations, { mutations });
     }
 }

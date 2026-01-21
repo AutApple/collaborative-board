@@ -1,7 +1,7 @@
 import type { AppContext } from '../app-context.js';
 import { rawElementToInstance } from '@shared/board/elements/utils/raw-element-to-instance.js';
 import { SemanticEvents, type BoardProcessDrawingEvent, type BoardRefreshEvent, type BoardResizeEvent, type BoardStartDrawingEvent } from '../event-bus/events/index.js';
-import type { BoardHistoryMutationEvent, BoardMutationsEvent, EventBus, SemanticEventMap } from '../event-bus';
+import type { BoardHistoryMutationsEvent, BoardMutationsEvent, EventBus, SemanticEventMap } from '../event-bus';
 import { optimizeMutations } from '@shared/board/board-mutation.js';
 
 export class BoardController {
@@ -14,7 +14,7 @@ export class BoardController {
         bus.on(SemanticEvents.BoardRefresh, this.onBoardRefresh.bind(this));
         bus.on(SemanticEvents.BoardResize, this.onBoardResize.bind(this));
         bus.on(SemanticEvents.BoardMutations, this.onBoardMutations.bind(this));
-        bus.on(SemanticEvents.BoardHistoryMutation, this.onBoardHistoryMutaiton.bind(this))
+        bus.on(SemanticEvents.BoardHistoryMutations, this.onBoardHistoryMutaitons.bind(this))
     }
 
     private onBoardStartDrawing(e: BoardStartDrawingEvent) {
@@ -24,8 +24,9 @@ export class BoardController {
     private onBoardEndDrawing() {
         const mutations = this.appContext.toolbox.endConstructing();
         if (mutations !== null && mutations.length > 0){
-            this.appContext.networkManager.sendBoardMutationList(optimizeMutations(mutations));
-            this.appContext.boardHistory.registerMutations(mutations);
+            const optimizedMutations = optimizeMutations(mutations);
+            this.appContext.networkManager.sendBoardMutationList(optimizedMutations);
+            this.appContext.boardHistory.registerMutations(optimizedMutations);
         }
         this.appContext.renderer.renderBoard(this.appContext.board, this.appContext.camera);
     }
@@ -53,10 +54,11 @@ export class BoardController {
         this.appContext.networkManager.requestBoardRefresh();
     }
 
-    private onBoardHistoryMutaiton(e: BoardHistoryMutationEvent) {
-        const { mutation } = e;
-        this.appContext.board.applyMutation(mutation);
-        this.appContext.networkManager.sendBoardMutationList([mutation]);
+    private onBoardHistoryMutaitons(e: BoardHistoryMutationsEvent) {
+        const { mutations } = e;
+        for (const mutation of mutations)
+            this.appContext.board.applyMutation(mutation);
+        this.appContext.networkManager.sendBoardMutationList(mutations);
         this.appContext.renderer.renderBoard(this.appContext.board, this.appContext.camera);
     }
 }
