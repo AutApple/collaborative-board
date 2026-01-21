@@ -1,5 +1,4 @@
 import { Vec2 } from '../../types/vec2.type.js';
-import { distance } from '../../utils/distance.js';
 import { BaseBoardElement } from './base.board-element.js';
 import type { RawLineBoardElement } from './raw/line.board-element.raw.js';
 import { BoardElementType } from './raw/types/board-element-type.js';
@@ -35,8 +34,8 @@ export class LineBoardElement extends BaseBoardElement {
     }
 
     public override findClosestPointTo(worldCoords: Vec2): { point: Vec2, distance: number; } {
-        const distA = distance(this.pos, worldCoords);
-        const distB = distance(this.pos2, worldCoords);
+        const distA = this.pos.distanceTo(worldCoords);
+        const distB = this.pos2.distanceTo(worldCoords);
         return distA < distB ? { point: this.pos, distance: distA } : { point: this.pos2, distance: distB };
     }
 

@@ -44,5 +44,8 @@ export class Vec2 implements XY {
     public static fromXY(xy: XY) {
         return new Vec2(xy.x, xy.y);
     }
-
+    
+    public distanceTo(vec: XY): number {
+        return Math.hypot(vec.x - this.x, vec.y - this.y);   
+    }
 }

@@ -1,5 +1,4 @@
 import { Vec2 } from '../../types/vec2.type.js';
-import { distance } from '../../utils/distance.js';
 import { BaseBoardElement } from './base.board-element.js';
 import type { RawStrokeBoardElement } from './raw/stroke.board-element.raw.js';
 import { BoardElementType } from './raw/types/board-element-type.js';
@@ -29,7 +28,7 @@ export class StrokeBoardElement extends BaseBoardElement {
     }
 
     private checkDistanceThreshold(worldCoords: Vec2) {
-        if (distance(this.lastCoords, worldCoords) < distanceThreshold) return false;
+        if (this.lastCoords.distanceTo(worldCoords) < distanceThreshold) return false;
         return true;
     }
 
@@ -41,7 +40,7 @@ export class StrokeBoardElement extends BaseBoardElement {
         let minDistance = Infinity;
 
         for (const p of points) {
-            const dist = distance(p, worldCoords);
+            const dist = p.distanceTo(worldCoords);
             if (dist < minDistance) {
                 minDistance = dist;
                 point = p;
