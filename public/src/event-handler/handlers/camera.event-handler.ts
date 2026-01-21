@@ -1,3 +1,4 @@
+import { Vec2 } from '@shared/types/vec2.type.js';
 import type { AppContext } from '../../app-context.js';
 import { SemanticEvents, type EventBus, type SemanticEventMap } from '../../event-bus';
 
@@ -6,14 +7,14 @@ export class CameraEventHandler {
     public handleMouseWheel(e: WheelEvent): boolean {
         if (!e.ctrlKey) return false; // check if ctrl key is pressed
 
-        this.semanticEventBus.emit(SemanticEvents.CameraZoom, { screenCoords: { x: e.offsetX, y: e.offsetY }, delta: e.deltaY });
+        this.semanticEventBus.emit(SemanticEvents.CameraZoom, { screenCoords: new Vec2(e.offsetX, e.offsetY), delta: e.deltaY });
 
         return true;
     }
     public handleMouseDown(e: MouseEvent): boolean {
         if (e.button !== 1) return false; // handle mouse down only on middle button
 
-        this.semanticEventBus.emit(SemanticEvents.CameraStartPanning, { screenCoords: { x: e.offsetX, y: e.offsetY } });
+        this.semanticEventBus.emit(SemanticEvents.CameraStartPanning, { screenCoords: new Vec2(e.offsetX, e.offsetY) });
 
         return true;
     }
@@ -21,7 +22,7 @@ export class CameraEventHandler {
     public handleMouseMove(e: MouseEvent): boolean {
         if (e.button !== 1 && !this.appContext.camera.isPanning()) return false; // handle mouse move only on middle button and only if camera is being panned
 
-        this.semanticEventBus.emit(SemanticEvents.CameraProcessPanning, { screenCoords: { x: e.offsetX, y: e.offsetY } });
+        this.semanticEventBus.emit(SemanticEvents.CameraProcessPanning, { screenCoords: new Vec2(e.offsetX, e.offsetY) });
 
         return true;
     }

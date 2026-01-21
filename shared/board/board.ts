@@ -1,5 +1,5 @@
 import { validate, version } from 'uuid';
-import type { Point } from '../types/point.type.js';
+import { Vec2 } from '../types/vec2.type.js';
 import { BoardMutationType, type BaseBoardMutation, type CreateBoardMutation, type RemoveBoardMutation, type UpdateBoardMutation } from './board-mutation.js';
 import { BaseBoardElement } from './elements/index.js';
 import { rawElementToInstance } from './elements/utils/raw-element-to-instance.js';
@@ -35,13 +35,13 @@ export class Board {
         this.elements = this.elements.filter(el => el.id !== elementId);
     }
 
-    updateElement(elementId: string, points: Point[]) {
+    updateElement(elementId: string, points: Vec2[]) {
         const element = this.elements.find(e => e.id === elementId);
         if (!element) return;
         element.setPoints(points);
     }
 
-    findClosestElementTo(worldCoords: Point): BaseBoardElement | undefined {
+    findClosestElementTo(worldCoords: Vec2): BaseBoardElement | undefined {
         let minDistance = Infinity;
         let minElement: BaseBoardElement | undefined = undefined;
         for (const element of this.elements) {
@@ -76,7 +76,7 @@ export class Board {
             case BoardMutationType.Update:
                 const updateMutation = mutation as UpdateBoardMutation;
                 if (!updateMutation.id || !updateMutation.points) throw Error('Wrong remove board mutation signature');
-                this.updateElement(updateMutation.id, updateMutation.points);
+                this.updateElement(updateMutation.id, updateMutation.points.map(p => Vec2.fromXY(p)));
                 break;
         }
     }

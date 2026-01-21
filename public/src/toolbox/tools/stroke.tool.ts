@@ -1,5 +1,5 @@
 import { StrokeBoardElement } from '@shared/board/elements/stroke.board-element.js';
-import type { Point } from '@shared/types/point.type.js';
+import { Vec2 } from '@shared/types/vec2.type.js';
 import type { Board } from '@shared/board/board.js';
 import { BaseTool } from './base.tool.js';
 import { BoardMutationType, type BoardMutationList, type CreateBoardMutation } from '@shared/board/board-mutation.js';
@@ -16,15 +16,15 @@ export class StrokeTool extends BaseTool {
         return !(this.constructingStrokePointer === null);
     }
 
-    public override startConstructing(worldCoords: Point, strokeData: StrokeData): void {
+    public override startConstructing(worldCoords: Vec2, strokeData: StrokeData): void {
         if (this.isConstructing()) return;
 
-        const stroke = new StrokeBoardElement(worldCoords, {... strokeData}, [{ x: 0, y: 0 }]);
+        const stroke = new StrokeBoardElement(worldCoords, {... strokeData}, [new Vec2(0, 0)]);
         this.constructingStrokePointer = stroke;
         this.board.appendElement(stroke);
     }
 
-    public override stepConstructing(worldCoords: Point): void {
+    public override stepConstructing(worldCoords: Vec2): void {
         if (!this.isConstructing()) return;
         this.constructingStrokePointer?.addPoint(worldCoords);
     }

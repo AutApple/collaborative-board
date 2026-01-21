@@ -1,4 +1,4 @@
-import type { Point } from '../../types/point.type.js';
+import { Vec2 } from '../../types/vec2.type.js';
 import { distance } from '../../utils/distance.js';
 import { BaseBoardElement } from './base.board-element.js';
 import type { RawLineBoardElement } from './raw/line.board-element.raw.js';
@@ -6,10 +6,12 @@ import { BoardElementType } from './raw/types/board-element-type.js';
 import type { StrokeData } from './types/stroke-data.type.js';
 
 export class LineBoardElement extends BaseBoardElement {
-    private points: Point[];
-    constructor(protected pos: Point, protected pos2: Point, protected strokeData: StrokeData, id?: string) {
+    private points: Vec2[];
+    protected pos2: Vec2 = new Vec2(0, 0);
+    constructor(pos: Vec2, pos2: Vec2, protected strokeData: StrokeData, id?: string) {
         super(pos, strokeData, id);
         this.points = [];
+        this.pos2.set(pos2);
         this.recalculatePoints();
     }
 
@@ -17,48 +19,48 @@ export class LineBoardElement extends BaseBoardElement {
         return new LineBoardElement(this.pos, this.pos2, this.strokeData);
     }
 
-    protected static override validatePoints(points: Point[]): boolean {
+    protected static override validatePoints(points: Vec2[]): boolean {
         return points.length <= 2;
     }
 
     private recalculatePoints(): void {
         // TODO: in-between points
-        this.points = [this.pos, this.pos2];
+        this.points = [new Vec2(this.pos.x, this.pos.y), new Vec2(this.pos2.x, this.pos2.y)];
         // console.log('Recalculated points ', this.points)
     }
 
     private recalculatePositions(): void {
-        this.pos = this.points[0]!;
-        this.pos2 = this.points[this.points.length - 1]!;
+        this.pos.set(this.points[0]!);
+        this.pos2.set(this.points[this.points.length - 1]!);
     }
 
-    public override findClosestPointTo(worldCoords: Point): { point: Point, distance: number; } {
+    public override findClosestPointTo(worldCoords: Vec2): { point: Vec2, distance: number; } {
         const distA = distance(this.pos, worldCoords);
         const distB = distance(this.pos2, worldCoords);
         return distA < distB ? { point: this.pos, distance: distA } : { point: this.pos2, distance: distB };
     }
 
-    public setPosition2(worldCoords: Point) {
-        this.pos2 = { ...worldCoords };
+    public setPosition2(worldCoords: Vec2) {
+        this.pos2.set(worldCoords);
         this.recalculatePoints();
     }
 
-    public setPosition(worldCoords: Point) {
-        this.pos = { ...worldCoords };
+    public setPosition(worldCoords: Vec2) {
+        this.pos.set(worldCoords);
         this.recalculatePoints();
     }
     public getPosition() {
         return this.pos;
     }
 
-    public getPosition2(): Point {
+    public getPosition2(): Vec2 {
         return this.pos2;
     }
 
-    public override getPoints(): readonly Point[] {
+    public override getPoints(): readonly Vec2[] {
         return this.points;
     }
-    public override setPoints(points: Point[]) {
+    public override setPoints(points: Vec2[]) {
         if (!LineBoardElement.validatePoints(points))
             throw Error('Wrong points array signature'); // TODO: replace with centralized messages
         this.points = points;
@@ -66,7 +68,7 @@ export class LineBoardElement extends BaseBoardElement {
     }
 
     public static override fromRaw(raw: RawLineBoardElement, id?: string | undefined) {
-        return new LineBoardElement(raw.pos, raw.pos2, raw.strokeData, id);
+        return new LineBoardElement(Vec2.fromXY(raw.pos), Vec2.fromXY(raw.pos2), raw.strokeData, id);
     }
 
     public override toRaw(): RawLineBoardElement {

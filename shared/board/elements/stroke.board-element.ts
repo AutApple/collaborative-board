@@ -1,4 +1,4 @@
-import type { Point } from '../../types/point.type.js';
+import { Vec2 } from '../../types/vec2.type.js';
 import { distance } from '../../utils/distance.js';
 import { BaseBoardElement } from './base.board-element.js';
 import type { RawStrokeBoardElement } from './raw/stroke.board-element.raw.js';
@@ -10,10 +10,10 @@ const timeThreshold = 16;
 const distanceThreshold = 3;
 
 export class StrokeBoardElement extends BaseBoardElement {
-    private lastCoords: Point = { x: 0, y: 0 };
+    private lastCoords: Vec2 = new Vec2(0, 0);
     private lastTime = 0;
 
-    constructor(protected pos: Point, protected strokeData: StrokeData, protected offsets: Point[] = [], id?: string | undefined) { // store individual points as offsets
+    constructor(pos: Vec2, protected strokeData: StrokeData, protected offsets: Vec2[] = [], id?: string | undefined) { // store individual points as offsets
         super(pos, strokeData, id);
         this.lastCoords = pos;
     }
@@ -28,13 +28,13 @@ export class StrokeBoardElement extends BaseBoardElement {
         return true;
     }
 
-    private checkDistanceThreshold(worldCoords: Point) {
+    private checkDistanceThreshold(worldCoords: Vec2) {
         if (distance(this.lastCoords, worldCoords) < distanceThreshold) return false;
         return true;
     }
 
 
-    public override findClosestPointTo(worldCoords: Point): { point: Point, distance: number; } {
+    public override findClosestPointTo(worldCoords: Vec2): { point: Vec2, distance: number; } {
         const points = this.getPoints();
 
         let point = this.pos;
@@ -50,47 +50,47 @@ export class StrokeBoardElement extends BaseBoardElement {
         return { point, distance: minDistance };
     }
 
-
-    private static pointToOffset(point: Point, pos: Point): Point {
-        return { x: point.x - pos.x, y: point.y - pos.y };
+    private static pointToOffset(point: Vec2, pos: Vec2): Vec2 {
+        return point.sub(pos);
     }
-    protected static override validatePoints(points: Point[]) {
+
+    protected static override validatePoints(points: Vec2[]) {
         return !(points.length < 1 && !points.every(p => p !== undefined));
     }
-    public addPoint(worldCoords: Point) {
+    public addPoint(worldCoords: Vec2) {
         if (!this.checkTimeThreshold()) return;
         if (!this.checkDistanceThreshold(worldCoords)) return;
 
         this.offsets.push(StrokeBoardElement.pointToOffset(worldCoords, this.pos));
-        this.lastCoords = { ...worldCoords };
+        this.lastCoords.set(worldCoords);
     }
 
-    public setPosition(worldCoords: Point) {
+    public setPosition(worldCoords: Vec2) {
         this.pos = worldCoords;
     }
     public getPosition() {
         return this.pos;
     }
 
-    public getOffsets(): Point[] {
+    public getOffsets(): Vec2[] {
         return this.offsets;
     }
 
-    public override getPoints(): readonly Point[] {
-        return this.offsets.map(off => { return { x: off.x + this.pos.x, y: off.y + this.pos.y }; }); // convert offsets to positions
+    public override getPoints(): readonly Vec2[] {
+        return this.offsets.map(off => { return off.add(this.pos) }); // convert offsets to positions
     }
 
-    public override setPoints(points: Point[]) {
+    public override setPoints(points: Vec2[]) {
         if (!StrokeBoardElement.validatePoints(points))
             throw Error('Wrong points array signature'); // TODO: replace with centralized messages
-        this.pos = points[0]!;
+        this.pos.set(points[0]!);
         this.offsets = points.map(p => {
             return StrokeBoardElement.pointToOffset(p, this.pos);
         });
     }
 
     public static override fromRaw(raw: RawStrokeBoardElement, id?: string) {
-        return new StrokeBoardElement(raw.pos, raw.strokeData, raw.offsets, id);
+        return new StrokeBoardElement(Vec2.fromXY(raw.pos), raw.strokeData, raw.offsets.map(off => Vec2.fromXY(off)), id);
     }
 
 

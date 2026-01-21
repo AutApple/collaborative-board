@@ -1,5 +1,5 @@
 import { LineBoardElement } from '@shared/board/elements/line-board-element.js';
-import type { Point } from '@shared/types/point.type.js';
+import type { Vec2 } from '@shared/types/vec2.type.js';
 import type { Board } from '@shared/board/board.js';
 import { BaseTool } from './base.tool.js';
 import { BoardMutationType, type BoardMutationList, type CreateBoardMutation } from '@shared/board/board-mutation.js';
@@ -16,7 +16,7 @@ export class LineTool extends BaseTool {
         return !(this.constructingLinePointer === null);
     }
 
-    public override startConstructing(worldCoords: Point, strokeData: StrokeData): void {
+    public override startConstructing(worldCoords: Vec2, strokeData: StrokeData): void {
         if (this.isConstructing()) return;
 
         const line = new LineBoardElement(worldCoords, worldCoords, {... strokeData});
@@ -24,7 +24,7 @@ export class LineTool extends BaseTool {
         this.board.appendElement(line);
     }
 
-    public override stepConstructing(worldCoords: Point): void {
+    public override stepConstructing(worldCoords: Vec2): void {
         if (!this.isConstructing()) return;
         this.constructingLinePointer?.setPosition2(worldCoords);
     }

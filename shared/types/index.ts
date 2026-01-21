@@ -1,1 +1,1 @@
-export * from './point.type.js';
+export * from './vec2.type.js';

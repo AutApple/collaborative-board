@@ -1,5 +1,5 @@
 import type { RawBoardElement } from '@shared/board/elements/raw/index.js';
-import type { Point } from '@shared/types/point.type.js';
+import type { Vec2 } from '@shared/types/vec2.type.js';
 import type { Tools } from '../../toolbox/enums/tools.enum.js';
 import type { BoardMutationList } from '@shared/board/board-mutation.js';
 
@@ -23,18 +23,18 @@ export enum SemanticEvents {
 }
 
 
-export type BoardStartDrawingEvent = { screenCoords: Point; };
-export type BoardProcessDrawingEvent = { screenCoords: Point; };
+export type BoardStartDrawingEvent = { screenCoords: Vec2; };
+export type BoardProcessDrawingEvent = { screenCoords: Vec2; };
 // export type BoardElementAddEvent = { rawElementData: RawBoardElement; };
 export type BoardRefreshEvent = { rawData: RawBoardElement[]; };
 export type BoardEndDrawingEvent = {};
 export type BoardResizeEvent = { w: number, h: number; };
 export type BoardMutationsEvent = { mutations: BoardMutationList; };
 
-export type CameraStartPanningEvent = { screenCoords: Point; };
-export type CameraProcessPanningEvent = { screenCoords: Point; };
+export type CameraStartPanningEvent = { screenCoords: Vec2; };
+export type CameraProcessPanningEvent = { screenCoords: Vec2; };
 export type CameraEndPanningEvent = {};
-export type CameraZoomEvent = { screenCoords: Point; delta: number; };
+export type CameraZoomEvent = { screenCoords: Vec2; delta: number; };
 
 export type ToolboxChangeToolEvent = { tool: Tools; };
 export type ToolboxChangeStrokeColorEvent = { value: string };

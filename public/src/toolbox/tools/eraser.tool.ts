@@ -1,4 +1,4 @@
-import type { Point } from '@shared/types/point.type.js';
+import { Vec2 } from '@shared/types/vec2.type.js';
 import type { Board } from '@shared/board/board.js';
 import { BoardMutationType, type BoardMutationList, type CreateBoardMutation, type RemoveBoardMutation, type UpdateBoardMutation } from '@shared/board/board-mutation.js';
 import { BaseTool } from './base.tool.js';
@@ -21,7 +21,7 @@ export class EraserTool extends BaseTool {
         };
     }
 
-    private erase(worldCoords: Point): BoardMutationList {
+    private erase(worldCoords: Vec2): BoardMutationList {
         const closestElement = this.board.findClosestElementTo(worldCoords);
         if (!closestElement) return [];
         const { point, distance } = closestElement.findClosestPointTo(worldCoords);
@@ -72,14 +72,14 @@ export class EraserTool extends BaseTool {
         return this.erasing;
     }
 
-    public override startConstructing(worldCoords: Point, {size}: StrokeData): void {
+    public override startConstructing(worldCoords: Vec2, {size}: StrokeData): void {
         this.erasing = true;
         this.eraserRadius = size;
         const mutations = this.erase(worldCoords);
         this.resultingMutationList.push(...mutations);
     }
 
-    public override stepConstructing(worldCoords: Point): void {
+    public override stepConstructing(worldCoords: Vec2): void {
         const mutations = this.erase(worldCoords);
         this.resultingMutationList.push(...mutations);
     }

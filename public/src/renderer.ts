@@ -1,4 +1,4 @@
-import type { Point } from '@shared/types/point.type.js';
+import { Vec2 } from '@shared/types/vec2.type.js';
 import { BaseBoardElement } from '@shared/board/elements/';
 import type { Board } from '@shared/board/board.js';
 import type { Camera } from './camera/camera.js';
@@ -20,7 +20,7 @@ export class Renderer {
     private renderElement(element: BaseBoardElement, camera: Camera) {
         const points = element.getPoints();
         if (points[0] === undefined) return;
-        let lastScreenCoords: Point = camera.worldToScreen(points[0]);
+        let lastScreenCoords: Vec2 = camera.worldToScreen(points[0]);
         for (const point of points) {
             // convert world coords to local coords
             const screenCoords = camera.worldToScreen(point);
@@ -35,7 +35,7 @@ export class Renderer {
             this.ctx.lineTo(screenCoords.x, screenCoords.y);
             this.ctx.stroke();
 
-            lastScreenCoords = { ...screenCoords };
+            lastScreenCoords.set(screenCoords);
         }
     }
 

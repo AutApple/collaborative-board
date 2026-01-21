@@ -1,4 +1,4 @@
-import type { Point } from '@shared/types/point.type.js';
+import type { Vec2 } from '@shared/types/vec2.type.js';
 import type { RawBoardElement } from './elements/raw/index.js';
 import { rawElementToInstance } from './elements/utils/raw-element-to-instance.js';
 
@@ -20,7 +20,7 @@ export interface CreateBoardMutation extends BaseBoardMutation {
 
 export interface UpdateBoardMutation extends BaseBoardMutation {
     type: BoardMutationType.Update;
-    points: Point[];
+    points: Vec2[];
 }
 
 export interface RemoveBoardMutation extends BaseBoardMutation {

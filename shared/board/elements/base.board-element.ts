@@ -1,10 +1,14 @@
-import type { Point } from '../../types/point.type.js';
+import { Vec2 } from '../../types/vec2.type.js';
 import type { RawBaseBoardElement } from './raw/base.board-element.raw.js';
 import type { StrokeData } from './types/stroke-data.type.js';
 
 export abstract class BaseBoardElement {
     protected _id: string;
-    constructor(protected pos: Point, protected strokeData: StrokeData, id?: string | undefined) { this._id = id ?? crypto.randomUUID(); }
+    protected pos: Vec2 = new Vec2(0, 0);
+    constructor(pos: Vec2, protected strokeData: StrokeData, id?: string | undefined) { 
+        this._id = id ?? crypto.randomUUID(); 
+        this.pos.set(pos);
+    }
 
     public get id() {
         return this._id;
@@ -14,14 +18,14 @@ export abstract class BaseBoardElement {
     }
 
     public abstract clone(): BaseBoardElement;
-    public abstract findClosestPointTo(worldCoords: Point): { point: Point, distance: number; };
+    public abstract findClosestPointTo(worldCoords: Vec2): { point: Vec2, distance: number; };
 
-    protected static validatePoints(points: Point[]) {
+    protected static validatePoints(points: Vec2[]) {
         return points.length >= 1;
     }
 
-    public abstract getPoints(): readonly Point[];
-    public abstract setPoints(points: Point[]): void;
+    public abstract getPoints(): readonly Vec2[];
+    public abstract setPoints(points: Vec2[]): void;
 
     public static fromRaw(raw: RawBaseBoardElement, id?: string | undefined) {
         throw new Error('Must be implemented in subclass');

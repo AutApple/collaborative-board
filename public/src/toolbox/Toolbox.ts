@@ -1,5 +1,5 @@
 import type { BoardMutationList } from '@shared/board/board-mutation.js';
-import type { Point } from '@shared/types/point.type.js';
+import { Vec2 } from '@shared/types/vec2.type.js';
 import type { Board } from '@shared/board/board.js';
 import { Tools } from './enums/tools.enum.js';
 import type { BaseTool } from './tools/base.tool.js';
@@ -15,8 +15,6 @@ export class Toolbox {
     
     
     constructor(private board: Board) {
-       
-        
         this.currentStrokeData = { // TODO: some config that would define defaults
             color: 'black',
             size: 3
@@ -46,10 +44,10 @@ export class Toolbox {
         return this.currentTool.isConstructing();
     }
 
-    startConstructing(worldCoords: Point): void {
+    startConstructing(worldCoords: Vec2): void {
         return this.currentTool.startConstructing(worldCoords, this.currentStrokeData);
     }
-    stepConstructing(worldCoords: Point): void {
+    stepConstructing(worldCoords: Vec2): void {
         return this.currentTool.stepConstructing(worldCoords);
     }
     endConstructing(): BoardMutationList | null {
