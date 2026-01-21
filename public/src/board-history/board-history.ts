@@ -16,6 +16,7 @@ class BoardAction {
     }
 
     private static findInverseMutation(mutation: BaseBoardMutation, mutationList: BoardMutationList): BaseBoardMutation | null {
+        // TODO: make this less sphagetti-code 
         // Find inverted mutation for the corresponding mutation in mutation list. Return null if its not possible to find 
         // Inverted mutation cases:
         // 1.) It was create mutation. Simply make remove mutation and return it.
@@ -59,7 +60,7 @@ class BoardAction {
                             return {
                                 id: mutation.id,
                                 type: BoardMutationType.Update,
-                                points,
+                                points: [... points],
                             } as UpdateBoardMutation;
                         }
                         const m = mutationList[i]! as UpdateBoardMutation;

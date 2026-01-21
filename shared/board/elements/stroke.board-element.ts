@@ -65,7 +65,7 @@ export class StrokeBoardElement extends BaseBoardElement {
     }
 
     public setPosition(worldCoords: Vec2) {
-        this.pos = worldCoords;
+        this.pos = Vec2.fromXY(worldCoords);
     }
     public getPosition() {
         return this.pos;
@@ -82,7 +82,7 @@ export class StrokeBoardElement extends BaseBoardElement {
     public override setPoints(points: Vec2[]) {
         if (!StrokeBoardElement.validatePoints(points))
             throw Error('Wrong points array signature'); // TODO: replace with centralized messages
-        this.pos.set(points[0]!);
+        this.setPosition(points[0]!);
         this.offsets = points.map(p => {
             return StrokeBoardElement.pointToOffset(p, this.pos);
         });
@@ -91,7 +91,6 @@ export class StrokeBoardElement extends BaseBoardElement {
     public static override fromRaw(raw: RawStrokeBoardElement, id?: string) {
         return new StrokeBoardElement(Vec2.fromXY(raw.pos), raw.strokeData, raw.offsets.map(off => Vec2.fromXY(off)), id);
     }
-
 
     public override toRaw(): RawStrokeBoardElement {
         return {
@@ -111,7 +110,7 @@ export class StrokeBoardElement extends BaseBoardElement {
             let maxDist = 0;
             let index = 0;
             const endIndex = points.length - 1;
-            
+
             const first = points[0]!;
             const last = points[endIndex]!;
 
@@ -128,16 +127,14 @@ export class StrokeBoardElement extends BaseBoardElement {
                 const right = rdp(points.slice(index));
 
                 return [...left.slice(0, -1), ...right];
-            } else 
+            } else
                 return [first, last];
-            
-
         }
         const epsilon = 3; // TODO: retrieve epsilon from  the configuration. hardcoded value is temporary solution before i make proper config system
         const pointsList = this.getPoints();
         if (pointsList.length <= 2) return;
         // console.log(`Optimizaiton (e=${epsilon}) start. Initial points: ${pointsList.map(p => `{x: ${p.x},y: ${p.y}}, `)}`)
-      
+
         this.setPoints(rdp(pointsList));
         // console.log(`Optimizaiton (e=${epsilon}) end. Resulting points: ${this.getPoints().map(p => `{x: ${p.x},y: ${p.y}}, `)}`)
         return;

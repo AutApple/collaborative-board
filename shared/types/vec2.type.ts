@@ -2,7 +2,11 @@ export interface XY { x: number, y: number; };
 export class Vec2 implements XY {
     constructor(public x: number, public y: number) { }
     public getXY(): XY { return { x: this.x, y: this.y }; }
-    public set(vec: XY) { this.x = vec.x; this.y = vec.y; }
+    
+    public set(vec: XY): void { 
+        this.x = vec.x; 
+        this.y = vec.y; 
+    }
     public add(vec: XY): Vec2 {
         return new Vec2(
             this.x + vec.x,

@@ -9,7 +9,9 @@ export abstract class BaseBoardElement {
         this._id = id ?? crypto.randomUUID(); 
         this.pos.set(pos);
     }
-
+    public get position() {
+        return this.pos;
+    }
     public get id() {
         return this._id;
     }

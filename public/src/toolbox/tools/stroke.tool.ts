@@ -19,7 +19,7 @@ export class StrokeTool extends BaseTool {
     public override startConstructing(worldCoords: Vec2, strokeData: StrokeData): void {
         if (this.isConstructing()) return;
 
-        const stroke = new StrokeBoardElement(worldCoords, {... strokeData}, [new Vec2(0, 0)]);
+        const stroke = new StrokeBoardElement(worldCoords, { ...strokeData }, [new Vec2(0, 0)]);
         this.constructingStrokePointer = stroke;
         this.board.appendElement(stroke);
     }
@@ -31,7 +31,7 @@ export class StrokeTool extends BaseTool {
 
     public override endConstructing(): BoardMutationList | null {
         if (!this.isConstructing()) return null;
-        this.constructingStrokePointer!.optimizePoints(); // optimize points 
+        this.constructingStrokePointer!.optimizePoints(); // optimize points
         const raw = this.constructingStrokePointer!.toRaw();
         const mutation: CreateBoardMutation = {
             type: BoardMutationType.Create,
