@@ -15,9 +15,9 @@ export class Toolbox {
     
     
     constructor(private board: Board) {
-        this.currentTool = new StrokeTool(board);
+       
         
-        this.currentStrokeData = {
+        this.currentStrokeData = { // TODO: some config that would define defaults
             color: 'black',
             size: 3
         };
@@ -28,6 +28,7 @@ export class Toolbox {
             [Tools.Line]: new LineTool(board),
             [Tools.Eraser]: new EraserTool(board)
         };
+        this.currentTool = this.toolInstances[Tools.Pen]; // TODO: some config that would define defaults
     }
     
     changeColor(color: string) {
