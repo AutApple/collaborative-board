@@ -4,6 +4,11 @@ import { BoardMutationType, type BaseBoardMutation, type CreateBoardMutation, ty
 import { BaseBoardElement } from './elements/index.js';
 import { rawElementToInstance } from './elements/utils/raw-element-to-instance.js';
 
+export interface BoardDebugStats {
+    overallPointsAmount:  number;
+    overallElementsAmount: number; 
+}
+
 export class Board {
     constructor() { }
 
@@ -82,6 +87,20 @@ export class Board {
                 break;
         }
     }
+
+    getDebugStats(): BoardDebugStats {
+        const debugStats: BoardDebugStats = {
+            overallPointsAmount: 0,
+            overallElementsAmount: this.elements.length
+        }
+        for (const element of this.elements) {
+            for (const point of element.getPoints()) {
+                debugStats.overallPointsAmount += 1;
+            }
+        }
+        return debugStats;
+    }
+    
 }
 
 

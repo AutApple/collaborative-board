@@ -38,12 +38,20 @@ export class Renderer {
             lastScreenCoords.set(screenCoords);
         }
     }
+    public renderDebugStats(board: Board) {
+        const stats = board.getDebugStats(); 
+        this.ctx.fillText(`Overall elements: ${stats.overallElementsAmount}`, 16, 16)
+        this.ctx.fillText(`Overall points: ${stats.overallPointsAmount}`, 16, 32)
+
+    }
 
     public renderBoard(board: Board, camera: Camera) {
         this.clear();
         const elements: BaseBoardElement[] = board.getElements();
         for (const element of elements)
             this.renderElement(element, camera);
+
+        this.renderDebugStats(board);   
     }
 
     public clear() {
