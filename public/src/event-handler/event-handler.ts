@@ -23,7 +23,7 @@ export class EventHandler {
         canvas.addEventListener("mousemove", this.handleMouseMove.bind(this));
         canvas.addEventListener("mouseup", this.handleMouseUp.bind(this));
         canvas.addEventListener("mouseleave", this.handleMouseLeave.bind(this));
-
+        target.addEventListener("keydown", (e) => {this.handleKeyPress(e as KeyboardEvent)});
         canvas.addEventListener("wheel", this.handleMouseWheel.bind(this));
         this.registerNetworkEvents(socket);
     }
@@ -55,6 +55,12 @@ export class EventHandler {
 
     public handleResize(): void {
         if (this.boardInputHandler.handleResize()) return;
+    }
+
+    public handleKeyPress(e: KeyboardEvent) {
+        console.log('goes to keypress general');
+        e.preventDefault();
+        if (this.boardInputHandler.handleKeyPress(e)) return;
     }
 
     public registerNetworkEvents(socket: Socket) {

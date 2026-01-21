@@ -36,4 +36,11 @@ export class BoardEventHandler {
         this.semanticEventBus.emit(SemanticEvents.BoardResize, { w: window.innerWidth, h: window.innerHeight });
         return false; // don't consume resize events 
     }
+
+    public handleKeyPress(e: KeyboardEvent): boolean {
+        if (!e.ctrlKey && !e.metaKey) return false; 
+        if (e.code === 'KeyZ') this.semanticEventBus.emit(SemanticEvents.BoardHistoryUndoAction, {});
+        if (e.code === 'KeyY') this.semanticEventBus.emit(SemanticEvents.BoardHistoryRedoAction, {});
+        return false;
+    }
 }

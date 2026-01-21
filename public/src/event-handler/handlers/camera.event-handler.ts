@@ -5,7 +5,7 @@ import { SemanticEvents, type EventBus, type SemanticEventMap } from '../../even
 export class CameraEventHandler {
     constructor(private appContext: AppContext, private semanticEventBus: EventBus<SemanticEventMap>) { }
     public handleMouseWheel(e: WheelEvent): boolean {
-        if (!e.ctrlKey) return false; // check if ctrl key is pressed
+        if (!e.ctrlKey && !e.metaKey) return false; // check if ctrl key is pressed
 
         this.semanticEventBus.emit(SemanticEvents.CameraZoom, { screenCoords: new Vec2(e.offsetX, e.offsetY), delta: e.deltaY });
 

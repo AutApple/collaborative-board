@@ -5,6 +5,7 @@ import { Camera } from './camera/camera.js';
 import { NetworkManager } from './network-manager.js';
 import { Toolbox } from './toolbox/toolbox.js';
 import { Vec2 } from '@shared/types/vec2.type.js';
+import { BoardHistory } from './board-history/board-history.js';
 
 export class AppContext {
     public board: Board;
@@ -12,6 +13,7 @@ export class AppContext {
     public camera: Camera;
     public networkManager: NetworkManager;
     public toolbox: Toolbox;
+    public boardHistory: BoardHistory;
 
     constructor(canvas: HTMLCanvasElement, socket: Socket) {
         this.board = new Board();
@@ -19,5 +21,6 @@ export class AppContext {
         this.camera = new Camera(new Vec2(0, 0), 1);
         this.networkManager = new NetworkManager(socket);
         this.toolbox = new Toolbox(this.board);
+        this.boardHistory = new BoardHistory();
     }
 }

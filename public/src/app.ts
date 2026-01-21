@@ -6,6 +6,7 @@ import { BoardController } from './board/board.controller.js';
 import { CameraController } from './camera/camera.controller.js';
 import { ToolboxUiAdapter } from './toolbox/toolbox.ui-adapter.js';
 import { ToolboxController } from './toolbox/toolbox.controller.js';
+import { BoardHistoryController } from './board-history/board-history.controller.js';
 
 export class BoardClient {
     constructor(private document: Document) { }
@@ -37,11 +38,12 @@ export class BoardClient {
 
         const boardController = new BoardController(appContext);
         const cameraController = new CameraController(appContext);
-        console.log(toolboxUiAdapter);
         const toolboxController = new ToolboxController(appContext, toolboxUiAdapter);
+        const boardHistoryController = new BoardHistoryController(appContext);
 
         boardController.subscribe(semanticEventBus);
         cameraController.subscribe(semanticEventBus);
         toolboxController.subscribe(semanticEventBus);
+        boardHistoryController.subscribe(semanticEventBus);
     }
 }
