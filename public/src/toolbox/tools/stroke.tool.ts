@@ -31,6 +31,7 @@ export class StrokeTool extends BaseTool {
 
     public override endConstructing(): BoardMutationList | null {
         if (!this.isConstructing()) return null;
+        this.constructingStrokePointer!.optimizePoints(); // optimize points 
         const raw = this.constructingStrokePointer!.toRaw();
         const mutation: CreateBoardMutation = {
             type: BoardMutationType.Create,

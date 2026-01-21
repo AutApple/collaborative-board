@@ -32,4 +32,5 @@ export abstract class BaseBoardElement {
     }
 
     public abstract toRaw(): RawBaseBoardElement;
+    public abstract optimizePoints(): void;
 }

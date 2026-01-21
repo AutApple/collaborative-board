@@ -80,4 +80,7 @@ export class LineBoardElement extends BaseBoardElement {
             strokeData: this.strokeData,
         };
     }
+    public override optimizePoints(): void { // no need for point optimization for the line
+        return;
+    }
 }

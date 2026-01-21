@@ -48,4 +48,20 @@ export class Vec2 implements XY {
     public distanceTo(vec: XY): number {
         return Math.hypot(vec.x - this.x, vec.y - this.y);   
     }
+
+    public cross(vec: XY): number {
+        return (this.x * vec.y) - (this.y * vec.x);
+    }
+
+    public perpendicularDistanceTo(a: Vec2, b: Vec2): number {
+        const ab = b.sub(a);
+        
+        const len = Math.hypot(ab.x, ab.y);
+        if (len === 0) return this.distanceTo(a); // when a = b, just return distance to a to prevent dividing by zero
+        
+        const ap = this.sub(a);
+        
+        const cross = Math.abs(ab.cross(ap));
+        return cross / Math.sqrt(ab.x * ab.x + ab.y * ab.y);
+    }
 }

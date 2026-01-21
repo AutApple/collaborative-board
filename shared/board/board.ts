@@ -28,6 +28,7 @@ export class Board {
 
     appendElement(element: BaseBoardElement) {
         if (!this.validateId(element.id)) return; // Check if element's id is valid
+        element.optimizePoints();
         this.elements.push(element);
     }
 
@@ -39,6 +40,7 @@ export class Board {
         const element = this.elements.find(e => e.id === elementId);
         if (!element) return;
         element.setPoints(points);
+        element.optimizePoints();
     }
 
     findClosestElementTo(worldCoords: Vec2): BaseBoardElement | undefined {

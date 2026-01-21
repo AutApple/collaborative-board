@@ -76,7 +76,7 @@ export class StrokeBoardElement extends BaseBoardElement {
     }
 
     public override getPoints(): readonly Vec2[] {
-        return this.offsets.map(off => { return off.add(this.pos) }); // convert offsets to positions
+        return this.offsets.map(off => { return off.add(this.pos); }); // convert offsets to positions
     }
 
     public override setPoints(points: Vec2[]) {
@@ -104,5 +104,42 @@ export class StrokeBoardElement extends BaseBoardElement {
 
             strokeData: this.strokeData
         };
+    }
+
+    public override optimizePoints(): void { // use RDP algorhythm for stroke optimization. 
+        function rdp(points: readonly Vec2[]): Vec2[] {
+            let maxDist = 0;
+            let index = 0;
+            const endIndex = points.length - 1;
+            
+            const first = points[0]!;
+            const last = points[endIndex]!;
+
+            for (let i = 1; i < endIndex; i++) {
+                const dist = points[i]!.perpendicularDistanceTo(first, last);
+                if (dist > maxDist) {
+                    maxDist = dist;
+                    index = i;
+                }
+            }
+
+            if (maxDist > epsilon) {
+                const left = rdp(points.slice(0, index + 1));
+                const right = rdp(points.slice(index));
+
+                return [...left.slice(0, -1), ...right];
+            } else 
+                return [first, last];
+            
+
+        }
+        const epsilon = 3; // TODO: retrieve epsilon from  the configuration. hardcoded value is temporary solution before i make proper config system
+        const pointsList = this.getPoints();
+        if (pointsList.length <= 2) return;
+        // console.log(`Optimizaiton (e=${epsilon}) start. Initial points: ${pointsList.map(p => `{x: ${p.x},y: ${p.y}}, `)}`)
+      
+        this.setPoints(rdp(pointsList));
+        // console.log(`Optimizaiton (e=${epsilon}) end. Resulting points: ${this.getPoints().map(p => `{x: ${p.x},y: ${p.y}}, `)}`)
+        return;
     }
 }
