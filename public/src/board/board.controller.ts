@@ -3,9 +3,10 @@ import { rawElementToInstance } from '@shared/board/elements/utils/raw-element-t
 import { SemanticEvents, type BoardProcessDrawingEvent, type BoardRefreshEvent, type BoardResizeEvent, type BoardStartDrawingEvent } from '../event-bus/events/index.js';
 import type { BoardHistoryMutationsEvent, BoardMutationsEvent, EventBus, SemanticEventMap } from '../event-bus';
 import { optimizeMutations } from '@shared/board/board-mutation.js';
+import type { NetworkService } from '../network/network.service.js';
 
 export class BoardController {
-    constructor(private appContext: AppContext) { }
+    constructor(private appContext: AppContext, private networkService: NetworkService) { }
 
     public subscribe(bus: EventBus<SemanticEventMap>) {
         bus.on(SemanticEvents.BoardStartDrawing, this.onBoardStartDrawing.bind(this));
@@ -27,7 +28,7 @@ export class BoardController {
         const mutations = this.appContext.toolbox.endConstructing();
         if (mutations !== null && mutations.length > 0){
             const optimizedMutations = optimizeMutations(mutations);
-            this.appContext.networkManager.sendBoardMutationList(optimizedMutations);
+            this.networkService.sendBoardMutationList(optimizedMutations);
             this.appContext.boardHistory.registerMutations(optimizedMutations);
         }
         this.appContext.renderer.renderBoard(this.appContext.board, this.appContext.camera);
@@ -54,14 +55,14 @@ export class BoardController {
 
     private onBoardResize(e: BoardResizeEvent) {
         this.appContext.renderer.resizeCanvas(e.w, e.h);
-        this.appContext.networkManager.requestBoardRefresh();
+        this.networkService.requestBoardRefresh();
     }
 
     private onBoardHistoryMutaitons(e: BoardHistoryMutationsEvent) {
         const { mutations } = e;
         for (const mutation of mutations)
             this.appContext.board.applyMutation(mutation);
-        this.appContext.networkManager.sendBoardMutationList(mutations);
+        this.networkService.sendBoardMutationList(mutations);
         this.appContext.renderer.renderBoard(this.appContext.board, this.appContext.camera);
     }
 }

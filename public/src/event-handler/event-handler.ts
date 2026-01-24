@@ -1,31 +1,34 @@
-import { BoardEventHandler } from './handlers/board.event-handler.js';
-import { CameraEventHandler } from './handlers/camera.event-handler.js';
+import type { BoardMutationList } from '@shared/board/board-mutation.js';
+import type { RawBoardElement } from '@shared/board/elements/raw/index.js';
+import { ClientBoardEvents, ServerBoardEvents, type ClientBoardEventPayloads, type ServerBoardEventPayloads } from '@shared/socket-events/board.socket-events.js';
+import type { Socket } from 'socket.io-client';
+import type { Cursor } from '../../../shared/remote-cursor/types/cursor.js';
 import type { AppContext } from '../app-context.js';
 import { EventBus, SemanticEvents, type SemanticEventMap } from '../event-bus';
-import type { Socket } from 'socket.io-client';
-import { ServerBoardEvents } from '@shared/socket-events/board.socket-events.js';
-import type { RawBoardElement } from '@shared/board/elements/raw/index.js';
-import type { BoardMutationList } from '@shared/board/board-mutation.js';
+import { BoardEventHandler } from './handlers/board.event-handler.js';
+import { CameraEventHandler } from './handlers/camera.event-handler.js';
+import { CursorEventHandler } from './handlers/cursor.event-handler.js';
 
 //TODO: split into NetworkAdapter, CanvasAdapter, WindowAdapter, DOMAdapter ... and unify in EventHandler 
 export class EventHandler {
     private boardInputHandler: BoardEventHandler;
     private cameraInputHandler: CameraEventHandler;
+    private cursorEventHandler: CursorEventHandler;
 
     constructor(appContext: AppContext, private semanticEventBus: EventBus<SemanticEventMap>) {
         this.boardInputHandler = new BoardEventHandler(appContext, semanticEventBus);
         this.cameraInputHandler = new CameraEventHandler(appContext, semanticEventBus);
+        this.cursorEventHandler = new CursorEventHandler(semanticEventBus);
     };
 
-    public registerEvents(canvas: HTMLCanvasElement, target: EventTarget, socket: Socket) {
+    public registerEvents(canvas: HTMLCanvasElement, target: EventTarget) {
         target.addEventListener("resize", this.handleResize.bind(this));
         canvas.addEventListener("mousedown", this.handleMouseDown.bind(this));
         canvas.addEventListener("mousemove", this.handleMouseMove.bind(this));
         canvas.addEventListener("mouseup", this.handleMouseUp.bind(this));
         canvas.addEventListener("mouseleave", this.handleMouseLeave.bind(this));
-        target.addEventListener("keydown", (e) => {this.handleKeyPress(e as KeyboardEvent)});
+        target.addEventListener("keydown", (e) => { this.handleKeyPress(e as KeyboardEvent); });
         canvas.addEventListener("wheel", this.handleMouseWheel.bind(this));
-        this.registerNetworkEvents(socket);
     }
 
     public handleMouseDown(e: MouseEvent): void {
@@ -35,6 +38,7 @@ export class EventHandler {
     }
 
     public handleMouseMove(e: MouseEvent): void {
+        if (this.cursorEventHandler.handleMouseMove(e)) return; 
         if (this.boardInputHandler.handleMouseMove(e)) return;
         if (this.cameraInputHandler.handleMouseMove(e)) return;
     }
@@ -58,15 +62,10 @@ export class EventHandler {
     }
 
     public handleKeyPress(e: KeyboardEvent) {
-        console.log('goes to keypress general');
         e.preventDefault();
         if (this.boardInputHandler.handleKeyPress(e)) return;
     }
 
-    public registerNetworkEvents(socket: Socket) {
-        // socket.on(ServerBoardEvents.AddElement, (raw: RawBoardElement) => this.semanticEventBus.emit(SemanticEvents.BoardElementAdd, { rawElementData: raw }));
-        socket.on(ServerBoardEvents.RefreshBoard, (raw: RawBoardElement[]) => this.semanticEventBus.emit(SemanticEvents.BoardRefresh, { rawData: raw }));
-        socket.on(ServerBoardEvents.BoardMutations, (mutations: BoardMutationList) => this.semanticEventBus.emit(SemanticEvents.BoardMutations, { mutations }));
-    }
+
 
 }

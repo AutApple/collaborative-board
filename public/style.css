@@ -13,6 +13,22 @@ canvas {
     z-index: 999;
 }
 
+#cursors-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.remote-cursor {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  background: url(assets/cursor.png) center / contain no-repeat;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+  z-index: 1000;
+}
+
 #toolbox {
     display: flex;
     flex-direction: column;

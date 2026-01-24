@@ -1,12 +1,17 @@
+import type { BoardClientSocket } from '@shared/socket-events/board.socket-events.js';
 import { io } from 'socket.io-client';
 import { AppContext } from './app-context.js';
-import { EventHandler } from './event-handler/event-handler.js';
-import { EventBus, type SemanticEventMap } from './event-bus';
+import { BoardHistoryController } from './board-history/board-history.controller.js';
 import { BoardController } from './board/board.controller.js';
 import { CameraController } from './camera/camera.controller.js';
-import { ToolboxUiAdapter } from './toolbox/toolbox.ui-adapter.js';
+import { EventBus, type SemanticEventMap } from './event-bus';
+import { EventHandler } from './event-handler/event-handler.js';
+import { NetworkController } from './network/network.controller.js';
+import { NetworkService } from './network/network.service.js';
+import { CursorController } from './cursor/cursor.controller.js';
+import { RemoteCursorUIAdapter } from './cursor/remote-cursor.ui-adapter.js';
 import { ToolboxController } from './toolbox/toolbox.controller.js';
-import { BoardHistoryController } from './board-history/board-history.controller.js';
+import { ToolboxUiAdapter } from './toolbox/toolbox.ui-adapter.js';
 
 export class BoardClient {
     constructor(private document: Document) { }
@@ -17,33 +22,42 @@ export class BoardClient {
             throw new Error(`Element #${id} is not a canvas`);
         return el;
     }
-
-    run() {
-        const socket = io();
-        socket.on('connect', () => {
-            console.log('Connected to localhost:3000', socket.id);
-        });
-
+    private init(socket: BoardClientSocket) {
         const canvas = this.getCanvas('canvas');
 
         if (!canvas) throw Error('Can\'t get a canvas element!');
 
-        const appContext = new AppContext(canvas, socket);
+        const appContext = new AppContext(canvas);
         const semanticEventBus = new EventBus<SemanticEventMap>();
 
         const eventHandler = new EventHandler(appContext, semanticEventBus); // raw events to semantic events + event consumption
-        eventHandler.registerEvents(canvas, window, socket);
+        eventHandler.registerEvents(canvas, window);
+
+        const networkService = new NetworkService(socket);
+        const networkController = new NetworkController(appContext, semanticEventBus, networkService);
+
+        networkController.bind(socket);
 
         const toolboxUiAdapter = new ToolboxUiAdapter(this.document, semanticEventBus);
+        const remoteCursorUiAdapter = new RemoteCursorUIAdapter(this.document);
 
-        const boardController = new BoardController(appContext);
+        const boardController = new BoardController(appContext, networkService);
         const cameraController = new CameraController(appContext);
         const toolboxController = new ToolboxController(appContext, toolboxUiAdapter);
         const boardHistoryController = new BoardHistoryController(appContext);
+        const cursorController = new CursorController(appContext, remoteCursorUiAdapter, networkService);
 
         boardController.subscribe(semanticEventBus);
         cameraController.subscribe(semanticEventBus);
         toolboxController.subscribe(semanticEventBus);
         boardHistoryController.subscribe(semanticEventBus);
+        cursorController.subscribe(semanticEventBus);
+    }
+    run() {
+        const socket: BoardClientSocket = io();
+        socket.on('connect', () => {
+            console.log('Connected to localhost:3000', socket.id);
+            this.init(socket);
+        });
     }
 }

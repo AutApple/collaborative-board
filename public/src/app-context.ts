@@ -1,26 +1,26 @@
-import type { Socket } from 'socket.io-client';
 import { Board } from '@shared/board/board.js';
-import { Renderer } from './renderer.js';
-import { Camera } from './camera/camera.js';
-import { NetworkManager } from './network-manager.js';
-import { Toolbox } from './toolbox/toolbox.js';
-import { Vec2 } from '@shared/types/vec2.type.js';
+import { RemoteCursorMap } from '@shared/remote-cursor/remote-cursor-list.js';
+import { Vec2, type XY } from '@shared/types/vec2.type.js';
 import { BoardHistory } from './board-history/board-history.js';
+import { Camera } from './camera/camera.js';
+import { Renderer } from './renderer.js';
+import { Toolbox } from './toolbox/toolbox.js';
 
 export class AppContext {
     public board: Board;
     public renderer: Renderer;
     public camera: Camera;
-    public networkManager: NetworkManager;
     public toolbox: Toolbox;
     public boardHistory: BoardHistory;
+    public remoteCursorList: RemoteCursorMap = new RemoteCursorMap();
+    public localCursorPosition: XY;
 
-    constructor(canvas: HTMLCanvasElement, socket: Socket) {
+    constructor(canvas: HTMLCanvasElement) {
         this.board = new Board();
         this.renderer = new Renderer(canvas);
         this.camera = new Camera(new Vec2(0, 0), 1);
-        this.networkManager = new NetworkManager(socket);
         this.toolbox = new Toolbox(this.board);
         this.boardHistory = new BoardHistory();
+        this.localCursorPosition = { x: 0, y: 0 };
     }
 }
