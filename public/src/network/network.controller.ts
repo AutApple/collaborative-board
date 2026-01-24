@@ -41,6 +41,6 @@ export class NetworkController {
         for (const cursor of cursors)
             this.bus.emit(SemanticEvents.RemoteCursorConnect, { cursor });
         this.bus.emit(SemanticEvents.BoardRefresh, { rawData: raw });
-        this.networkService.sendHandshake(this.appContext.localCursorPosition);
+        this.networkService.sendHandshake(this.appContext.localCursorWorldCoords);
     }
 };

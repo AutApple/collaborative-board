@@ -88,7 +88,6 @@ export class EraserTool extends BaseTool {
         this.erasing = false;
         const returnValue = [...this.resultingMutationList];
         this.resultingMutationList = [];
-        console.log('return value: ', returnValue);
         return returnValue;
     }
 }

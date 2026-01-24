@@ -17,8 +17,8 @@ export function encodeRemoteCursor(cursor: Cursor): ArrayBuffer {
     uint8.set(idBytes, 1);
 
     // then put coordinates of a cursor
-    view.setFloat32(1 + idBytes.length, cursor.position.x, true);
-    view.setFloat32(1 + idBytes.length + 4, cursor.position.y, true);
+    view.setFloat32(1 + idBytes.length, cursor.worldCoords.x, true);
+    view.setFloat32(1 + idBytes.length + 4, cursor.worldCoords.y, true);
 
     return buffer;
 }
@@ -34,5 +34,5 @@ export function decodeRemoveCursor(buffer: ArrayBuffer): Cursor {
     const x = view.getFloat32(1 + idLength, true);
     const y = view.getFloat32(1 + idLength + 4, true);
 
-    return { clientId, position: { x, y } };
+    return { clientId, worldCoords: { x, y } };
 }

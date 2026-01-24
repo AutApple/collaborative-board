@@ -34,10 +34,10 @@ export interface ServerBoardEventPayloads {
 }
 
 export interface ClientBoardEventPayloads {
-    [ClientBoardEvents.Handshake]: (mousePos: XY) => void;
+    [ClientBoardEvents.Handshake]: (cursorWorldCoords: XY) => void;
     [ClientBoardEvents.BoardMutations]: (mutations: BoardMutationList) => void;
     [ClientBoardEvents.RequestRefresh]: () => void;
-    [ClientBoardEvents.LocalCursorMove]: (pos: XY) => void;
+    [ClientBoardEvents.LocalCursorMove]: (worldCoords: XY) => void;
 }
 
 export type BoardClientSocket = ClientSocket<ServerBoardEventPayloads, ClientBoardEventPayloads>;

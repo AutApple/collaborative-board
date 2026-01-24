@@ -55,7 +55,7 @@ export type BoardHistoryMutationsEvent = { mutations: BoardMutationList; };
 export type RemoteCursorConnectEvent = { cursor: Cursor };
 export type RemoteCursorDisconnectEvent = { clientId: string };
 export type RemoteCursorMoveEvent = { cursor: Cursor };
-export type LocalCursorMoveEvent = { worldCoords: Vec2 };
+export type LocalCursorMoveEvent = { screenCoords: Vec2 };
 
 export type SemanticEventMap = {
     // board

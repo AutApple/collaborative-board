@@ -19,8 +19,8 @@ export class BoardServer {
             console.log('New client connected:', socket.id);
             // socket.emit(ServerBoardEvents.RefreshBoard, this.appContext.board.getElements().map(element => element.toRaw()));
             socket.emit(ServerBoardEvents.Handshake, this.appContext.board.getElements().map(element => element.toRaw()), this.appContext.cursorMap.toList());
-            socket.on(ClientBoardEvents.Handshake, (mousePos: XY) => {
-                const cursor = {clientId: socket.id, position: {... mousePos}};
+            socket.on(ClientBoardEvents.Handshake, (cursorWorldCoords: XY) => {
+                const cursor = {clientId: socket.id, worldCoords: cursorWorldCoords};
                 this.appContext.cursorMap.addCursor(cursor);
                 socket.broadcast.emit(ServerBoardEvents.ClientConnected, socket.id, cursor);
             });
@@ -31,7 +31,7 @@ export class BoardServer {
 
             socket.on(ClientBoardEvents.LocalCursorMove, (pos: XY) => {
                 this.appContext.cursorMap.setPosition(socket.id, pos);
-                socket.broadcast.emit(ServerBoardEvents.RemoteCursorMove, {clientId: socket.id, position: pos});
+                socket.broadcast.emit(ServerBoardEvents.RemoteCursorMove, {clientId: socket.id, worldCoords: pos});
             });
 
             socket.on(ClientBoardEvents.BoardMutations, (mutations: BoardMutationList) => {

@@ -1,4 +1,4 @@
-import type { Vec2, XY } from '../../../shared/types/vec2.type.js';
+import { Vec2, type XY } from '../../../shared/types/vec2.type.js';
 import type { AppContext } from '../app-context.js';
 import type { EventBus } from '../event-bus/event-bus.js';
 import { SemanticEvents, type LocalCursorMoveEvent, type RemoteCursorConnectEvent, type RemoteCursorDisconnectEvent, type RemoteCursorMoveEvent, type SemanticEventMap } from '../event-bus/index.js';
@@ -16,7 +16,7 @@ export class CursorController {
    
    public onRemoteCursorConnect({ cursor }: RemoteCursorConnectEvent) {
         this.appContext.remoteCursorList.addCursor(cursor);
-        this.uiAdapter.addCursor(cursor.clientId, cursor.position);
+        this.uiAdapter.addCursor(cursor.clientId, this.appContext.camera.worldToScreen(Vec2.fromXY(cursor.worldCoords)));
    }
 
    public onRemoteCursorDisconnect({ clientId }: RemoteCursorDisconnectEvent) {
@@ -26,13 +26,12 @@ export class CursorController {
 
    public onRemoteCursorMove({ cursor }: RemoteCursorMoveEvent) {
      // update remote cursor with given id
-     console.log('Hey?');
-     this.uiAdapter.changeCursorPosition(cursor.clientId, cursor.position);
+     this.uiAdapter.changeCursorPosition(cursor.clientId, this.appContext.camera.worldToScreen(Vec2.fromXY(cursor.worldCoords)));
    }
    
-   public onLocalCursorMove({ worldCoords: pos }: LocalCursorMoveEvent) {
-     this.appContext.localCursorPosition = pos;
-     this.networkService.sendLocalCursorMove(this.appContext.localCursorPosition);
+   public onLocalCursorMove({ screenCoords }: LocalCursorMoveEvent) {
+     this.appContext.localCursorWorldCoords = this.appContext.camera.screenToWorld(screenCoords);
+     this.networkService.sendLocalCursorMove(this.appContext.localCursorWorldCoords);
    }
 
 }

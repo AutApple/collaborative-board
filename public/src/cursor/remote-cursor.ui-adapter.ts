@@ -25,7 +25,6 @@ export class RemoteCursorUIAdapter {
     }
 
     changeCursorPosition(clientId: string, screenCoords: XY) {
-        console.log('Got cursor change position');
         const cursorElement = this.childrenMap.get(clientId);
         if (!cursorElement) return;
         cursorElement.style.transform = `translate(${screenCoords.x}px, ${screenCoords.y}px)`;

@@ -13,7 +13,7 @@ export class AppContext {
     public toolbox: Toolbox;
     public boardHistory: BoardHistory;
     public remoteCursorList: RemoteCursorMap = new RemoteCursorMap();
-    public localCursorPosition: XY;
+    public localCursorWorldCoords: XY;
 
     constructor(canvas: HTMLCanvasElement) {
         this.board = new Board();
@@ -21,6 +21,6 @@ export class AppContext {
         this.camera = new Camera(new Vec2(0, 0), 1);
         this.toolbox = new Toolbox(this.board);
         this.boardHistory = new BoardHistory();
-        this.localCursorPosition = { x: 0, y: 0 };
+        this.localCursorWorldCoords = { x: 0, y: 0 };
     }
 }

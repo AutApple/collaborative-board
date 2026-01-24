@@ -8,8 +8,7 @@ export class BoardHistoryController {
     public subscribe(bus: EventBus<SemanticEventMap>) {
         this.bus = bus;
         bus.on(SemanticEvents.BoardHistoryRedoAction, this.onRedoAction.bind(this));
-        bus.on(SemanticEvents.BoardHistoryUndoAction, this.onUndoAction.bind(this));
-        
+        bus.on(SemanticEvents.BoardHistoryUndoAction, this.onUndoAction.bind(this)); 
     }
 
     private onRedoAction(_: BoardHistoryRedoActionEvent) {

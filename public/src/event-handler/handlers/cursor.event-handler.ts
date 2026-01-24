@@ -6,7 +6,7 @@ export class CursorEventHandler {
     constructor(private semanticEventBus: EventBus<SemanticEventMap>) { }
 
     public handleMouseMove(e: MouseEvent): boolean {
-        this.semanticEventBus.emit(SemanticEvents.LocalCursorMove, { worldCoords: new Vec2(e.offsetX, e.offsetY) });
+        this.semanticEventBus.emit(SemanticEvents.LocalCursorMove, { screenCoords: new Vec2(e.offsetX, e.offsetY) });
         return false; // don't consume that, obviously
     }
 

@@ -12,12 +12,12 @@ export class RemoteCursorMap {
     public setPosition (clientId: string, position: XY) {
         const cursor = this.map.get(clientId);
         if (!cursor) return;
-        cursor.position = {... position}; 
+        cursor.worldCoords = {... position}; 
     }
     
     public getPosition (clientId: string): XY | undefined { 
         const cursor = this.map.get(clientId);
-        return cursor?.position;
+        return cursor?.worldCoords;
     }
 
     public addCursor(cursor: Cursor) {
@@ -29,9 +29,11 @@ export class RemoteCursorMap {
 
     public toList(): Cursor[] {
         const list: Cursor[] = [];
-        for (const clientId of Object.keys(this.map)) {
+        for (const clientId of this.map.keys()) {
+            console.log(clientId);
             list.push(this.map.get(clientId)!);
         }
+        console.log(list);
         return list;
     }
 
