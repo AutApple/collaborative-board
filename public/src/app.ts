@@ -12,7 +12,7 @@ import { CursorController } from './cursor/cursor.controller.js';
 import { RemoteCursorUIAdapter } from './cursor/remote-cursor.ui-adapter.js';
 import { ToolboxController } from './toolbox/toolbox.controller.js';
 import { ToolboxUiAdapter } from './toolbox/toolbox.ui-adapter.js';
-import { BoardUiAdapter } from './board/board.ui-adapter.js';
+import { NetworkUiAdapter } from './network/network.ui-adapter.js';
 
 export class BoardClient {
     constructor(private document: Document) { }
@@ -36,16 +36,14 @@ export class BoardClient {
         
         const toolboxUiAdapter = new ToolboxUiAdapter(this.document, semanticEventBus);
         const remoteCursorUiAdapter = new RemoteCursorUIAdapter(this.document);
-        const boardUiAdapter = new BoardUiAdapter(this.document);
-
-        boardUiAdapter.hideDisconnectOverlay();
+        
+        const networkUiAdapter = new NetworkUiAdapter(this.document);
+        networkUiAdapter.hideDisconnectOverlay();
         
         const networkService = new NetworkService(socket);
-        const networkController = new NetworkController(appContext, boardUiAdapter, semanticEventBus, networkService);
+        const networkController = new NetworkController(appContext, networkUiAdapter, semanticEventBus, networkService);
 
         networkController.bind(socket);
-
-
 
         const boardController = new BoardController(appContext, networkService);
         const cameraController = new CameraController(appContext);

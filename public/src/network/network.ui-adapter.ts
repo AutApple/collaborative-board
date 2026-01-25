@@ -1,4 +1,4 @@
-export class BoardUiAdapter { 
+export class NetworkUiAdapter { 
     private disconnectOverlayElement: HTMLDivElement;
     private disconnectTextElement: HTMLHeadingElement;
     constructor (document: Document, disconnectOverlayId: string = 'disconnect-overlay', disconnectTextId = 'disconnect-text') {
