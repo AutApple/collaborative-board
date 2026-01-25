@@ -1,4 +1,4 @@
-import { Vec2 } from '@shared/types/vec2.type.js';
+import { Vec2, type XY } from '@shared/types/vec2.type.js';
 import { BaseBoardElement } from '@shared/board/elements/';
 import type { Board } from '@shared/board/board.js';
 import type { Camera } from './camera/camera.js';
@@ -17,6 +17,10 @@ export class Renderer {
         this.canvas.height = h;
     }
 
+    public getCanvasDimensions(): XY {
+        return { x: this.canvas.width, y: this.canvas.height };
+    }
+    
     private renderElement(element: BaseBoardElement, camera: Camera) {
         const points = element.getPoints();
         if (points[0] === undefined) return;
@@ -25,7 +29,7 @@ export class Renderer {
             // convert world coords to local coords
             const screenCoords = camera.worldToScreen(point);
 
-            const {color, size} = element.getStrokeData();
+            const { color, size } = element.getStrokeData();
             this.ctx.lineWidth = size;
             this.ctx.lineCap = "round";
             this.ctx.strokeStyle = color;
@@ -39,9 +43,9 @@ export class Renderer {
         }
     }
     public renderDebugStats(board: Board) {
-        const stats = board.getDebugStats(); 
-        this.ctx.fillText(`Overall elements: ${stats.overallElementsAmount}`, 16, 16)
-        this.ctx.fillText(`Overall points: ${stats.overallPointsAmount}`, 16, 32)
+        const stats = board.getDebugStats();
+        this.ctx.fillText(`Overall elements: ${stats.overallElementsAmount}`, 16, 16);
+        this.ctx.fillText(`Overall points: ${stats.overallPointsAmount}`, 16, 32);
 
     }
 
@@ -51,7 +55,7 @@ export class Renderer {
         for (const element of elements)
             this.renderElement(element, camera);
 
-        this.renderDebugStats(board);   
+        this.renderDebugStats(board);
     }
 
     public clear() {
