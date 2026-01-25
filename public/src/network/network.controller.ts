@@ -6,9 +6,10 @@ import type { EventBus } from '../event-bus/event-bus.js';
 import { SemanticEvents, type SemanticEventMap } from '../event-bus/index.js';
 import type { Cursor } from '../../../shared/remote-cursor/types/cursor.js';
 import type { NetworkService } from './network.service.js';
+import type { BoardUiAdapter } from '../board/board.ui-adapter.js';
 
 export class NetworkController {
-    constructor(private appContext: AppContext, private bus: EventBus<SemanticEventMap>, private networkService: NetworkService) { }
+    constructor(private appContext: AppContext, private boardUiAdapter: BoardUiAdapter, private bus: EventBus<SemanticEventMap>, private networkService: NetworkService) { }
 
     public bind(socket: BoardClientSocket) {
         socket.on(ServerBoardEvents.RefreshBoard, this.onRefreshBoard.bind(this));
@@ -17,8 +18,13 @@ export class NetworkController {
         socket.on(ServerBoardEvents.ClientConnected, this.onClientConnected.bind(this));
         socket.on(ServerBoardEvents.ClientDisconnected, this.onClientDisconnected.bind(this));
         socket.on(ServerBoardEvents.RemoteCursorMove, this.onRemoteCursorMove.bind(this));
+        socket.on('disconnect', this.onDisconnect.bind(this));
     }
 
+    public onDisconnect() {
+        this.boardUiAdapter.showDisconnectOverlay();
+    }
+    
     public onClientConnected(_: string, cursor: Cursor) {
         this.bus.emit(SemanticEvents.RemoteCursorConnect, { cursor });
     }
