@@ -5,17 +5,27 @@ import type { AppContext } from './app-context.js';
 import type { ClientRegistry } from './client-registry.js';
 
 const handshakeTimeoutMs = 5000; // TODO: place in config
+
+const throttlingTPS = 60; // TODO: place in config
+
+const cursorMoveThrottlingTimeoutMs = 1000 / throttlingTPS; // TODO: place in config
+const boardMutationsThrottlingTimeoutMs = 100; // TODO: place in config
+const requestRefreshThrottlingTimeoutMs = 1000; // TODO: place in config
+
 export class Client {
     private connected = true;
     private passedHandshake = false;
+    
+    private throttleMap: Map<(...args: any) => void, boolean> = new Map();
+
     private handshakeTimer: NodeJS.Timeout;
 
     private boundHandlers = {
-        onHandshake: (coords: XY) => this.onHandshake(coords),
-        onDisconnect: () => this.onDisconnect(),
-        onLocalCursorMove: (pos: XY) => this.onLocalCursorMove(pos),
-        onBoardMutations: (mutations: BoardMutationList) => this.onBoardMutations(mutations),
-        onRequestRefresh: () => this.onRequestRefresh(),
+        onHandshake: (coords: XY) => { this.onHandshake(coords); },
+        onDisconnect: () => { this.onDisconnect(); },
+        onLocalCursorMove: (pos: XY) => { this.callAndThrottle(cursorMoveThrottlingTimeoutMs, this.onLocalCursorMove, pos) },
+        onBoardMutations: (mutations: BoardMutationList) => {   this.callAndThrottle(boardMutationsThrottlingTimeoutMs, this.onBoardMutations, mutations) },
+        onRequestRefresh: () => { this.callAndThrottle(requestRefreshThrottlingTimeoutMs, this.onRequestRefresh) },
     };
 
     constructor(private socket: BoardServerSocket, private appContext: AppContext, private clientRegistry: ClientRegistry) {
@@ -29,27 +39,37 @@ export class Client {
         socket.on(ClientBoardEvents.RequestRefresh, this.boundHandlers.onRequestRefresh);
     }
 
+    private callAndThrottle(timeout: number, callback: (...args: any) => void, ...args: any) {
+        const canCall: boolean = this.throttleMap.get(callback) ?? true;
+        if (canCall === false) return;
+        
+        callback.apply(this, args);
+        this.throttleMap.set(callback, false);
+        setTimeout(() => { this.throttleMap.set(callback, true) }, timeout);
+    }
+
     public getClientId() {
         return this.socket.id;
     }
-    
+
     private disconnect() {
         if (!this.connected) return;
         this.connected = false;
 
         this.clientRegistry.unregisterClient(this.socket.id);
         this.appContext.cursorMap.removeCursor(this.socket.id);
-        
+
         this.socket.off(ClientBoardEvents.Handshake, this.boundHandlers.onHandshake);
         this.socket.off('disconnect', this.boundHandlers.onDisconnect);
         this.socket.off(ClientBoardEvents.LocalCursorMove, this.boundHandlers.onLocalCursorMove);
         this.socket.off(ClientBoardEvents.BoardMutations, this.boundHandlers.onBoardMutations);
         this.socket.off(ClientBoardEvents.RequestRefresh, this.boundHandlers.onRequestRefresh);
-        
+
         this.socket.disconnect();
     }
-    
+
     private onHandshake(cursorWorldCoords: XY) {
+        if (this.passedHandshake) return;
         const cursor = { clientId: this.socket.id, worldCoords: cursorWorldCoords };
         this.appContext.cursorMap.addCursor(cursor);
         this.socket.broadcast.emit(ServerBoardEvents.ClientConnected, this.socket.id, cursor);
