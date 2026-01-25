@@ -39,8 +39,8 @@ export class Client {
 
         this.clientRegistry.unregisterClient(this.socket.id);
         this.appContext.cursorMap.removeCursor(this.socket.id);
-           this.socket.off(ClientBoardEvents.Handshake, this.boundHandlers.onHandshake);
         
+        this.socket.off(ClientBoardEvents.Handshake, this.boundHandlers.onHandshake);
         this.socket.off('disconnect', this.boundHandlers.onDisconnect);
         this.socket.off(ClientBoardEvents.LocalCursorMove, this.boundHandlers.onLocalCursorMove);
         this.socket.off(ClientBoardEvents.BoardMutations, this.boundHandlers.onBoardMutations);
