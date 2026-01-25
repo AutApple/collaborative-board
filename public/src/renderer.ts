@@ -20,33 +20,42 @@ export class Renderer {
     public getCanvasDimensions(): XY {
         return { x: this.canvas.width, y: this.canvas.height };
     }
-    
+
     private renderElement(element: BaseBoardElement, camera: Camera) {
         const points = element.getPoints();
-        if (points[0] === undefined) return;
-        let lastScreenCoords: Vec2 = camera.worldToScreen(points[0]);
-        for (const point of points) {
-            // convert world coords to local coords
-            const screenCoords = camera.worldToScreen(point);
+        if (points.length < 2) return;
 
-            const { color, size } = element.getStrokeData();
-            this.ctx.lineWidth = size;
-            this.ctx.lineCap = "round";
-            this.ctx.strokeStyle = color;
+        const { color, size } = element.getStrokeData();
+        this.ctx.lineWidth = size;
+        this.ctx.lineCap = "round";
+        this.ctx.strokeStyle = color;
 
-            this.ctx.beginPath();
-            this.ctx.moveTo(lastScreenCoords.x, lastScreenCoords.y);
-            this.ctx.lineTo(screenCoords.x, screenCoords.y);
-            this.ctx.stroke();
+        const start = camera.worldToScreen(points[0]!);
+        this.ctx.beginPath();
+        this.ctx.moveTo(start.x, start.y);
 
-            lastScreenCoords.set(screenCoords);
+        for (let i = 1; i < points.length; i++) {
+            const prev = camera.worldToScreen(points[i - 1]!);
+            const curr = camera.worldToScreen(points[i]!);
+
+            // calculate midpoint between prev and curr
+            const cx = (prev.x + curr.x) / 2;
+            const cy = (prev.y + curr.y) / 2;
+
+            this.ctx.quadraticCurveTo(prev.x, prev.y, cx, cy);
         }
+
+        // connect to last point
+        const last = camera.worldToScreen(points[points.length - 1]!);
+        this.ctx.lineTo(last.x, last.y);
+
+        this.ctx.stroke();
     }
+
     public renderDebugStats(board: Board) {
         const stats = board.getDebugStats();
         this.ctx.fillText(`Overall elements: ${stats.overallElementsAmount}`, 16, 16);
         this.ctx.fillText(`Overall points: ${stats.overallPointsAmount}`, 16, 32);
-
     }
 
     public renderBoard(board: Board, camera: Camera) {
