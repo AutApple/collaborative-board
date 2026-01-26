@@ -1,5 +1,5 @@
 import { Board } from '@shared/board/board.js';
-import { RemoteCursorMap } from '@shared/remote-cursor/remote-cursor-list.js';
+import { RemoteCursorMap } from '@shared/remote-cursor/remote-cursor-map.js';
 import { Vec2, type XY } from '@shared/types/vec2.type.js';
 import { BoardHistory } from './board-history/board-history.js';
 import { Camera } from './camera/camera.js';

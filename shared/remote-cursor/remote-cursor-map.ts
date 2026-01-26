@@ -33,7 +33,6 @@ export class RemoteCursorMap {
             console.log(clientId);
             list.push(this.map.get(clientId)!);
         }
-        console.log(list);
         return list;
     }
 
