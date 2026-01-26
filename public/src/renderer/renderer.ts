@@ -1,6 +1,6 @@
 import { Vec2, type XY } from '@shared/types/vec2.type.js';
 import { BaseBoardElement } from '@shared/board/elements/';
-import type { Board } from '@shared/board/board.js';
+import type { Board, BoardDebugStats } from '@shared/board/board.js';
 import type { Camera } from '../camera/camera.js';
 import type { BaseRenderLayer } from './layers/base.render-layer.js';
 import { RenderLayerType } from './types/render-layer.type.js';
@@ -32,11 +32,19 @@ export class Renderer {
     public getCanvasDimensions(): XY {
         return { x: this.canvas.width, y: this.canvas.height };
     }
+
     public setLayerData(layer: RenderLayerType, ...data: any) {
         this.layers.get(layer)?.updateData(...data);
     }
+    
     public setLayerDataAndRender(camera: Camera, layer: RenderLayerType, ...data: any) {
         this.setLayerData(layer, ...data);
+        this.renderAll(camera);
+    }
+
+    public refreshBoardLayersAndRender(camera: Camera, elements: BaseBoardElement[], debugStats: BoardDebugStats) {
+        this.setLayerData(RenderLayerType.Elements, elements);
+        this.setLayerData(RenderLayerType.DebugStats, debugStats);
         this.renderAll(camera);
     }
     

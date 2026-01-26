@@ -4,6 +4,8 @@ import type { Board } from '@shared/board/board.js';
 import { BaseTool } from './base.tool.js';
 import { BoardMutationType, type BoardMutationList, type CreateBoardMutation } from '@shared/board/board-mutation.js';
 import type { StrokeData } from '@shared/board/elements/types/stroke-data.type.js';
+import { ToolResult } from '../tool-result.js';
+import { SemanticEvents } from '../../event-bus/index.js';
 
 export class StrokeTool extends BaseTool {
     constructor(protected board: Board) {
@@ -16,20 +18,23 @@ export class StrokeTool extends BaseTool {
         return !(this.constructingStrokePointer === null);
     }
 
-    public override startConstructing(worldCoords: Vec2, strokeData: StrokeData): void {
-        if (this.isConstructing()) return;
+    public override startConstructing(worldCoords: Vec2, strokeData: StrokeData): ToolResult | null {
+        if (this.isConstructing()) return null;
 
         const stroke = new StrokeBoardElement(worldCoords, { ...strokeData }, [new Vec2(0, 0)]);
         this.constructingStrokePointer = stroke;
-        this.board.appendElement(stroke);
+        
+        return new ToolResult().addBoardAction((board) => board.appendElement(stroke)).addRenderBoardEmit(this.board);
     }
 
-    public override stepConstructing(worldCoords: Vec2): void {
-        if (!this.isConstructing()) return;
+    public override stepConstructing(worldCoords: Vec2): ToolResult | null {
+        if (!this.isConstructing()) return null;
         this.constructingStrokePointer?.addPoint(worldCoords);
+
+        return new ToolResult().addRenderBoardEmit(this.board);
     }
 
-    public override endConstructing(): BoardMutationList | null {
+    public override endConstructing(): ToolResult | null {
         if (!this.isConstructing()) return null;
         this.constructingStrokePointer!.optimizePoints(); // optimize points
         const raw = this.constructingStrokePointer!.toRaw();
@@ -39,6 +44,6 @@ export class StrokeTool extends BaseTool {
             raw
         };
         this.constructingStrokePointer = null;
-        return [mutation];
+        return new ToolResult().setGlobalMutations([mutation]).addRenderBoardEmit(this.board);
     }
 }

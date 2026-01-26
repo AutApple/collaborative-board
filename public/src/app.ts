@@ -13,6 +13,7 @@ import { RemoteCursorUIAdapter } from './cursor/remote-cursor.ui-adapter.js';
 import { ToolboxController } from './toolbox/toolbox.controller.js';
 import { ToolboxUiAdapter } from './toolbox/toolbox.ui-adapter.js';
 import { NetworkUiAdapter } from './network/network.ui-adapter.js';
+import { RendererController } from './renderer/renderer.controller.js';
 
 export class BoardClient {
     constructor(private document: Document) { }
@@ -50,12 +51,14 @@ export class BoardClient {
         const toolboxController = new ToolboxController(appContext, toolboxUiAdapter);
         const boardHistoryController = new BoardHistoryController(appContext);
         const cursorController = new CursorController(appContext, remoteCursorUiAdapter, networkService);
+        const rendererController = new RendererController(appContext);
 
         boardController.subscribe(semanticEventBus);
         cameraController.subscribe(semanticEventBus);
         toolboxController.subscribe(semanticEventBus);
         boardHistoryController.subscribe(semanticEventBus);
         cursorController.subscribe(semanticEventBus);
+        rendererController.subscribe(semanticEventBus);
     }
     run() {
         const socket: BoardClientSocket = io();

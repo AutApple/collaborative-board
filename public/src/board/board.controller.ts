@@ -10,39 +10,33 @@ export class BoardController {
     constructor(private appContext: AppContext, private networkService: NetworkService) { }
 
     public subscribe(bus: EventBus<SemanticEventMap>) {
-        bus.on(SemanticEvents.BoardStartDrawing, this.onBoardStartDrawing.bind(this));
-        bus.on(SemanticEvents.BoardProcessDrawing, this.onBoardMouseMove.bind(this));
-        bus.on(SemanticEvents.BoardEndDrawing, this.onBoardEndDrawing.bind(this));
+        bus.on(SemanticEvents.BoardStartDrawing, (e) => { this.onBoardStartDrawing(e, bus) });
+        bus.on(SemanticEvents.BoardProcessDrawing, (e) => { this.onBoardMouseMove(e, bus) });
+        bus.on(SemanticEvents.BoardEndDrawing, () => { this.onBoardEndDrawing(bus) });
         bus.on(SemanticEvents.BoardRefresh, this.onBoardRefresh.bind(this));
         bus.on(SemanticEvents.BoardResize, this.onBoardResize.bind(this));
         bus.on(SemanticEvents.BoardMutations, this.onBoardMutations.bind(this));
         bus.on(SemanticEvents.BoardHistoryMutations, this.onBoardHistoryMutaitons.bind(this));
     }
 
-    private onBoardStartDrawing(e: BoardStartDrawingEvent) {
-        this.appContext.toolbox.startConstructing(this.appContext.camera.screenToWorld(e.screenCoords));
+
+    private onBoardStartDrawing(e: BoardStartDrawingEvent, bus: EventBus<SemanticEventMap>) {
+        const toolResult = this.appContext.toolbox.startConstructing(this.appContext.camera.screenToWorld(e.screenCoords));
+        if (toolResult !== null)
+            toolResult.apply(this.appContext, this.networkService, bus);
     }
 
-    private onBoardEndDrawing() {
-        // TODO: besides mutations, tools can and will generate semantic events.
-        // This can come in handy when doing tools like color picker, for example
-        const mutations = this.appContext.toolbox.endConstructing();
-        if (mutations !== null && mutations.length > 0) {
-            const optimizedMutations = optimizeMutations(mutations);
-            this.networkService.sendBoardMutationList(optimizedMutations);
-            this.appContext.boardHistory.registerMutations(optimizedMutations);
-        }
-
-        this.appContext.renderer.setLayerData(RenderLayerType.DebugStats, this.appContext.board.getDebugStats());
-        this.appContext.renderer.setLayerDataAndRender(this.appContext.camera, RenderLayerType.Elements, this.appContext.board.getElements());
+    private onBoardEndDrawing(bus: EventBus<SemanticEventMap>) {
+        const toolResult = this.appContext.toolbox.endConstructing();
+        if (toolResult !== null)
+            toolResult.apply(this.appContext, this.networkService, bus);
     }
 
-    private onBoardMouseMove(e: BoardProcessDrawingEvent) {
+    private onBoardMouseMove(e: BoardProcessDrawingEvent, bus: EventBus<SemanticEventMap>) {
         // TODO: stroke streaming 
-        this.appContext.toolbox.stepConstructing(this.appContext.camera.screenToWorld(e.screenCoords));
-        
-        this.appContext.renderer.setLayerData(RenderLayerType.DebugStats, this.appContext.board.getDebugStats());
-        this.appContext.renderer.setLayerDataAndRender(this.appContext.camera, RenderLayerType.Elements, this.appContext.board.getElements());
+        const toolResult = this.appContext.toolbox.stepConstructing(this.appContext.camera.screenToWorld(e.screenCoords));
+        if (toolResult !== null)
+            toolResult.apply(this.appContext, this.networkService, bus);        
     }
 
     private onBoardMutations(e: BoardMutationsEvent) {
@@ -52,7 +46,6 @@ export class BoardController {
 
         this.appContext.renderer.setLayerData(RenderLayerType.DebugStats, this.appContext.board.getDebugStats());
         this.appContext.renderer.setLayerDataAndRender(this.appContext.camera, RenderLayerType.Elements, this.appContext.board.getElements());
-
     }
 
     private onBoardRefresh(e: BoardRefreshEvent) {

@@ -7,6 +7,7 @@ import { LineTool } from './tools/line.tool.js';
 import { StrokeTool } from './tools/stroke.tool.js';
 import { EraserTool } from './tools/eraser.tool.js';
 import type { StrokeData } from '@shared/board/elements/types/stroke-data.type.js';
+import type { ToolResult } from './tool-result.js';
 
 export class Toolbox {
     private currentTool: BaseTool;
@@ -47,13 +48,13 @@ export class Toolbox {
         return this.currentTool.isConstructing();
     }
 
-    startConstructing(worldCoords: Vec2): void {
+    startConstructing(worldCoords: Vec2): ToolResult | null {
         return this.currentTool.startConstructing(worldCoords, this.currentStrokeData);
     }
-    stepConstructing(worldCoords: Vec2): void {
+    stepConstructing(worldCoords: Vec2): ToolResult | null {
         return this.currentTool.stepConstructing(worldCoords);
     }
-    endConstructing(): BoardMutationList | null {
+    endConstructing(): ToolResult | null {
         return this.currentTool.endConstructing();
     }
 }

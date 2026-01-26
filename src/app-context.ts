@@ -1,5 +1,5 @@
 import { Board } from '@shared/board/board.js';
-import { RemoteCursorMap } from '../shared/remote-cursor/remote-cursor-list.js';
+import { RemoteCursorMap } from '../shared/remote-cursor/remote-cursor-map.js';
 
 export class AppContext {
     public board: Board;

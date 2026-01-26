@@ -4,6 +4,7 @@ import type { Board } from '@shared/board/board.js';
 import { BaseTool } from './base.tool.js';
 import { BoardMutationType, type BoardMutationList, type CreateBoardMutation } from '@shared/board/board-mutation.js';
 import type { StrokeData } from '@shared/board/elements/types/stroke-data.type.js';
+import { ToolResult } from '../tool-result.js';
 
 export class LineTool extends BaseTool {
     constructor(protected board: Board) {
@@ -16,20 +17,20 @@ export class LineTool extends BaseTool {
         return !(this.constructingLinePointer === null);
     }
 
-    public override startConstructing(worldCoords: Vec2, strokeData: StrokeData): void {
-        if (this.isConstructing()) return;
-
-        const line = new LineBoardElement(worldCoords, worldCoords, {... strokeData});
+    public override startConstructing(worldCoords: Vec2, strokeData: StrokeData): ToolResult | null {
+        if (this.isConstructing()) return null;
+        const line = new LineBoardElement(worldCoords, worldCoords, { ...strokeData });
         this.constructingLinePointer = line;
-        this.board.appendElement(line);
+        return new ToolResult().addBoardAction(board => board.appendElement(line)).addRenderBoardEmit(this.board);
     }
 
-    public override stepConstructing(worldCoords: Vec2): void {
-        if (!this.isConstructing()) return;
+    public override stepConstructing(worldCoords: Vec2): ToolResult | null {
+        if (!this.isConstructing()) return null;
         this.constructingLinePointer?.setPosition2(worldCoords);
+        return new ToolResult().addRenderBoardEmit(this.board);
     }
 
-    public override endConstructing(): BoardMutationList | null {
+    public override endConstructing(): ToolResult | null {
         if (!this.isConstructing()) return null;
         const raw = this.constructingLinePointer!.toRaw();
         const mutation: CreateBoardMutation = {
@@ -38,6 +39,6 @@ export class LineTool extends BaseTool {
             raw
         };
         this.constructingLinePointer = null;
-        return [mutation];
+        return new ToolResult().setGlobalMutations([mutation]).addRenderBoardEmit(this.board);
     }
 }

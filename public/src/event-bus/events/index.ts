@@ -1,8 +1,10 @@
 import type { RawBoardElement } from '@shared/board/elements/raw/index.js';
 import type { Vec2 } from '@shared/types/vec2.type.js';
 import type { Tools } from '../../toolbox/enums/tools.enum.js';
-import type { BaseBoardMutation, BoardMutationList } from '@shared/board/board-mutation.js';
+import type { BoardMutationList } from '@shared/board/board-mutation.js';
 import type { Cursor } from '../../../../shared/remote-cursor/types/cursor.js';
+import type { BaseBoardElement } from '../../../../shared/board/elements/base.board-element.js';
+import type { BoardDebugStats } from '../../../../shared/board/board.js';
 
 export enum SemanticEvents {
     BoardStartDrawing,
@@ -28,7 +30,9 @@ export enum SemanticEvents {
     RemoteCursorConnect,
     RemoteCursorDisconnect,
     RemoteCursorMove,
-    LocalCursorMove
+    LocalCursorMove,
+
+    RendererRedrawBoard
 }
 
 
@@ -57,6 +61,8 @@ export type RemoteCursorDisconnectEvent = { clientId: string };
 export type RemoteCursorMoveEvent = { cursor: Cursor };
 export type LocalCursorMoveEvent = { screenCoords: Vec2 };
 
+export type RendererRedrawBoardEvent =  { elements: BaseBoardElement[], debugStats: BoardDebugStats };
+
 export type SemanticEventMap = {
     // board
     [SemanticEvents.BoardStartDrawing]: BoardStartDrawingEvent,
@@ -78,10 +84,11 @@ export type SemanticEventMap = {
     [SemanticEvents.BoardHistoryMutations]: BoardHistoryMutationsEvent;
     [SemanticEvents.BoardHistoryRedoAction]: BoardHistoryRedoActionEvent;
     [SemanticEvents.BoardHistoryUndoAction]: BoardHistoryUndoActionEvent;
-    //cursors
+    // cursors
     [SemanticEvents.RemoteCursorConnect]: RemoteCursorConnectEvent
     [SemanticEvents.RemoteCursorDisconnect]: RemoteCursorDisconnectEvent
     [SemanticEvents.RemoteCursorMove]: RemoteCursorMoveEvent
     [SemanticEvents.LocalCursorMove]: LocalCursorMoveEvent
-   
+    // renderer
+    [SemanticEvents.RendererRedrawBoard]: RendererRedrawBoardEvent
 };
