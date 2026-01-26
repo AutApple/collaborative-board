@@ -73,7 +73,7 @@ export class Board {
                 if (!createMutation.raw) throw Error('Wrong create board mutation signature'); // TODO: generic centralized messages
                 const element = rawElementToInstance(createMutation.raw);
                 this.appendElement(element);
-                console.log('Created element with id ', element.id);
+                // console.log('Created element with id ', element.id);
                 break;
             case BoardMutationType.Remove:
                 const removeMutation = mutation as RemoveBoardMutation;
