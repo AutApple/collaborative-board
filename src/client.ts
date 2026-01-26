@@ -3,6 +3,9 @@ import { ClientBoardEvents, ServerBoardEvents, type BoardClientSocket, type Boar
 import type { XY } from '../shared/types/vec2.type.js';
 import type { AppContext } from './app-context.js';
 import type { ClientRegistry } from './client-registry.js';
+import { BoardEventHandler } from './event-handlers.ts/board.event-handler.js';
+import { CursorEventHandler } from './event-handlers.ts/cursor.event-handler.js';
+import { NetworkingEventHandler } from './event-handlers.ts/networking.event-handler.js';
 
 const handshakeTimeoutMs = 5000; // TODO: place in config
 
@@ -16,21 +19,31 @@ export class Client {
     private connected = true;
     private passedHandshake = false;
     
+    private networkingEventHandler: NetworkingEventHandler;
+    private boardEventHandler: BoardEventHandler;
+    private cursorEventHandler: CursorEventHandler;
+
     private throttleMap: Map<(...args: any) => void, boolean> = new Map();
 
     private handshakeTimer: NodeJS.Timeout;
 
     private boundHandlers = {
-        onHandshake: (coords: XY) => { this.onHandshake(coords); },
-        onDisconnect: () => { this.onDisconnect(); },
-        onLocalCursorMove: (pos: XY) => { this.callAndThrottle(cursorMoveThrottlingTimeoutMs, this.onLocalCursorMove, pos) },
-        onBoardMutations: (mutations: BoardMutationList) => {   this.callAndThrottle(boardMutationsThrottlingTimeoutMs, this.onBoardMutations, mutations) },
-        onRequestRefresh: () => { this.callAndThrottle(requestRefreshThrottlingTimeoutMs, this.onRequestRefresh) },
+        onHandshake: (coords: XY) => { this.networkingEventHandler.onHandshake(coords); },
+        onDisconnect: () => { this.networkingEventHandler.onDisconnect(); },
+        onLocalCursorMove: (pos: XY) => { this.callAndThrottle(cursorMoveThrottlingTimeoutMs, this.cursorEventHandler.onLocalCursorMove, pos) },
+        onBoardMutations: (mutations: BoardMutationList) => {   this.callAndThrottle(boardMutationsThrottlingTimeoutMs, this.boardEventHandler.onBoardMutations, mutations) },
+        onRequestRefresh: () => { this.callAndThrottle(requestRefreshThrottlingTimeoutMs, this.boardEventHandler.onRequestRefresh) },
     };
 
     constructor(private socket: BoardServerSocket, private appContext: AppContext, private clientRegistry: ClientRegistry) {
         socket.emit(ServerBoardEvents.Handshake, appContext.board.getElements().map(e => e.toRaw()), appContext.cursorMap.toList());
+        
+        this.networkingEventHandler = new NetworkingEventHandler(appContext, this);
+        this.boardEventHandler = new BoardEventHandler(appContext, this);
+        this.cursorEventHandler = new CursorEventHandler(appContext, this);
+
         this.handshakeTimer = setTimeout(this._handshakePassCheck.bind(this), handshakeTimeoutMs);
+
 
         socket.on(ClientBoardEvents.Handshake, this.boundHandlers.onHandshake);
         socket.on('disconnect', this.boundHandlers.onDisconnect);
@@ -51,8 +64,12 @@ export class Client {
     public getClientId() {
         return this.socket.id;
     }
+    
+    public getSocket(): BoardServerSocket {
+        return this.socket;
+    }
 
-    private disconnect() {
+    public disconnect() {
         if (!this.connected) return;
         this.connected = false;
 
@@ -68,38 +85,11 @@ export class Client {
         this.socket.disconnect();
     }
 
-    private onHandshake(cursorWorldCoords: XY) {
-        if (this.passedHandshake) return;
-        const cursor = { clientId: this.socket.id, worldCoords: cursorWorldCoords };
-        this.appContext.cursorMap.addCursor(cursor);
-        this.socket.broadcast.emit(ServerBoardEvents.ClientConnected, this.socket.id, cursor);
-
-        this.markHandshakePass();
+    public didPassHandshake(): boolean {
+        return this.passedHandshake;
     }
-
-    private onDisconnect() {
-        this.disconnect();
-    }
-
-    private onLocalCursorMove(pos: XY) {
-        this.appContext.cursorMap.setPosition(this.socket.id, pos);
-        this.socket.broadcast.emit(ServerBoardEvents.RemoteCursorMove, { clientId: this.socket.id, worldCoords: pos });
-    }
-
-    private onBoardMutations(mutations: BoardMutationList) {
-        mutations = optimizeMutations(mutations);
-        for (const mutation of mutations) {
-            // console.log('Got mutation: ', mutation);
-            // TODO: validate point array length, etc etc. only then apply mutations. reject on weird data 
-            this.appContext.board.applyMutation(mutation);
-        }
-        this.socket.broadcast.emit(ServerBoardEvents.BoardMutations, mutations);
-    }
-
-    private onRequestRefresh() {
-        this.socket.emit(ServerBoardEvents.RefreshBoard, this.appContext.board.getElements().map(element => element.toRaw()));
-    }
-    private markHandshakePass() {
+ 
+    public markHandshakePass() {
         this.passedHandshake = true;
         clearTimeout(this.handshakeTimer);
     }
