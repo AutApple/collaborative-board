@@ -3,9 +3,9 @@ import { ClientBoardEvents, ServerBoardEvents, type BoardClientSocket, type Boar
 import type { XY } from '../shared/types/vec2.type.js';
 import type { AppContext } from './app-context.js';
 import type { ClientRegistry } from './client-registry.js';
-import { BoardEventHandler } from './event-handlers.ts/board.event-handler.js';
-import { CursorEventHandler } from './event-handlers.ts/cursor.event-handler.js';
-import { NetworkingEventHandler } from './event-handlers.ts/networking.event-handler.js';
+import { BoardEventHandler } from './event-handlers/board.event-handler.js';
+import { CursorEventHandler } from './event-handlers/cursor.event-handler.js';
+import { NetworkingEventHandler } from './event-handlers/networking.event-handler.js';
 
 const handshakeTimeoutMs = 5000; // TODO: place in config
 
