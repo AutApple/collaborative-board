@@ -67,7 +67,6 @@ export class BoardController {
     private onBoardResize(e: BoardResizeEvent) {
         this.appContext.renderer.resizeCanvas(e.w, e.h);
         this.appContext.renderer.renderAll(this.appContext.camera);
-        // this.networkService.requestBoardRefresh();
     }
 
     private onBoardHistoryMutaitons(e: BoardHistoryMutationsEvent) {
