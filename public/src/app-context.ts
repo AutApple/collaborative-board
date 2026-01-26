@@ -3,7 +3,7 @@ import { RemoteCursorMap } from '@shared/remote-cursor/remote-cursor-list.js';
 import { Vec2, type XY } from '@shared/types/vec2.type.js';
 import { BoardHistory } from './board-history/board-history.js';
 import { Camera } from './camera/camera.js';
-import { Renderer } from './renderer.js';
+import { Renderer } from './renderer/renderer.js';
 import { Toolbox } from './toolbox/toolbox.js';
 
 export class AppContext {

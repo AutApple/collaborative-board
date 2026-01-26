@@ -14,22 +14,21 @@ export class CameraController {
 
     public onCameraZoom(e: CameraZoomEvent) {
         this.appContext.camera.zoom(e.screenCoords, e.delta);
-        this.appContext.renderer.renderBoard(this.appContext.board, this.appContext.camera);
+        this.appContext.renderer.renderAll(this.appContext.camera);
     }
 
     public onCameraStartPanning(e: CameraStartPanningEvent) {
         this.appContext.camera.startMove(e.screenCoords);
-        this.appContext.renderer.renderBoard(this.appContext.board, this.appContext.camera);
-
+        this.appContext.renderer.renderAll(this.appContext.camera);
     }
 
     public onCameraProcessPanning(e: CameraProcessPanningEvent) {
         this.appContext.camera.move(e.screenCoords);
-        this.appContext.renderer.renderBoard(this.appContext.board, this.appContext.camera);
+        this.appContext.renderer.renderAll(this.appContext.camera);
     }
 
     public onCameraEndPanning(e: CameraEndPanningEvent) {
         this.appContext.camera.endMove();
-        this.appContext.renderer.renderBoard(this.appContext.board, this.appContext.camera);
+        this.appContext.renderer.renderAll(this.appContext.camera);
     }
 }
