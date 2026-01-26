@@ -39,6 +39,9 @@ export class Toolbox {
     changeTool(tool: Tools) {
         this.currentTool = this.toolInstances[tool];
     }
+    getCurrentStrokeData(): StrokeData {
+        return this.currentStrokeData;
+    }
 
     isConstructing(): boolean {
         return this.currentTool.isConstructing();

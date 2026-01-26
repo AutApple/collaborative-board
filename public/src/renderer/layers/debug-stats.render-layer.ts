@@ -9,6 +9,7 @@ export class DebugStatsRenderLayer extends BaseRenderLayer {
         this.debugStats = debugStats;
     }
     public render(ctx: CanvasRenderingContext2D, _: Camera): void {
+        ctx.fillStyle = 'black';
         ctx.fillText(`Overall elements: ${this.debugStats.overallElementsAmount}`, 16, 16);
         ctx.fillText(`Overall points: ${this.debugStats.overallPointsAmount}`, 16, 32);
     }

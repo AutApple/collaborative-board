@@ -6,13 +6,15 @@ import type { BaseRenderLayer } from './layers/base.render-layer.js';
 import { RenderLayerType } from './types/render-layer.type.js';
 import { BoardElementsRenderLayer } from './layers/board-elements.render-layer.js';
 import { DebugStatsRenderLayer } from './layers/debug-stats.render-layer.js';
+import { StrokePreviewRenderLayer } from './layers/stroke-preview.render-layer.js';
 
 
 export class Renderer {
     private ctx: CanvasRenderingContext2D;
     private layers: Map<RenderLayerType, BaseRenderLayer> = new Map<RenderLayerType, BaseRenderLayer>([
         [RenderLayerType.Elements, new BoardElementsRenderLayer()],
-        [RenderLayerType.DebugStats, new DebugStatsRenderLayer()]
+        [RenderLayerType.DebugStats, new DebugStatsRenderLayer()],
+        [RenderLayerType.StrokePreview, new StrokePreviewRenderLayer()]
     ]);
 
     constructor(private canvas: HTMLCanvasElement) {
@@ -30,11 +32,11 @@ export class Renderer {
     public getCanvasDimensions(): XY {
         return { x: this.canvas.width, y: this.canvas.height };
     }
-    public setLayerData(layer: RenderLayerType, data: any) {
-        this.layers.get(layer)?.updateData(data);
+    public setLayerData(layer: RenderLayerType, ...data: any) {
+        this.layers.get(layer)?.updateData(...data);
     }
-    public setLayerDataAndRender(camera: Camera, layer: RenderLayerType, data: any) {
-        this.setLayerData(layer, data);
+    public setLayerDataAndRender(camera: Camera, layer: RenderLayerType, ...data: any) {
+        this.setLayerData(layer, ...data);
         this.renderAll(camera);
     }
     

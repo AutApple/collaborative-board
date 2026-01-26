@@ -8,13 +8,22 @@ export class BoardElementsRenderLayer extends BaseRenderLayer {
 
     private renderElement(ctx: CanvasRenderingContext2D, element: BaseBoardElement, camera: Camera) {
         const points = element.getPoints();
-        if (points.length < 2) return;
+        if (points.length === 0) return;
 
         const { color, size } = element.getStrokeData();
         ctx.lineWidth = size;
         ctx.lineCap = "round";
         ctx.strokeStyle = color;
 
+        // Single-point stroke = dot
+        if (points.length === 1) {
+            const p = camera.worldToScreen(points[0]!);
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, size * 0.5, 0, Math.PI * 2);
+            ctx.fill();
+            return;
+        }
+       
         const start = camera.worldToScreen(points[0]!);
         ctx.beginPath();
         ctx.moveTo(start.x, start.y);
@@ -34,10 +43,6 @@ export class BoardElementsRenderLayer extends BaseRenderLayer {
         const last = camera.worldToScreen(points[points.length - 1]!);
         ctx.lineTo(last.x, last.y);
         ctx.stroke();
-    }
-
-    public override clear(): void {
-        this.elements = [];
     }
 
     public override updateData(elements: BaseBoardElement[]): void {

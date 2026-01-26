@@ -3,6 +3,7 @@ import type { AppContext } from '../app-context.js';
 import type { EventBus } from '../event-bus/event-bus.js';
 import { SemanticEvents, type LocalCursorMoveEvent, type RemoteCursorConnectEvent, type RemoteCursorDisconnectEvent, type RemoteCursorMoveEvent, type SemanticEventMap } from '../event-bus/index.js';
 import type { NetworkService } from '../network/network.service.js';
+import { RenderLayerType } from '../renderer/types/render-layer.type.js';
 import type { RemoteCursorUIAdapter } from './remote-cursor.ui-adapter.js';
 
 export class CursorController {
@@ -43,6 +44,12 @@ export class CursorController {
      }
 
      public onLocalCursorMove({ screenCoords }: LocalCursorMoveEvent) {
+          this.appContext.renderer.setLayerDataAndRender(
+               this.appContext.camera,
+               RenderLayerType.StrokePreview,
+               this.appContext.toolbox.getCurrentStrokeData(),
+               this.appContext.camera.worldToScreen(Vec2.fromXY(this.appContext.localCursorWorldCoords))
+          );
           if (!this._checkTime()) return; // should be throttled to prevent spamming with packets on server
           this.appContext.localCursorWorldCoords = this.appContext.camera.screenToWorld(screenCoords);
           this.networkService.sendLocalCursorMove(this.appContext.localCursorWorldCoords);
