@@ -27,6 +27,7 @@ export class ToolboxController {
 
     public onToolboxChangeStrokeColor(e: ToolboxChangeStrokeColorEvent) {
         this.appContext.toolbox.changeColor(e.value);
+        this.uiAdapter.setStrokeColor(e.value);
         this.appContext.renderer.setLayerDataAndRender(
             this.appContext.camera,
             RenderLayerType.StrokePreview,
@@ -36,6 +37,7 @@ export class ToolboxController {
     }
     public onToolboxChangeStrokeSize(e: ToolboxChangeStrokeSizeEvent) {
         this.appContext.toolbox.changeSize(e.value);
+        this.uiAdapter.setStrokeSize(e.value);
         this.appContext.renderer.setLayerDataAndRender(
             this.appContext.camera,
             RenderLayerType.StrokePreview,

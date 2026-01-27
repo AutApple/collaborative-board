@@ -14,6 +14,9 @@ interface ToolboxElementDOMIds {
 export class ToolboxUiAdapter {
     private buttonIdMap: Record<Tools, string>;
     
+    private colorPickerElement: HTMLInputElement;
+    private strokeSizeElement: HTMLInputElement;
+
     constructor(
         private document: Document,
         private semanticEventBus: EventBus<SemanticEventMap>,
@@ -41,16 +44,16 @@ export class ToolboxUiAdapter {
             element.addEventListener('click', _ => { this.semanticEventBus.emit(SemanticEvents.ToolboxChangeTool, { tool }); });
         }
 
-        const colorPickerElement = this.document.getElementById(toolboxUiElementIds.color_setting);
-        if (!colorPickerElement) throw new Error(`Color picker component not found. Did you spell id correctly? Id: ${toolboxUiElementIds.color_setting}`);
+        this.colorPickerElement = this.document.getElementById(toolboxUiElementIds.color_setting) as HTMLInputElement;
+        if (!this.colorPickerElement) throw new Error(`Color picker component not found. Did you spell id correctly? Id: ${toolboxUiElementIds.color_setting}`);
         
-        const strokePickerElement = this.document.getElementById(toolboxUiElementIds.stroke_setting);
-        if (!strokePickerElement) throw new Error(`Stroke size picker component not found. Did you spell id correctly? Id: ${toolboxUiElementIds.stroke_setting}`);
+        this.strokeSizeElement = this.document.getElementById(toolboxUiElementIds.stroke_setting) as HTMLInputElement;
+        if (!this.strokeSizeElement) throw new Error(`Stroke size picker component not found. Did you spell id correctly? Id: ${toolboxUiElementIds.stroke_setting}`);
 
-        colorPickerElement.addEventListener('input', e => {
+        this.colorPickerElement.addEventListener('input', e => {
             this.semanticEventBus.emit(SemanticEvents.ToolboxChangeStrokeColor, {value: (e.target as HTMLInputElement).value});
         });
-        strokePickerElement.addEventListener('input', e => {
+        this.strokeSizeElement.addEventListener('input', e => {
             this.semanticEventBus.emit(SemanticEvents.ToolboxChangeStrokeSize, {value: +(e.target as HTMLInputElement).value});
         });
     }
@@ -63,6 +66,14 @@ export class ToolboxUiAdapter {
         return ret;
     }
     
+    
+    public setStrokeColor(value: string) {
+        this.colorPickerElement.value = value;
+    }
+    public setStrokeSize(value: number) {
+        this.strokeSizeElement.value = value.toString();
+    }
+
     public setActive(button: Tools) {
         const el = this.document.getElementById(this.getDOMElementId(button));
         if (el)
