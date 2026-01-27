@@ -33,10 +33,10 @@ export class LineBoardElement extends BaseBoardElement {
         this.pos2.set(this.points[this.points.length - 1]!);
     }
 
-    public override findClosestPointTo(worldCoords: Vec2): { point: Vec2, distance: number; } {
+    public override findClosestPointTo(worldCoords: Vec2): Vec2 {
         const distA = this.pos.distanceTo(worldCoords);
         const distB = this.pos2.distanceTo(worldCoords);
-        return distA < distB ? { point: this.pos, distance: distA } : { point: this.pos2, distance: distB };
+        return distA < distB ?  this.pos : this.pos2;
     }
 
     public setPosition2(worldCoords: Vec2) {

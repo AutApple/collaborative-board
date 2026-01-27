@@ -33,7 +33,7 @@ export class StrokeBoardElement extends BaseBoardElement {
     }
 
 
-    public override findClosestPointTo(worldCoords: Vec2): { point: Vec2, distance: number; } {
+    public override findClosestPointTo(worldCoords: Vec2): Vec2 {
         const points = this.getPoints();
 
         let point = this.pos;
@@ -46,7 +46,7 @@ export class StrokeBoardElement extends BaseBoardElement {
                 point = p;
             }
         }
-        return { point, distance: minDistance };
+        return point;
     }
 
     private static pointToOffset(point: Vec2, pos: Vec2): Vec2 {

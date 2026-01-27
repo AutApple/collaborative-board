@@ -53,8 +53,9 @@ export class Board {
         let minElement: BaseBoardElement | undefined = undefined;
         for (const element of this.elements) {
             const closestPoint = element.findClosestPointTo(worldCoords);
-            const isNewMinDistance = (minDistance > closestPoint.distance);
-            minDistance = isNewMinDistance ? closestPoint.distance : minDistance;
+            const distance = closestPoint.distanceTo(worldCoords);
+            const isNewMinDistance = (minDistance > distance);
+            minDistance = isNewMinDistance ? distance : minDistance;
             minElement = isNewMinDistance ? element : minElement;
         }
         return minElement;

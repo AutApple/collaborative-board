@@ -20,7 +20,7 @@ export abstract class BaseBoardElement {
     }
 
     public abstract clone(): BaseBoardElement;
-    public abstract findClosestPointTo(worldCoords: Vec2): { point: Vec2, distance: number; };
+    public abstract findClosestPointTo(worldCoords: Vec2): Vec2;
 
     protected static validatePoints(points: Vec2[]) {
         return points.length >= 1;

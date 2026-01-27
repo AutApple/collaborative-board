@@ -3,12 +3,13 @@ import { Tools } from './enums/tools.enum.js';
 
 
 interface ToolboxElementDOMIds {
-    pen_button: string,
-    line_button: string,
-    eraser_button: string;
+    penButton: string,
+    lineButton: string,
+    eraserButton: string;
+    eyeDropperButton: string;
 
-    color_setting: string;
-    stroke_setting: string;
+    colorSetting: string;
+    strokeSetting: string;
 }
 
 export class ToolboxUiAdapter {
@@ -21,20 +22,22 @@ export class ToolboxUiAdapter {
         private document: Document,
         private semanticEventBus: EventBus<SemanticEventMap>,
         toolboxUiElementIds: ToolboxElementDOMIds = {
-            pen_button: 'toolbox-button-pen',
-            line_button: 'toolbox-button-line',
-            eraser_button: 'toolbox-button-eraser',
+            penButton: 'toolbox-button-pen',
+            lineButton: 'toolbox-button-line',
+            eraserButton: 'toolbox-button-eraser',
+            eyeDropperButton: 'toolbox-button-eye-dropper',
 
-            color_setting: 'toolbox-setting-color',
-            stroke_setting: 'toolbox-setting-stroke'
+            colorSetting: 'toolbox-setting-color',
+            strokeSetting: 'toolbox-setting-stroke',
         }) {
         
         
         // Map of tools mapped to corresponding buttons 
         this.buttonIdMap = {
-            [Tools.Pen]: toolboxUiElementIds.pen_button,
-            [Tools.Line]: toolboxUiElementIds.line_button,
-            [Tools.Eraser]: toolboxUiElementIds.eraser_button
+            [Tools.Pen]: toolboxUiElementIds.penButton,
+            [Tools.Line]: toolboxUiElementIds.lineButton,
+            [Tools.Eraser]: toolboxUiElementIds.eraserButton,
+            [Tools.Eyedropper]: toolboxUiElementIds.eyeDropperButton
         };
 
         for (const tool of Object.keys(this.buttonIdMap) as Tools[]) {
@@ -44,11 +47,11 @@ export class ToolboxUiAdapter {
             element.addEventListener('click', _ => { this.semanticEventBus.emit(SemanticEvents.ToolboxChangeTool, { tool }); });
         }
 
-        this.colorPickerElement = this.document.getElementById(toolboxUiElementIds.color_setting) as HTMLInputElement;
-        if (!this.colorPickerElement) throw new Error(`Color picker component not found. Did you spell id correctly? Id: ${toolboxUiElementIds.color_setting}`);
+        this.colorPickerElement = this.document.getElementById(toolboxUiElementIds.colorSetting) as HTMLInputElement;
+        if (!this.colorPickerElement) throw new Error(`Color picker component not found. Did you spell id correctly? Id: ${toolboxUiElementIds.colorSetting}`);
         
-        this.strokeSizeElement = this.document.getElementById(toolboxUiElementIds.stroke_setting) as HTMLInputElement;
-        if (!this.strokeSizeElement) throw new Error(`Stroke size picker component not found. Did you spell id correctly? Id: ${toolboxUiElementIds.stroke_setting}`);
+        this.strokeSizeElement = this.document.getElementById(toolboxUiElementIds.strokeSetting) as HTMLInputElement;
+        if (!this.strokeSizeElement) throw new Error(`Stroke size picker component not found. Did you spell id correctly? Id: ${toolboxUiElementIds.strokeSetting}`);
 
         this.colorPickerElement.addEventListener('input', e => {
             this.semanticEventBus.emit(SemanticEvents.ToolboxChangeStrokeColor, {value: (e.target as HTMLInputElement).value});

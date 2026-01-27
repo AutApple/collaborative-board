@@ -27,7 +27,10 @@ export class EraserTool extends BaseTool {
     private erase(worldCoords: Vec2): BoardMutationList {
         const closestElement = this.board.findClosestElementTo(worldCoords);
         if (!closestElement) return [];
-        const { point, distance } = closestElement.findClosestPointTo(worldCoords);
+        
+        const point = closestElement.findClosestPointTo(worldCoords);
+        const distance = point.distanceTo(worldCoords);
+
         if (distance > this.eraserRadius) return [];
         // 2 cases  
         // 1 - point is either first or last point of the element. then we just remove the point.
