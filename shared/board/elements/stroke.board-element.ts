@@ -32,22 +32,34 @@ export class StrokeBoardElement extends BaseBoardElement {
         return true;
     }
 
-
     public override findClosestPointTo(worldCoords: Vec2): Vec2 {
         const points = this.getPoints();
 
-        let point = this.pos;
+        let closestPoint = this.pos;
         let minDistance = Infinity;
 
-        for (const p of points) {
-            const dist = p.distanceTo(worldCoords);
+        for (let i = 0; i < points.length - 1; i++) {
+            const A = points[i]!;
+            const B = points[i + 1]!;
+
+            const AB = B.sub(A);
+            const AP = worldCoords.sub(A);
+
+            let t = AB.dot(AP) / AB.dot(AB);
+            t = Math.max(0, Math.min(1, t));
+
+            const projection = A.add(AB.mulScalar(t));
+
+            const dist = projection.distanceTo(worldCoords);
             if (dist < minDistance) {
                 minDistance = dist;
-                point = p;
+                closestPoint = projection;
             }
         }
-        return point;
+
+        return closestPoint;
     }
+     
 
     private static pointToOffset(point: Vec2, pos: Vec2): Vec2 {
         return point.sub(pos);

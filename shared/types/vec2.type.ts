@@ -68,4 +68,8 @@ export class Vec2 implements XY {
         const cross = Math.abs(ab.cross(ap));
         return cross / Math.sqrt(ab.x * ab.x + ab.y * ab.y);
     }
+
+    public dot(vec: XY): number {
+        return this.x * vec.x + this.y * vec.y;
+    }
 }

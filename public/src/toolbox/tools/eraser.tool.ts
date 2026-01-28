@@ -27,7 +27,7 @@ export class EraserTool extends BaseTool {
     private erase(worldCoords: Vec2): BoardMutationList {
         const closestElement = this.board.findClosestElementTo(worldCoords);
         if (!closestElement) return [];
-        
+
         const point = closestElement.findClosestPointTo(worldCoords);
         const distance = point.distanceTo(worldCoords);
 
@@ -38,13 +38,21 @@ export class EraserTool extends BaseTool {
         // if there is no points left - completely dissolve the element
         // then append new stroke with these saved points
         const allPoints = closestElement.getPoints();
-        const idx = allPoints.findIndex(p => p.x === point.x && p.y === point.y);
+        let idx = 0;
+        let minDist = Infinity;
+        for (let i = 0; i < allPoints.length; i++) {
+            const d = allPoints[i]!.distanceTo(point);
+            if (d < minDist) {
+                minDist = d;
+                idx = i;
+            }
+        }
         if (idx === 0 || idx === (allPoints.length - 1)) {
             const updatedPoints = allPoints.filter((_, i) => i !== idx);
 
             if (updatedPoints.length < 1)
                 return [this.removeElementAndMakeMutation(closestElement.id)];
-            this.localToolResult.addBoardAction((board) => { board.updateElement(closestElement.id, updatedPoints )})
+            this.localToolResult.addBoardAction((board) => { board.updateElement(closestElement.id, updatedPoints); });
             let resMutation: UpdateBoardMutation = {
                 type: BoardMutationType.Update,
                 id: closestElement.id,
@@ -57,13 +65,13 @@ export class EraserTool extends BaseTool {
         this.localToolResult.addBoardAction((board) => {
             board.updateElement(closestElement.id, left);
         });
-        
+
         const newElement = closestElement.clone();
         newElement.setPoints(right);
         this.localToolResult.addBoardAction((board) => {
             board.appendElement(newElement);
-        })
-        
+        });
+
         const updateMutation: UpdateBoardMutation = {
             type: BoardMutationType.Update,
             id: closestElement.id,
@@ -81,7 +89,7 @@ export class EraserTool extends BaseTool {
         return this.erasing;
     }
 
-    public override startConstructing(worldCoords: Vec2, {size}: StrokeData): ToolResult | null {
+    public override startConstructing(worldCoords: Vec2, { size }: StrokeData): ToolResult | null {
         this.localToolResult.clear();
         this.erasing = true;
         this.eraserRadius = size;
@@ -99,7 +107,7 @@ export class EraserTool extends BaseTool {
         return this.localToolResult.addRenderBoardEmit(this.board);
     }
 
-    public override endConstructing(): ToolResult | null{
+    public override endConstructing(): ToolResult | null {
         this.localToolResult.clear();
         const toolResult = new ToolResult().setGlobalMutations(this.resultingMutationList).addRenderBoardEmit(this.board);
         this.erasing = false;

@@ -34,9 +34,13 @@ export class LineBoardElement extends BaseBoardElement {
     }
 
     public override findClosestPointTo(worldCoords: Vec2): Vec2 {
-        const distA = this.pos.distanceTo(worldCoords);
-        const distB = this.pos2.distanceTo(worldCoords);
-        return distA < distB ?  this.pos : this.pos2;
+        const AB = this.pos2.sub(this.pos);
+        const AP = worldCoords.sub(this.pos);
+
+        let t = AB.dot(AP) / AB.dot(AB);
+        t = Math.max(0, Math.min(1, t));
+
+        return this.pos.add(AB.mulScalar(t));
     }
 
     public setPosition2(worldCoords: Vec2) {
