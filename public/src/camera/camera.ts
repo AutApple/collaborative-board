@@ -33,7 +33,7 @@ export class Camera {
 
         this.scale *= zoomFactor;
 
-        this.pos.set(p.sub(mouse).mulScalar(this.scale));
+        this.pos = Vec2.fromXY(p.sub(mouse.mulScalar(this.scale)));
     }
 
     public isPanning(): boolean {
