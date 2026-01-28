@@ -1,7 +1,7 @@
 import { Vec2, type XY } from '@shared/types/vec2.type.js';
 import { BaseBoardElement } from '@shared/board/elements/';
 import type { Board, BoardDebugStats } from '@shared/board/board.js';
-import type { Camera } from '../camera/camera.js';
+import { Camera } from '../camera/camera.js';
 import type { BaseRenderLayer } from './layers/base.render-layer.js';
 import { RenderLayerType } from './types/render-layer.type.js';
 import { BoardElementsRenderLayer } from './layers/board-elements.render-layer.js';
@@ -29,6 +29,21 @@ export class Renderer {
         this.canvas.height = h;
     }
 
+
+    public async saveBoardToPNG(camera: Camera): Promise<Blob> {
+        const canvas = new OffscreenCanvas(this.canvas.width, this.canvas.height); // no HTML element needed
+        const ctx = canvas.getContext('2d');
+        if (!ctx) throw new Error('Unable to make a canvas instance');
+        
+        ctx.fillStyle = '#ffffff'; // TODO: CANVAS BACKGROUND
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        this.layers.get(RenderLayerType.Elements)!.render(ctx, camera);
+
+        const blob = await canvas.convertToBlob({ type: 'image/png' });
+        return blob;
+    }
+
     public getCanvasDimensions(): XY {
         return { x: this.canvas.width, y: this.canvas.height };
     }
@@ -36,7 +51,7 @@ export class Renderer {
     public setLayerData(layer: RenderLayerType, ...data: any) {
         this.layers.get(layer)?.updateData(...data);
     }
-    
+
     public setLayerDataAndRender(camera: Camera, layer: RenderLayerType, ...data: any) {
         this.setLayerData(layer, ...data);
         this.renderAll(camera);
@@ -47,7 +62,7 @@ export class Renderer {
         this.setLayerData(RenderLayerType.DebugStats, debugStats);
         this.renderAll(camera);
     }
-    
+
     public renderAll(camera: Camera) {
         this.clear();
         for (const layerType of this.layers.keys()) {

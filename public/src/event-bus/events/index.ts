@@ -32,7 +32,8 @@ export enum SemanticEvents {
     RemoteCursorMove,
     LocalCursorMove,
 
-    RendererRedrawBoard
+    RendererRedrawBoard,
+    RendererExportBoard
 }
 
 
@@ -62,6 +63,7 @@ export type RemoteCursorMoveEvent = { cursor: Cursor };
 export type LocalCursorMoveEvent = { screenCoords: Vec2 };
 
 export type RendererRedrawBoardEvent =  { elements: BaseBoardElement[], debugStats: BoardDebugStats };
+export type RendererExportBoardEvent = {};
 
 export type SemanticEventMap = {
     // board
@@ -85,10 +87,11 @@ export type SemanticEventMap = {
     [SemanticEvents.BoardHistoryRedoAction]: BoardHistoryRedoActionEvent;
     [SemanticEvents.BoardHistoryUndoAction]: BoardHistoryUndoActionEvent;
     // cursors
-    [SemanticEvents.RemoteCursorConnect]: RemoteCursorConnectEvent
-    [SemanticEvents.RemoteCursorDisconnect]: RemoteCursorDisconnectEvent
-    [SemanticEvents.RemoteCursorMove]: RemoteCursorMoveEvent
-    [SemanticEvents.LocalCursorMove]: LocalCursorMoveEvent
+    [SemanticEvents.RemoteCursorConnect]: RemoteCursorConnectEvent;
+    [SemanticEvents.RemoteCursorDisconnect]: RemoteCursorDisconnectEvent;
+    [SemanticEvents.RemoteCursorMove]: RemoteCursorMoveEvent;
+    [SemanticEvents.LocalCursorMove]: LocalCursorMoveEvent;
     // renderer
-    [SemanticEvents.RendererRedrawBoard]: RendererRedrawBoardEvent
+    [SemanticEvents.RendererRedrawBoard]: RendererRedrawBoardEvent;
+    [SemanticEvents.RendererExportBoard]: RendererExportBoardEvent;
 };

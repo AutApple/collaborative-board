@@ -47,6 +47,34 @@ body {
   100% { opacity: 0.6; }
 }
 
+#top-panel {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    z-index: 1000;
+    display: flex;
+    gap: 0.5rem;
+}
+
+#top-panel-save-button {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.4rem 0.6rem;
+    background-color: #2a2a2a6a;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+}
+
+#top-panel-save-button:hover {
+    background-color: rgb(50, 50, 50);
+    color: rgb(183, 239, 183);
+}
+
 canvas {
     display: block;
     background: #fff;

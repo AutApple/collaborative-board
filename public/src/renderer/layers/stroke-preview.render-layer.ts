@@ -12,7 +12,7 @@ export class StrokePreviewRenderLayer extends BaseRenderLayer {
         this.strokeData = strokeData;
         this.screenMouseCoords = screenMouseCoords;
     }
-    public override render(ctx: CanvasRenderingContext2D, _: Camera): void {
+    public override render(ctx: CanvasRenderingContext2D |  OffscreenCanvasRenderingContext2D, _: Camera): void {
         const { x, y } = this.screenMouseCoords;
         const { color, size } = this.strokeData;
 

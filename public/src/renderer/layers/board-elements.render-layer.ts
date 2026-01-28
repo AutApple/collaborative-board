@@ -6,7 +6,7 @@ export class BoardElementsRenderLayer extends BaseRenderLayer {
     private elements: BaseBoardElement[] = []; 
     constructor () { super(); }
 
-    private renderElement(ctx: CanvasRenderingContext2D, element: BaseBoardElement, camera: Camera) {
+    private renderElement(ctx: CanvasRenderingContext2D |  OffscreenCanvasRenderingContext2D, element: BaseBoardElement, camera: Camera) {
         const points = element.getPoints();
         if (points.length === 0) return;
 

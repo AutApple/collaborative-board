@@ -14,6 +14,7 @@ import { ToolboxController } from './toolbox/toolbox.controller.js';
 import { ToolboxUiAdapter } from './toolbox/toolbox.ui-adapter.js';
 import { NetworkUiAdapter } from './network/network.ui-adapter.js';
 import { RendererController } from './renderer/renderer.controller.js';
+import { RendererUiAdapter } from './renderer/renderer.ui-adapter.js';
 
 export class BoardClient {
     constructor(private document: Document) { }
@@ -37,7 +38,7 @@ export class BoardClient {
         
         const toolboxUiAdapter = new ToolboxUiAdapter(this.document, semanticEventBus);
         const remoteCursorUiAdapter = new RemoteCursorUIAdapter(this.document);
-        
+        const rendererUiAdapter = new RendererUiAdapter(this.document, semanticEventBus);
         const networkUiAdapter = new NetworkUiAdapter(this.document);
         networkUiAdapter.hideDisconnectOverlay();
         
@@ -51,7 +52,7 @@ export class BoardClient {
         const toolboxController = new ToolboxController(appContext, toolboxUiAdapter);
         const boardHistoryController = new BoardHistoryController(appContext);
         const cursorController = new CursorController(appContext, remoteCursorUiAdapter, networkService);
-        const rendererController = new RendererController(appContext);
+        const rendererController = new RendererController(appContext, rendererUiAdapter);
 
         boardController.subscribe(semanticEventBus);
         cameraController.subscribe(semanticEventBus);
