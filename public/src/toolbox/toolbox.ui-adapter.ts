@@ -7,6 +7,7 @@ interface ToolboxElementDOMIds {
     lineButton: string,
     eraserButton: string;
     eyeDropperButton: string;
+    rectangleButton: string;
 
     colorSetting: string;
     strokeSetting: string;
@@ -26,9 +27,11 @@ export class ToolboxUiAdapter {
             lineButton: 'toolbox-button-line',
             eraserButton: 'toolbox-button-eraser',
             eyeDropperButton: 'toolbox-button-eye-dropper',
+            rectangleButton: 'toolbox-button-rectangle',
 
             colorSetting: 'toolbox-setting-color',
             strokeSetting: 'toolbox-setting-stroke',
+            
         }) {
         
         
@@ -37,7 +40,8 @@ export class ToolboxUiAdapter {
             [Tools.Pen]: toolboxUiElementIds.penButton,
             [Tools.Line]: toolboxUiElementIds.lineButton,
             [Tools.Eraser]: toolboxUiElementIds.eraserButton,
-            [Tools.Eyedropper]: toolboxUiElementIds.eyeDropperButton
+            [Tools.Eyedropper]: toolboxUiElementIds.eyeDropperButton,
+            [Tools.Rectangle]: toolboxUiElementIds.rectangleButton
         };
 
         for (const tool of Object.keys(this.buttonIdMap) as Tools[]) {

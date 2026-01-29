@@ -8,6 +8,7 @@ import { EraserTool } from './tools/eraser.tool.js';
 import type { StrokeData } from '@shared/board/elements/types/stroke-data.type.js';
 import type { ToolResult } from './tool-result.js';
 import { EyedropperTool } from './tools/eyedropper.tool.js';
+import { RectangleTool } from './tools/rectangle.tool.js';
 
 export class Toolbox {
     private currentTool: BaseTool;
@@ -26,7 +27,8 @@ export class Toolbox {
             [Tools.Pen]: new StrokeTool(board),
             [Tools.Line]: new LineTool(board),
             [Tools.Eraser]: new EraserTool(board),
-            [Tools.Eyedropper]: new EyedropperTool(board)
+            [Tools.Eyedropper]: new EyedropperTool(board),
+            [Tools.Rectangle]: new RectangleTool(board)
         };
         this.currentTool = this.toolInstances[Tools.Pen]; // TODO: some config that would define defaults
     }
