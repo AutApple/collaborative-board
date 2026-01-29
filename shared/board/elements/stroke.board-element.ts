@@ -32,15 +32,15 @@ export class StrokeBoardElement extends BaseBoardElement {
         return true;
     }
 
-    public override findClosestPointTo(worldCoords: Vec2): Vec2 {
-        const points = this.getPoints();
+    public override findClosestVertexTo(worldCoords: Vec2): Vec2 {
+        const vertices = this.getVertices();
 
         let closestPoint = this.pos;
         let minDistance = Infinity;
 
-        for (let i = 0; i < points.length - 1; i++) {
-            const A = points[i]!;
-            const B = points[i + 1]!;
+        for (let i = 0; i < vertices.length - 1; i++) {
+            const A = vertices[i]!;
+            const B = vertices[i + 1]!;
 
             const AB = B.sub(A);
             const AP = worldCoords.sub(A);
@@ -65,10 +65,10 @@ export class StrokeBoardElement extends BaseBoardElement {
         return point.sub(pos);
     }
 
-    protected static override validatePoints(points: Vec2[]) {
+    protected static override validateVertices(points: Vec2[]) {
         return !(points.length < 1 && !points.every(p => p !== undefined));
     }
-    public addPoint(worldCoords: Vec2) {
+    public addVertex(worldCoords: Vec2) {
         if (!this.checkTimeThreshold()) return;
         if (!this.checkDistanceThreshold(worldCoords)) return;
 
@@ -87,12 +87,12 @@ export class StrokeBoardElement extends BaseBoardElement {
         return this.offsets;
     }
 
-    public override getPoints(): readonly Vec2[] {
+    public override getVertices(): readonly Vec2[] {
         return this.offsets.map(off => { return off.add(this.pos); }); // convert offsets to positions
     }
 
-    public override setPoints(points: Vec2[]) {
-        if (!StrokeBoardElement.validatePoints(points))
+    public override setVertices(points: Vec2[]) {
+        if (!StrokeBoardElement.validateVertices(points))
             throw Error('Wrong points array signature'); // TODO: replace with centralized messages
         this.setPosition(points[0]!);
         this.offsets = points.map(p => {
@@ -117,17 +117,17 @@ export class StrokeBoardElement extends BaseBoardElement {
         };
     }
 
-    public override optimizePoints(): void { // use RDP algorhythm for stroke optimization. 
-        function rdp(points: readonly Vec2[]): Vec2[] {
+    public override optimizeVertices(): void { // use RDP algorhythm for stroke optimization. 
+        function rdp(vertices: readonly Vec2[]): Vec2[] {
             let maxDist = 0;
             let index = 0;
-            const endIndex = points.length - 1;
+            const endIndex = vertices.length - 1;
 
-            const first = points[0]!;
-            const last = points[endIndex]!;
+            const first = vertices[0]!;
+            const last = vertices[endIndex]!;
 
             for (let i = 1; i < endIndex; i++) {
-                const dist = points[i]!.perpendicularDistanceTo(first, last);
+                const dist = vertices[i]!.perpendicularDistanceTo(first, last);
                 if (dist > maxDist) {
                     maxDist = dist;
                     index = i;
@@ -135,19 +135,19 @@ export class StrokeBoardElement extends BaseBoardElement {
             }
 
             if (maxDist > epsilon) {
-                const left = rdp(points.slice(0, index + 1));
-                const right = rdp(points.slice(index));
+                const left = rdp(vertices.slice(0, index + 1));
+                const right = rdp(vertices.slice(index));
 
                 return [...left.slice(0, -1), ...right];
             } else
                 return [first, last];
         }
         const epsilon = 3; // TODO: retrieve epsilon from  the configuration. hardcoded value is temporary solution before i make proper config system
-        const pointsList = this.getPoints();
-        if (pointsList.length <= 2) return;
+        const verticesList = this.getVertices();
+        if (verticesList.length <= 2) return;
         // console.log(`Optimizaiton (e=${epsilon}) start. Initial points: ${pointsList.map(p => `{x: ${p.x},y: ${p.y}}, `)}`)
 
-        this.setPoints(rdp(pointsList));
+        this.setVertices(rdp(verticesList));
         // console.log(`Optimizaiton (e=${epsilon}) end. Resulting points: ${this.getPoints().map(p => `{x: ${p.x},y: ${p.y}}, `)}`)
         return;
     }

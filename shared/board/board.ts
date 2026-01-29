@@ -33,7 +33,7 @@ export class Board {
 
     appendElement(element: BaseBoardElement) {
         if (!this.validateId(element.id)) return; // Check if element's id is valid
-        element.optimizePoints();
+        element.optimizeVertices();
         this.elements.push(element);
     }
 
@@ -44,15 +44,15 @@ export class Board {
     updateElement(elementId: string, points: Vec2[]) {
         const element = this.elements.find(e => e.id === elementId);
         if (!element) return;
-        element.setPoints(points);
-        element.optimizePoints();
+        element.setVertices(points);
+        element.optimizeVertices();
     }
 
     findClosestElementTo(worldCoords: Vec2): BaseBoardElement | undefined {
         let minDistance = Infinity;
         let minElement: BaseBoardElement | undefined = undefined;
         for (const element of this.elements) {
-            const closestPoint = element.findClosestPointTo(worldCoords);
+            const closestPoint = element.findClosestVertexTo(worldCoords);
             const distance = closestPoint.distanceTo(worldCoords);
             const isNewMinDistance = (minDistance > distance);
             minDistance = isNewMinDistance ? distance : minDistance;
@@ -95,7 +95,7 @@ export class Board {
             overallElementsAmount: this.elements.length
         }
         for (const element of this.elements) {
-            for (const point of element.getPoints()) {
+            for (const point of element.getVertices()) {
                 debugStats.overallPointsAmount += 1;
             }
         }

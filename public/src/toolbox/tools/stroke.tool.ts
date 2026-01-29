@@ -29,14 +29,14 @@ export class StrokeTool extends BaseTool {
 
     public override stepConstructing(worldCoords: Vec2): ToolResult | null {
         if (!this.isConstructing()) return null;
-        this.constructingStrokePointer?.addPoint(worldCoords);
+        this.constructingStrokePointer?.addVertex(worldCoords);
 
         return new ToolResult().addRenderBoardEmit(this.board);
     }
 
     public override endConstructing(): ToolResult | null {
         if (!this.isConstructing()) return null;
-        this.constructingStrokePointer!.optimizePoints(); // optimize points
+        this.constructingStrokePointer!.optimizeVertices(); // optimize vertices
         const raw = this.constructingStrokePointer!.toRaw();
         const mutation: CreateBoardMutation = {
             type: BoardMutationType.Create,

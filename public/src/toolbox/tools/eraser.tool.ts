@@ -28,7 +28,7 @@ export class EraserTool extends BaseTool {
         const closestElement = this.board.findClosestElementTo(worldCoords);
         if (!closestElement) return [];
 
-        const point = closestElement.findClosestPointTo(worldCoords);
+        const point = closestElement.findClosestVertexTo(worldCoords);
         const distance = point.distanceTo(worldCoords);
 
         if (distance > this.eraserRadius) return [];
@@ -37,7 +37,7 @@ export class EraserTool extends BaseTool {
         // 2 - point is in the middle. remove the point. get all of the points after it and put them into the buffer, while removing from the stroke
         // if there is no points left - completely dissolve the element
         // then append new stroke with these saved points
-        const allPoints = closestElement.getPoints();
+        const allPoints = closestElement.getVertices();
         let idx = 0;
         let minDist = Infinity;
         for (let i = 0; i < allPoints.length; i++) {
@@ -67,7 +67,7 @@ export class EraserTool extends BaseTool {
         });
 
         const newElement = closestElement.clone();
-        newElement.setPoints(right);
+        newElement.setVertices(right);
         this.localToolResult.addBoardAction((board) => {
             board.appendElement(newElement);
         });

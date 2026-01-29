@@ -20,19 +20,19 @@ export abstract class BaseBoardElement {
     }
 
     public abstract clone(): BaseBoardElement;
-    public abstract findClosestPointTo(worldCoords: Vec2): Vec2;
+    public abstract findClosestVertexTo(worldCoords: Vec2): Vec2;
 
-    protected static validatePoints(points: Vec2[]) {
+    protected static validateVertices(points: Vec2[]) {
         return points.length >= 1;
     }
 
-    public abstract getPoints(): readonly Vec2[];
-    public abstract setPoints(points: Vec2[]): void;
+    public abstract getVertices(): readonly Vec2[];
+    public abstract setVertices(vertices: Vec2[]): void;
 
     public static fromRaw(raw: RawBaseBoardElement, id?: string | undefined) {
         throw new Error('Must be implemented in subclass');
     }
 
     public abstract toRaw(): RawBaseBoardElement;
-    public abstract optimizePoints(): void;
+    public abstract optimizeVertices(): void;
 }

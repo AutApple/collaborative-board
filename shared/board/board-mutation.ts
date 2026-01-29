@@ -60,7 +60,7 @@ export function optimizeMutations(mutations: BoardMutationList): BoardMutationLi
                     idxToDelete.set(i, true);
                     const createMutation = (mutations[createMutationIndex] as CreateBoardMutation)!; 
                     const element = rawElementToInstance(createMutation.raw);
-                    element.setPoints((mutations[i] as UpdateBoardMutation)!.points);
+                    element.setVertices((mutations[i] as UpdateBoardMutation)!.points);
                     createMutation.raw = element.toRaw();
                     break;
                 case BoardMutationType.Remove:

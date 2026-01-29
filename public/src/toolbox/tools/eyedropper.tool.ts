@@ -16,7 +16,7 @@ export class EyedropperTool extends BaseTool {
         const defaultColor = '#ffffff'; // TODO: return something that is configured as background color; 
         const element = this.board.findClosestElementTo(worldCoords);
         if (!element) return defaultColor;
-        const distance = element.findClosestPointTo(worldCoords).distanceTo(worldCoords); 
+        const distance = element.findClosestVertexTo(worldCoords).distanceTo(worldCoords); 
         if (distance > 1.1 * element.getStrokeData().size) return defaultColor; // TODO: put this hardcoded value into config as well
         return element.getStrokeData().color;
     }

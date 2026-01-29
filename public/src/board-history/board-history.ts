@@ -41,7 +41,7 @@ class BoardAction {
                 }
                 if (!createMutation || !lastUpdateMutation) return null;
                 const element = rawElementToInstance(createMutation.raw);
-                element.setPoints(lastUpdateMutation.points);
+                element.setVertices(lastUpdateMutation.points);
 
                 return {
                     id: mutation.id,
@@ -56,7 +56,7 @@ class BoardAction {
                         if (isCreateMutation) {
                             const m = mutationList[i]! as CreateBoardMutation;
                             const element = rawElementToInstance(m.raw);
-                            const points = element.getPoints();
+                            const points = element.getVertices();
                             return {
                                 id: mutation.id,
                                 type: BoardMutationType.Update,
