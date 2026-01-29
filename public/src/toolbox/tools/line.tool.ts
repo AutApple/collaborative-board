@@ -1,17 +1,17 @@
-import { LineBoardElement } from '@shared/board/elements/line-board-element.js';
 import type { Vec2 } from '@shared/utils/vec2.utils.js';
 import type { Board } from '@shared/board/board.js';
 import { BaseTool } from './base.tool.js';
 import { BoardMutationType, type BoardMutationList, type CreateBoardMutation } from '@shared/board/board-mutation.js';
 import type { StrokeData } from '@shared/board/elements/types/stroke-data.type.js';
 import { ToolResult } from '../tool-result.js';
+import { StrokeBoardElement } from '../../../../shared/board/elements/stroke.board-element.js';
 
 export class LineTool extends BaseTool {
     constructor(protected board: Board) {
         super(board);
     }
 
-    private constructingLinePointer: LineBoardElement | null = null;
+    private constructingLinePointer: StrokeBoardElement | null = null;
 
     public override isConstructing(): boolean {
         return !(this.constructingLinePointer === null);
@@ -19,14 +19,14 @@ export class LineTool extends BaseTool {
 
     public override startConstructing(worldCoords: Vec2, strokeData: StrokeData): ToolResult | null {
         if (this.isConstructing()) return null;
-        const line = new LineBoardElement(worldCoords, worldCoords, { ...strokeData });
+        const line = new StrokeBoardElement(worldCoords, { ...strokeData });
         this.constructingLinePointer = line;
         return new ToolResult().addBoardAction(board => board.appendElement(line)).addRenderBoardEmit(this.board);
     }
 
     public override stepConstructing(worldCoords: Vec2): ToolResult | null {
         if (!this.isConstructing()) return null;
-        this.constructingLinePointer?.setPosition2(worldCoords);
+        this.constructingLinePointer?.setVertices([this.constructingLinePointer.getPosition(), worldCoords]);
         return new ToolResult().addRenderBoardEmit(this.board);
     }
 
