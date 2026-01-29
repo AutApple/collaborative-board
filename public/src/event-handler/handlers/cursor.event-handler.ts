@@ -1,4 +1,4 @@
-import { Vec2 } from '../../../../shared/types/vec2.type.js';
+import { Vec2 } from '../../../../shared/utils/vec2.utils.js';
 import type { EventBus } from '../../event-bus/event-bus.js';
 import { SemanticEvents, type SemanticEventMap } from '../../event-bus/index.js';
 

@@ -1,5 +1,5 @@
 import { validate, version } from 'uuid';
-import { Vec2 } from '../types/vec2.type.js';
+import { Vec2 } from '../utils/vec2.utils.js';
 import { BoardMutationType, type BaseBoardMutation, type CreateBoardMutation, type RemoveBoardMutation, type UpdateBoardMutation } from './board-mutation.js';
 import { BaseBoardElement } from './elements/index.js';
 import { rawElementToInstance } from './elements/utils/raw-element-to-instance.js';

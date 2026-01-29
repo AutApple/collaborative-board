@@ -1,5 +1,5 @@
 import type { StrokeData } from '../../../../shared/board/elements/types/stroke-data.type.js';
-import type { XY } from '../../../../shared/types/vec2.type.js';
+import type { XY } from '../../../../shared/utils/vec2.utils.js';
 import type { Camera } from '../../camera/camera.js';
 import { BaseRenderLayer } from './base.render-layer.js';
 

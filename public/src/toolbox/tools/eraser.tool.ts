@@ -1,4 +1,4 @@
-import { Vec2 } from '@shared/types/vec2.type.js';
+import { Vec2 } from '@shared/utils/vec2.utils.js';
 import type { Board } from '@shared/board/board.js';
 import { BoardMutationType, type BoardMutationList, type CreateBoardMutation, type RemoveBoardMutation, type UpdateBoardMutation } from '@shared/board/board-mutation.js';
 import { BaseTool } from './base.tool.js';

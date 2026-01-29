@@ -1,1 +1,0 @@
-export * from './vec2.type.js';

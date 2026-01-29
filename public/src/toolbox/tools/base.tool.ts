@@ -1,4 +1,4 @@
-import type { Vec2 } from '@shared/types/vec2.type.js';
+import type { Vec2 } from '@shared/utils/vec2.utils.js';
 import type { Board } from '@shared/board/board.js';
 import type { StrokeData } from '../../../../shared/board/elements/types/stroke-data.type.js';
 import { ToolResult } from '../tool-result.js';

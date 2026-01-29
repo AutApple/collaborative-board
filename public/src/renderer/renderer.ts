@@ -1,4 +1,4 @@
-import { Vec2, type XY } from '@shared/types/vec2.type.js';
+import { Vec2, type XY } from '@shared/utils/vec2.utils.js';
 import { BaseBoardElement } from '@shared/board/elements/';
 import type { Board, BoardDebugStats } from '@shared/board/board.js';
 import { Camera } from '../camera/camera.js';

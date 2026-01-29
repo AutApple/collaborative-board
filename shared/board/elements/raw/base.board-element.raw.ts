@@ -1,4 +1,4 @@
-import type { Vec2 } from '../../../types/vec2.type.js';
+import type { Vec2 } from '../../../utils/vec2.utils.js';
 import type { StrokeData } from '../types/stroke-data.type.js';
 import type { BoardElementType } from './types/board-element-type.js';
 

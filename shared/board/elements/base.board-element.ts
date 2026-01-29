@@ -1,4 +1,4 @@
-import { Vec2 } from '../../types/vec2.type.js';
+import { Vec2 } from '../../utils/vec2.utils.js';
 import type { RawBaseBoardElement } from './raw/base.board-element.raw.js';
 import type { StrokeData } from './types/stroke-data.type.js';
 

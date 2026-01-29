@@ -1,5 +1,5 @@
 import type { RawBoardElement } from '@shared/board/elements/raw/index.js';
-import type { Vec2 } from '@shared/types/vec2.type.js';
+import type { Vec2 } from '@shared/utils/vec2.utils.js';
 import type { Tools } from '../../toolbox/enums/tools.enum.js';
 import type { BoardMutationList } from '@shared/board/board-mutation.js';
 import type { Cursor } from '../../../../shared/remote-cursor/types/cursor.js';

@@ -1,4 +1,4 @@
-import type { XY } from '../types/vec2.type.js';
+import type { XY } from '../utils/vec2.utils.js';
 import type { Cursor } from './types/cursor.js';
 
 export class RemoteCursorMap {

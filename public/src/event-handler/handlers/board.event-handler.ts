@@ -1,7 +1,7 @@
 import type { AppContext } from '../../app-context.js';
 import { SemanticEvents } from '../../event-bus/events/index.js';
 import type { EventBus, SemanticEventMap } from '../../event-bus';
-import { Vec2 } from '@shared/types/vec2.type.js';
+import { Vec2 } from '@shared/utils/vec2.utils.js';
 
 export class BoardEventHandler {
     constructor(private appContext: AppContext, private semanticEventBus: EventBus<SemanticEventMap>) { }

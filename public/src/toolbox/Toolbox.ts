@@ -1,5 +1,4 @@
-import type { BoardMutationList } from '@shared/board/board-mutation.js';
-import { Vec2 } from '@shared/types/vec2.type.js';
+import { Vec2 } from '@shared/utils/vec2.utils.js';
 import type { Board } from '@shared/board/board.js';
 import { Tools } from './enums/tools.enum.js';
 import type { BaseTool } from './tools/base.tool.js';

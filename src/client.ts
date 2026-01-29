@@ -1,6 +1,6 @@
 import { optimizeMutations, type BoardMutationList } from '../shared/board/board-mutation.js';
 import { ClientBoardEvents, ServerBoardEvents, type BoardClientSocket, type BoardServerSocket } from '../shared/socket-events/board.socket-events.js';
-import type { XY } from '../shared/types/vec2.type.js';
+import type { XY } from '../shared/utils/vec2.utils.js';
 import type { AppContext } from './app-context.js';
 import type { ClientRegistry } from './client-registry.js';
 import { BoardEventHandler } from './event-handlers/board.event-handler.js';

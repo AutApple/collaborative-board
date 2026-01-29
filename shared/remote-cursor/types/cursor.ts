@@ -1,4 +1,4 @@
-import type { XY } from '../../types/vec2.type.js';
+import type { XY } from '../../utils/vec2.utils.js';
 
 export interface Cursor {
     clientId: string, 

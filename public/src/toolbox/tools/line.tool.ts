@@ -1,5 +1,5 @@
 import { LineBoardElement } from '@shared/board/elements/line-board-element.js';
-import type { Vec2 } from '@shared/types/vec2.type.js';
+import type { Vec2 } from '@shared/utils/vec2.utils.js';
 import type { Board } from '@shared/board/board.js';
 import { BaseTool } from './base.tool.js';
 import { BoardMutationType, type BoardMutationList, type CreateBoardMutation } from '@shared/board/board-mutation.js';

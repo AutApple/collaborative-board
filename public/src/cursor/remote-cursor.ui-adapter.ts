@@ -1,4 +1,4 @@
-import type { XY } from '../../../shared/types/vec2.type.js';
+import type { XY } from '../../../shared/utils/vec2.utils.js';
 
 export class RemoteCursorUIAdapter {
     private cursorContainer: HTMLDivElement;
