@@ -52,7 +52,7 @@ export class Board {
         let minDistance = Infinity;
         let minElement: BaseBoardElement | undefined = undefined;
         for (const element of this.elements) {
-            const closestPoint = element.findClosestVertexTo(worldCoords);
+            const closestPoint = element.findClosestPointTo(worldCoords);
             const distance = closestPoint.distanceTo(worldCoords);
             const isNewMinDistance = (minDistance > distance);
             minDistance = isNewMinDistance ? distance : minDistance;

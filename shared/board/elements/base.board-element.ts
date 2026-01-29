@@ -20,7 +20,7 @@ export abstract class BaseBoardElement {
     }
 
     public abstract clone(): BaseBoardElement;
-    public abstract findClosestVertexTo(worldCoords: Vec2): Vec2;
+    public abstract findClosestPointTo(worldCoords: Vec2): Vec2;
 
     protected static validateVertices(points: Vec2[]) {
         return points.length >= 1;

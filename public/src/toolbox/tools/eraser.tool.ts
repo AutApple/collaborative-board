@@ -28,7 +28,7 @@ export class EraserTool extends BaseTool {
         const closestElement = this.board.findClosestElementTo(worldCoords);
         if (!closestElement) return [];
 
-        const point = closestElement.findClosestVertexTo(worldCoords);
+        const point = closestElement.findClosestPointTo(worldCoords);
         const distance = point.distanceTo(worldCoords);
 
         if (distance > this.eraserRadius) return [];

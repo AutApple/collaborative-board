@@ -32,7 +32,7 @@ export class StrokeBoardElement extends BaseBoardElement {
         return true;
     }
 
-    public override findClosestVertexTo(worldCoords: Vec2): Vec2 {
+    public override findClosestPointTo(worldCoords: Vec2): Vec2 {
         const vertices = this.getVertices();
 
         let closestPoint = this.pos;

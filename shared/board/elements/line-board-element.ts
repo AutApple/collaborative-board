@@ -33,7 +33,7 @@ export class LineBoardElement extends BaseBoardElement {
         this.pos2.set(this.vertices[this.vertices.length - 1]!);
     }
 
-    public override findClosestVertexTo(worldCoords: Vec2): Vec2 {
+    public override findClosestPointTo(worldCoords: Vec2): Vec2 {
         const AB = this.pos2.sub(this.pos);
         const AP = worldCoords.sub(this.pos);
 
