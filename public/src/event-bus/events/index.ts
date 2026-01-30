@@ -7,9 +7,9 @@ import type { BaseBoardElement } from '../../../../shared/board/elements/base.bo
 import type { BoardDebugStats } from '../../../../shared/board/board.js';
 
 export enum SemanticEvents {
-    BoardStartDrawing,
-    BoardEndDrawing,
-    BoardProcessDrawing,
+    ToolStartUsing,
+    ToolEndUsing,
+    ToolProcessUsing,
     BoardMutations,
     BoardRefresh,
     BoardResize,
@@ -37,10 +37,10 @@ export enum SemanticEvents {
 }
 
 
-export type BoardStartDrawingEvent = { screenCoords: Vec2; };
-export type BoardProcessDrawingEvent = { screenCoords: Vec2; };
+export type ToolStartUsingEvent = { screenCoords: Vec2; };
+export type ToolProcessUsingEvent = { screenCoords: Vec2; };
 export type BoardRefreshEvent = { rawData: RawBoardElement[]; };
-export type BoardEndDrawingEvent = {};
+export type ToolEndUsingEvent = {};
 export type BoardResizeEvent = { w: number, h: number; };
 export type BoardMutationsEvent = { mutations: BoardMutationList; };
 
@@ -67,9 +67,9 @@ export type RendererExportBoardEvent = {};
 
 export type SemanticEventMap = {
     // board
-    [SemanticEvents.BoardStartDrawing]: BoardStartDrawingEvent,
-    [SemanticEvents.BoardProcessDrawing]: BoardProcessDrawingEvent,
-    [SemanticEvents.BoardEndDrawing]: BoardEndDrawingEvent,
+    [SemanticEvents.ToolStartUsing]: ToolStartUsingEvent,
+    [SemanticEvents.ToolProcessUsing]: ToolProcessUsingEvent,
+    [SemanticEvents.ToolEndUsing]: ToolEndUsingEvent,
     [SemanticEvents.BoardRefresh]: BoardRefreshEvent,
     [SemanticEvents.BoardResize]: BoardResizeEvent,
     [SemanticEvents.BoardMutations]: BoardMutationsEvent;

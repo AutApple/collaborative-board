@@ -1,6 +1,6 @@
 import type { AppContext } from '../app-context.js';
 import { rawElementToInstance } from '@shared/board/elements/utils/raw-element-to-instance.js';
-import { SemanticEvents, type BoardProcessDrawingEvent, type BoardRefreshEvent, type BoardResizeEvent, type BoardStartDrawingEvent } from '../event-bus/events/index.js';
+import { SemanticEvents, type ToolProcessUsingEvent, type BoardRefreshEvent, type BoardResizeEvent, type ToolStartUsingEvent } from '../event-bus/events/index.js';
 import type { BoardHistoryMutationsEvent, BoardMutationsEvent, EventBus, SemanticEventMap } from '../event-bus';
 import { optimizeMutations } from '@shared/board/board-mutation.js';
 import type { NetworkService } from '../network/network.service.js';
@@ -10,35 +10,12 @@ export class BoardController {
     constructor(private appContext: AppContext, private networkService: NetworkService) { }
 
     public subscribe(bus: EventBus<SemanticEventMap>) {
-        bus.on(SemanticEvents.BoardStartDrawing, (e) => { this.onBoardStartDrawing(e, bus) });
-        bus.on(SemanticEvents.BoardProcessDrawing, (e) => { this.onBoardMouseMove(e, bus) });
-        bus.on(SemanticEvents.BoardEndDrawing, () => { this.onBoardEndDrawing(bus) });
         bus.on(SemanticEvents.BoardRefresh, this.onBoardRefresh.bind(this));
         bus.on(SemanticEvents.BoardResize, this.onBoardResize.bind(this));
         bus.on(SemanticEvents.BoardMutations, this.onBoardMutations.bind(this));
         bus.on(SemanticEvents.BoardHistoryMutations, this.onBoardHistoryMutaitons.bind(this));
     }
-
-
-    private onBoardStartDrawing(e: BoardStartDrawingEvent, bus: EventBus<SemanticEventMap>) {
-        const toolResult = this.appContext.toolbox.startConstructing(this.appContext.camera.screenToWorld(e.screenCoords));
-        if (toolResult !== null)
-            toolResult.apply(this.appContext, this.networkService, bus);
-    }
-
-    private onBoardEndDrawing(bus: EventBus<SemanticEventMap>) {
-        const toolResult = this.appContext.toolbox.endConstructing();
-        if (toolResult !== null)
-            toolResult.apply(this.appContext, this.networkService, bus);
-    }
-
-    private onBoardMouseMove(e: BoardProcessDrawingEvent, bus: EventBus<SemanticEventMap>) {
-        // TODO: stroke streaming 
-        const toolResult = this.appContext.toolbox.stepConstructing(this.appContext.camera.screenToWorld(e.screenCoords));
-        if (toolResult !== null)
-            toolResult.apply(this.appContext, this.networkService, bus);        
-    }
-
+ 
     private onBoardMutations(e: BoardMutationsEvent) {
         // console.log(`Got mutations!: ${e.mutations}`);
         for (const mutation of e.mutations)

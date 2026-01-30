@@ -8,19 +8,19 @@ export class BoardEventHandler {
 
     private endDrawingHandler(): boolean { // TODO: Drawing logic and element type depends on 
         if (!this.appContext.toolbox.isConstructing()) return false; // if board isnt being drawn on, don't consume event 
-        this.semanticEventBus.emit(SemanticEvents.BoardEndDrawing, {});
+        this.semanticEventBus.emit(SemanticEvents.ToolEndUsing, {});
         return true;
     }
 
     public handleMouseDown(e: MouseEvent): boolean {
         if (e.button !== 0) return false; // if it's not left button, don't consume event and pass it to the next handler
-        this.semanticEventBus.emit(SemanticEvents.BoardStartDrawing, { screenCoords: new Vec2(e.offsetX, e.offsetY) });
+        this.semanticEventBus.emit(SemanticEvents.ToolStartUsing, { screenCoords: new Vec2(e.offsetX, e.offsetY) });
         return true;
     }
 
     public handleMouseMove(e: MouseEvent): boolean {
         if (!this.appContext.toolbox.isConstructing()) return false; // don't consume event, if board is not being  drawn on rn
-        this.semanticEventBus.emit(SemanticEvents.BoardProcessDrawing, { screenCoords: new Vec2(e.offsetX, e.offsetY) });
+        this.semanticEventBus.emit(SemanticEvents.ToolProcessUsing, { screenCoords: new Vec2(e.offsetX, e.offsetY) });
         return true;
     }
 

@@ -49,7 +49,7 @@ export class BoardClient {
 
         const boardController = new BoardController(appContext, networkService);
         const cameraController = new CameraController(appContext);
-        const toolboxController = new ToolboxController(appContext, toolboxUiAdapter);
+        const toolboxController = new ToolboxController(appContext, toolboxUiAdapter, networkService);
         const boardHistoryController = new BoardHistoryController(appContext);
         const cursorController = new CursorController(appContext, remoteCursorUiAdapter, networkService);
         const rendererController = new RendererController(appContext, rendererUiAdapter);
