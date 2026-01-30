@@ -12,7 +12,7 @@ export class StrokeBoardElement extends BaseBoardElement {
     private lastCoords: Vec2 = new Vec2(0, 0);
     private lastTime = 0;
 
-    constructor(pos: Vec2, protected strokeData: StrokeData, protected offsets: Vec2[] = [], id?: string | undefined) { // store individual points as offsets
+    constructor(pos: Vec2, strokeData: StrokeData, protected offsets: Vec2[] = [], id?: string | undefined) { // store individual points as offsets
         super(pos, strokeData, id);
         this.lastCoords = pos;
     }
@@ -94,7 +94,7 @@ export class StrokeBoardElement extends BaseBoardElement {
     public override setVertices(points: Vec2[]) {
         if (!StrokeBoardElement.validateVertices(points))
             throw Error('Wrong points array signature'); // TODO: replace with centralized messages
-        this.setPosition(points[0]!);
+        // this.setPosition(points[0]!);
         this.offsets = points.map(p => {
             return StrokeBoardElement.pointToOffset(p, this.pos);
         });

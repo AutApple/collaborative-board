@@ -3,5 +3,6 @@ export enum Tools {
     Line = 'line',
     Eraser = 'eraser',
     Eyedropper = 'eyedropper',
-    Rectangle = 'rectangle'
+    Rectangle = 'rectangle',
+    Oval = 'oval'
 };

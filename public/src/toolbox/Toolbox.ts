@@ -9,6 +9,7 @@ import type { StrokeData } from '@shared/board/elements/types/stroke-data.type.j
 import type { ToolResult } from './tool-result.js';
 import { EyedropperTool } from './tools/eyedropper.tool.js';
 import { RectangleTool } from './tools/rectangle.tool.js';
+import { OvalTool } from './tools/oval.tool.js';
 
 export class Toolbox {
     private currentTool: BaseTool;
@@ -28,7 +29,8 @@ export class Toolbox {
             [Tools.Line]: new LineTool(board),
             [Tools.Eraser]: new EraserTool(board),
             [Tools.Eyedropper]: new EyedropperTool(board),
-            [Tools.Rectangle]: new RectangleTool(board)
+            [Tools.Rectangle]: new RectangleTool(board),
+            [Tools.Oval]: new OvalTool(board)
         };
         this.currentTool = this.toolInstances[Tools.Pen]; // TODO: some config that would define defaults
     }

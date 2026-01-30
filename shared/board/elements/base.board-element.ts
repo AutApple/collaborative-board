@@ -5,8 +5,10 @@ import type { StrokeData } from './types/stroke-data.type.js';
 export abstract class BaseBoardElement {
     protected _id: string;
     protected pos: Vec2 = new Vec2(0, 0);
-    constructor(pos: Vec2, protected strokeData: StrokeData, id?: string | undefined) { 
+    protected strokeData: StrokeData;
+    constructor(pos: Vec2, strokeData: StrokeData, id?: string | undefined) { 
         this._id = id ?? crypto.randomUUID(); 
+        this.strokeData = {... strokeData};
         this.pos.set(pos);
     }
     public get position() {

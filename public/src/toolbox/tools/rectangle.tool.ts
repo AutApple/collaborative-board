@@ -39,12 +39,12 @@ export class RectangleTool extends BaseTool {
         return new ToolResult().addBoardAction((board) => board.appendElement(this.constructingSquarePointer!)).addRenderBoardEmit(this.board);
     }
     public stepConstructing(worldCoords: Vec2): ToolResult | null {
-        if (!this.isConstructing) return null;
+        if (!this.isConstructing()) return null;
         this.constructingSquarePointer!.setVertices(this.getRectVertices(this.constructingSquarePointer!.getPosition(), worldCoords));
         return new ToolResult().addRenderBoardEmit(this.board);
     }
     public endConstructing(): ToolResult | null {
-        if (!this.isConstructing) return null;
+        if (!this.isConstructing()) return null;
         const mutation: CreateBoardMutation = {
                 id: this.constructingSquarePointer!.id,
                 type: BoardMutationType.Create,
