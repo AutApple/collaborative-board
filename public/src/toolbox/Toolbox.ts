@@ -49,17 +49,20 @@ export class Toolbox {
         return this.currentStrokeData;
     }
 
-    isConstructing(): boolean {
+    public isConstructing(): boolean {
         return this.currentTool.isConstructing();
     }
 
-    startConstructing(worldCoords: Vec2): ToolResult | null {
+    startConstructing(worldCoords: Vec2): ToolResult | null { 
+        if (this.isConstructing()) return null;
         return this.currentTool.startConstructing(worldCoords, this.currentStrokeData);
     }
     stepConstructing(worldCoords: Vec2): ToolResult | null {
+        if (!this.isConstructing()) return null;
         return this.currentTool.stepConstructing(worldCoords);
     }
     endConstructing(): ToolResult | null {
+        if (!this.isConstructing()) return null;
         return this.currentTool.endConstructing();
     }
 }

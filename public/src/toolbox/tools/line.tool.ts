@@ -18,20 +18,17 @@ export class LineTool extends BaseTool {
     }
 
     public override startConstructing(worldCoords: Vec2, strokeData: StrokeData): ToolResult | null {
-        if (this.isConstructing()) return null;
         const line = new StrokeBoardElement(worldCoords, { ...strokeData });
         this.constructingLinePointer = line;
         return new ToolResult().addBoardAction(board => board.appendElement(line)).addRenderBoardEmit(this.board);
     }
 
     public override stepConstructing(worldCoords: Vec2): ToolResult | null {
-        if (!this.isConstructing()) return null;
         this.constructingLinePointer?.setVertices([this.constructingLinePointer.getPosition(), worldCoords]);
         return new ToolResult().addRenderBoardEmit(this.board);
     }
 
     public override endConstructing(): ToolResult | null {
-        if (!this.isConstructing()) return null;
         const raw = this.constructingLinePointer!.toRaw();
         const mutation: CreateBoardMutation = {
             type: BoardMutationType.Create,

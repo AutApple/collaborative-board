@@ -8,10 +8,10 @@ import { BaseTool } from './base.tool.js';
 
 export class OvalTool extends BaseTool {
     constructor (protected board: Board) { super(board); }
-    private constructingTrianglePointer: StrokeBoardElement | null = null;
+    private constructingOvalPointer: StrokeBoardElement | null = null;
 
     public isConstructing(): boolean {
-        return (this.constructingTrianglePointer !== null);
+        return (this.constructingOvalPointer !== null);
     }
 
     public getOvalVertices(
@@ -44,22 +44,20 @@ export class OvalTool extends BaseTool {
     }
 
     public startConstructing(worldCoords: Vec2, strokeData: StrokeData): ToolResult | null {
-        this.constructingTrianglePointer = new StrokeBoardElement(worldCoords, strokeData);
-        return new ToolResult().addBoardAction((board) => board.appendElement(this.constructingTrianglePointer!)).addRenderBoardEmit(this.board);
+        this.constructingOvalPointer = new StrokeBoardElement(worldCoords, strokeData);
+        return new ToolResult().addBoardAction((board) => board.appendElement(this.constructingOvalPointer!)).addRenderBoardEmit(this.board);
     }
     public stepConstructing(worldCoords: Vec2): ToolResult | null {
-        if (!this.isConstructing()) return null;
-        this.constructingTrianglePointer!.setVertices(this.getOvalVertices(this.constructingTrianglePointer!.getPosition(), worldCoords));
+        this.constructingOvalPointer!.setVertices(this.getOvalVertices(this.constructingOvalPointer!.getPosition(), worldCoords));
         return new ToolResult().addRenderBoardEmit(this.board);
     }
     public endConstructing(): ToolResult | null {
-        if (!this.isConstructing) return null;
         const mutation: CreateBoardMutation = {
-                id: this.constructingTrianglePointer!.id,
+                id: this.constructingOvalPointer!.id,
                 type: BoardMutationType.Create,
-                raw: this.constructingTrianglePointer!.toRaw()
+                raw: this.constructingOvalPointer!.toRaw()
         };
-        this.constructingTrianglePointer = null;
+        this.constructingOvalPointer = null;
         return new ToolResult().setGlobalMutations([mutation]).addRenderBoardEmit(this.board);
     }
 
