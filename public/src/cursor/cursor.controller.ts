@@ -7,20 +7,8 @@ import { RenderLayerType } from '../renderer/types/render-layer.type.js';
 import type { RemoteCursorUIAdapter } from './remote-cursor.ui-adapter.js';
 
 export class CursorController {
-     private lastLocalMoveTime = 0;
-     private readonly fpsCap = 60; // target fps of cursor updates
-     private readonly minInterval = 1000 / this.fpsCap; // calculate ms per frame
-
      constructor(private appContext: AppContext, private uiAdapter: RemoteCursorUIAdapter, private networkService: NetworkService) { }
      
-     private _checkTime(): boolean {
-          const now = performance.now();
-          if (now - this.lastLocalMoveTime < this.minInterval) return false; // skip if too soon
-
-          this.lastLocalMoveTime = now;
-          return true;
-     }
-
      public subscribe(bus: EventBus<SemanticEventMap>) {
           bus.on(SemanticEvents.RemoteCursorConnect, this.onRemoteCursorConnect.bind(this));
           bus.on(SemanticEvents.RemoteCursorDisconnect, this.onRemoteCursorDisconnect.bind(this));
@@ -50,7 +38,6 @@ export class CursorController {
                this.appContext.toolbox.getCurrentStrokeData(),
                this.appContext.camera.worldToScreen(Vec2.fromXY(this.appContext.localCursorWorldCoords))
           );
-          if (!this._checkTime()) return; // should be throttled to prevent spamming with packets on server
           this.appContext.localCursorWorldCoords = this.appContext.camera.screenToWorld(screenCoords);
           this.networkService.sendLocalCursorMove(this.appContext.localCursorWorldCoords);
      }
