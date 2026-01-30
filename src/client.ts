@@ -3,17 +3,10 @@ import { ClientBoardEvents, ServerBoardEvents, type BoardClientSocket, type Boar
 import type { XY } from '../shared/utils/vec2.utils.js';
 import type { AppContext } from './app-context.js';
 import type { ClientRegistry } from './client-registry.js';
+import { defaultServerConfig } from './config/server.config.js';
 import { BoardEventHandler } from './event-handlers/board.event-handler.js';
 import { CursorEventHandler } from './event-handlers/cursor.event-handler.js';
 import { NetworkingEventHandler } from './event-handlers/networking.event-handler.js';
-
-const handshakeTimeoutMs = 5000; // TODO: place in config
-
-const throttlingTPS = 60; // TODO: place in config
-
-const cursorMoveThrottlingTimeoutMs = 1000 / throttlingTPS; // TODO: place in config
-const boardMutationsThrottlingTimeoutMs = 100; // TODO: place in config
-const requestRefreshThrottlingTimeoutMs = 1000; // TODO: place in config
 
 export class Client {
     private connected = true;
@@ -30,9 +23,9 @@ export class Client {
     private boundHandlers = {
         onHandshake: (coords: XY) => { this.networkingEventHandler.onHandshake(coords); },
         onDisconnect: () => { this.networkingEventHandler.onDisconnect(); },
-        onLocalCursorMove: (pos: XY) => { this.callAndThrottle(cursorMoveThrottlingTimeoutMs, this.cursorEventHandler.onLocalCursorMove, pos) },
-        onBoardMutations: (mutations: BoardMutationList) => {   this.callAndThrottle(boardMutationsThrottlingTimeoutMs, this.boardEventHandler.onBoardMutations, mutations) },
-        onRequestRefresh: () => { this.callAndThrottle(requestRefreshThrottlingTimeoutMs, this.boardEventHandler.onRequestRefresh) },
+        onLocalCursorMove: (pos: XY) => { this.callAndThrottle(defaultServerConfig.cursorMoveThrottlingTimeoutMs, this.cursorEventHandler.onLocalCursorMove, pos) },
+        onBoardMutations: (mutations: BoardMutationList) => {   this.callAndThrottle(defaultServerConfig.boardMutationsThrottlingTimeoutMs, this.boardEventHandler.onBoardMutations, mutations) },
+        onRequestRefresh: () => { this.callAndThrottle(defaultServerConfig.requestRefreshThrottlingTimeoutMs, this.boardEventHandler.onRequestRefresh) },
     };
 
     constructor(private socket: BoardServerSocket, private appContext: AppContext, private clientRegistry: ClientRegistry) {
@@ -42,7 +35,7 @@ export class Client {
         this.boardEventHandler = new BoardEventHandler(appContext, this);
         this.cursorEventHandler = new CursorEventHandler(appContext, this);
 
-        this.handshakeTimer = setTimeout(this._handshakePassCheck.bind(this), handshakeTimeoutMs);
+        this.handshakeTimer = setTimeout(this._handshakePassCheck.bind(this), defaultServerConfig.handshakeTimeoutMs);
 
 
         socket.on(ClientBoardEvents.Handshake, this.boundHandlers.onHandshake);
