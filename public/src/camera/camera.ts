@@ -1,4 +1,5 @@
 import { Vec2 } from '@shared/utils/vec2.utils.js';
+import { clientConfiguration } from '../config/client.config.js';
 
 export class Camera {
     private initialPos: Vec2 = new Vec2(0, 0);
@@ -32,6 +33,7 @@ export class Camera {
         const zoomFactor = factor < 0 ? 1.1 : 0.9;
 
         this.scale *= zoomFactor;
+        this.scale = Math.min(Math.max(this.scale, clientConfiguration.minCameraScale), clientConfiguration.maxCameraScale); 
 
         this.pos = Vec2.fromXY(p.sub(mouse.mulScalar(this.scale)));
     }

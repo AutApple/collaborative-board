@@ -1,3 +1,4 @@
+import { clientConfiguration } from '../config/client.config.js';
 import { SemanticEvents, type EventBus, type SemanticEventMap } from '../event-bus/index.js';
 import { Tools } from './enums/tools.enum.js';
 
@@ -66,6 +67,11 @@ export class ToolboxUiAdapter {
         this.strokeSizeElement.addEventListener('input', e => {
             this.semanticEventBus.emit(SemanticEvents.ToolboxChangeStrokeSize, {value: +(e.target as HTMLInputElement).value});
         });
+
+        // set defaults from client configuration
+        this.setStrokeColor(clientConfiguration.defaultStrokeData.color);
+        this.setStrokeSize(clientConfiguration.defaultStrokeData.size);
+
     }
 
 

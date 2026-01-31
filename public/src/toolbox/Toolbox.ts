@@ -10,6 +10,7 @@ import type { ToolResult } from './tool-result.js';
 import { EyedropperTool } from './tools/eyedropper.tool.js';
 import { RectangleTool } from './tools/rectangle.tool.js';
 import { OvalTool } from './tools/oval.tool.js';
+import { clientConfiguration } from '../config/client.config.js';
 
 export class Toolbox {
     private currentTool: BaseTool;
@@ -18,10 +19,7 @@ export class Toolbox {
     
     
     constructor(private board: Board) {
-        this.currentStrokeData = { // TODO: some config that would define defaults
-            color: 'black',
-            size: 3
-        };
+        this.currentStrokeData = {... clientConfiguration.defaultStrokeData};
 
         // make instances of a tools
         this.toolInstances = {
@@ -32,7 +30,7 @@ export class Toolbox {
             [Tools.Rectangle]: new RectangleTool(board),
             [Tools.Oval]: new OvalTool(board)
         };
-        this.currentTool = this.toolInstances[Tools.Pen]; // TODO: some config that would define defaults
+        this.currentTool = this.toolInstances[clientConfiguration.defaultTool];
     }
     
     changeColor(color: string) {

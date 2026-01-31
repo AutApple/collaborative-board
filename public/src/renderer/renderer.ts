@@ -1,12 +1,13 @@
-import { Vec2, type XY } from '@shared/utils/vec2.utils.js';
+import { type XY } from '@shared/utils/vec2.utils.js';
 import { BaseBoardElement } from '@shared/board/elements/';
-import type { Board, BoardDebugStats } from '@shared/board/board.js';
+import type { BoardDebugStats } from '@shared/board/board.js';
 import { Camera } from '../camera/camera.js';
 import type { BaseRenderLayer } from './layers/base.render-layer.js';
 import { RenderLayerType } from './types/render-layer.type.js';
 import { BoardElementsRenderLayer } from './layers/board-elements.render-layer.js';
 import { DebugStatsRenderLayer } from './layers/debug-stats.render-layer.js';
 import { StrokePreviewRenderLayer } from './layers/stroke-preview.render-layer.js';
+import { clientConfiguration } from '../config/client.config.js';
 
 
 export class Renderer {
@@ -66,6 +67,7 @@ export class Renderer {
     public renderAll(camera: Camera) {
         this.clear();
         for (const layerType of this.layers.keys()) {
+            if (layerType === RenderLayerType.DebugStats && !clientConfiguration.debugOverlay) continue; // TODO: layer.hide() and layer.show()
             const layer = this.layers.get(layerType);
             layer?.render(this.ctx, camera);
         }

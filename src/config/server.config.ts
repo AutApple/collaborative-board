@@ -6,7 +6,7 @@ export interface ServerConfiguration {
     handshakeTimeoutMs: number;
 }
 
-export const defaultServerConfig: ServerConfiguration = {
+export const serverConfiguraion: ServerConfiguration = {
     cursorMoveThrottlingTimeoutMs: 16,
     boardMutationsThrottlingTimeoutMs: 100,
     requestRefreshThrottlingTimeoutMs: 1000,

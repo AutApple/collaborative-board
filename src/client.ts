@@ -3,7 +3,7 @@ import { ClientBoardEvents, ServerBoardEvents, type BoardClientSocket, type Boar
 import type { XY } from '../shared/utils/vec2.utils.js';
 import type { AppContext } from './app-context.js';
 import type { ClientRegistry } from './client-registry.js';
-import { defaultServerConfig } from './config/server.config.js';
+import { serverConfiguraion } from './config/server.config.js';
 import { BoardEventHandler } from './event-handlers/board.event-handler.js';
 import { CursorEventHandler } from './event-handlers/cursor.event-handler.js';
 import { NetworkingEventHandler } from './event-handlers/networking.event-handler.js';
@@ -23,9 +23,9 @@ export class Client {
     private boundHandlers = {
         onHandshake: (coords: XY) => { this.networkingEventHandler.onHandshake(coords); },
         onDisconnect: () => { this.networkingEventHandler.onDisconnect(); },
-        onLocalCursorMove: (pos: XY) => { this.callAndThrottle(defaultServerConfig.cursorMoveThrottlingTimeoutMs, this.cursorEventHandler.onLocalCursorMove, pos) },
-        onBoardMutations: (mutations: BoardMutationList) => {   this.callAndThrottle(defaultServerConfig.boardMutationsThrottlingTimeoutMs, this.boardEventHandler.onBoardMutations, mutations) },
-        onRequestRefresh: () => { this.callAndThrottle(defaultServerConfig.requestRefreshThrottlingTimeoutMs, this.boardEventHandler.onRequestRefresh) },
+        onLocalCursorMove: (pos: XY) => { this.callAndThrottle(serverConfiguraion.cursorMoveThrottlingTimeoutMs, this.cursorEventHandler.onLocalCursorMove, pos) },
+        onBoardMutations: (mutations: BoardMutationList) => {   this.callAndThrottle(serverConfiguraion.boardMutationsThrottlingTimeoutMs, this.boardEventHandler.onBoardMutations, mutations) },
+        onRequestRefresh: () => { this.callAndThrottle(serverConfiguraion.requestRefreshThrottlingTimeoutMs, this.boardEventHandler.onRequestRefresh) },
     };
 
     constructor(private socket: BoardServerSocket, private appContext: AppContext, private clientRegistry: ClientRegistry) {
@@ -35,7 +35,7 @@ export class Client {
         this.boardEventHandler = new BoardEventHandler(appContext, this);
         this.cursorEventHandler = new CursorEventHandler(appContext, this);
 
-        this.handshakeTimer = setTimeout(this._handshakePassCheck.bind(this), defaultServerConfig.handshakeTimeoutMs);
+        this.handshakeTimer = setTimeout(this._handshakePassCheck.bind(this), serverConfiguraion.handshakeTimeoutMs);
 
 
         socket.on(ClientBoardEvents.Handshake, this.boundHandlers.onHandshake);
