@@ -1,6 +1,7 @@
 import type { Board } from '../../../../shared/board/board.js';
 import type { StrokeData } from '../../../../shared/board/elements/types/stroke-data.type.js';
 import type { Vec2 } from '../../../../shared/utils/vec2.utils.js';
+import { clientConfiguration } from '../../config/client.config.js';
 import { SemanticEvents } from '../../event-bus/index.js';
 import { ToolResult } from '../tool-result.js';
 import { BaseTool } from './base.tool.js';
@@ -12,12 +13,11 @@ export class EyedropperTool extends BaseTool {
     }
     private picking = false;
     private pickColor(worldCoords: Vec2): string {
-        // TODO: check for actual stroke dots, not vertecies
-        const defaultColor = '#ffffff'; // TODO: return something that is configured as background color; 
+        const defaultColor = clientConfiguration.boardBackgroundColor;  
         const element = this.board.findClosestElementTo(worldCoords);
         if (!element) return defaultColor;
         const distance = element.findClosestPointTo(worldCoords).distanceTo(worldCoords); 
-        if (distance > 1.1 * element.getStrokeData().size) return defaultColor; // TODO: put this hardcoded value into config as well
+        if (distance > element.getStrokeData().size) return defaultColor;
         return element.getStrokeData().color;
     }
     private pickColorAndMakeToolResult(worldCoords: Vec2): ToolResult {

@@ -4,6 +4,11 @@ import { Tools } from '../toolbox/enums/tools.enum.js';
 export interface ClientConfiguration {
     defaultStrokeData: StrokeData;
     defaultTool: Tools;
+
+    boardBackgroundColor: string;
+
+    ovalSegments: number;
+
     minCameraScale: number;
     maxCameraScale: number;
 
@@ -12,12 +17,17 @@ export interface ClientConfiguration {
 
 export const clientConfiguration: ClientConfiguration = {
     defaultStrokeData: {
-        color: 'black',
-        size: 3
+        color: '#4a69f4',
+        size: 6
     }, 
-    defaultTool: Tools.Pen,
+    defaultTool: Tools.Oval,
+
+    boardBackgroundColor: '#ffffff',
+
+    ovalSegments: 32,
+
     minCameraScale: 0.1,
     maxCameraScale: 3,
     
-    debugOverlay: true
+    debugOverlay: false
 };

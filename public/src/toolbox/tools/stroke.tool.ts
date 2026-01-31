@@ -5,7 +5,6 @@ import { BaseTool } from './base.tool.js';
 import { BoardMutationType, type BoardMutationList, type CreateBoardMutation } from '@shared/board/board-mutation.js';
 import type { StrokeData } from '@shared/board/elements/types/stroke-data.type.js';
 import { ToolResult } from '../tool-result.js';
-import { SemanticEvents } from '../../event-bus/index.js';
 
 export class StrokeTool extends BaseTool {
     constructor(protected board: Board) {

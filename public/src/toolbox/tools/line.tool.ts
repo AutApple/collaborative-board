@@ -1,7 +1,7 @@
 import type { Vec2 } from '@shared/utils/vec2.utils.js';
 import type { Board } from '@shared/board/board.js';
 import { BaseTool } from './base.tool.js';
-import { BoardMutationType, type BoardMutationList, type CreateBoardMutation } from '@shared/board/board-mutation.js';
+import { BoardMutationType, type CreateBoardMutation } from '@shared/board/board-mutation.js';
 import type { StrokeData } from '@shared/board/elements/types/stroke-data.type.js';
 import { ToolResult } from '../tool-result.js';
 import { StrokeBoardElement } from '../../../../shared/board/elements/stroke.board-element.js';

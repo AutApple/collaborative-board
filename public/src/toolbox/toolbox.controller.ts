@@ -1,5 +1,6 @@
 import { Vec2 } from '../../../shared/utils/vec2.utils.js';
 import type { AppContext } from '../app-context.js';
+import { clientConfiguration } from '../config/client.config.js';
 import type { EventBus } from '../event-bus/event-bus.js';
 import { SemanticEvents, type SemanticEventMap, type ToolboxChangeStrokeColorEvent, type ToolboxChangeStrokeSizeEvent, type ToolboxChangeToolEvent, type ToolProcessUsingEvent, type ToolStartUsingEvent } from '../event-bus/index.js';
 import type { NetworkService } from '../network/network.service.js';
@@ -8,7 +9,7 @@ import { Tools } from './enums/tools.enum.js';
 import type { ToolboxUiAdapter } from './toolbox.ui-adapter.js';
 
 export class ToolboxController {
-    private currentTool: Tools = Tools.Pen;
+    private currentTool: Tools = clientConfiguration.defaultTool;
 
     constructor(private appContext: AppContext, private uiAdapter: ToolboxUiAdapter, private networkService: NetworkService) { }
 

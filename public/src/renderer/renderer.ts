@@ -36,7 +36,7 @@ export class Renderer {
         const ctx = canvas.getContext('2d');
         if (!ctx) throw new Error('Unable to make a canvas instance');
         
-        ctx.fillStyle = '#ffffff'; // TODO: CANVAS BACKGROUND
+        ctx.fillStyle = clientConfiguration.boardBackgroundColor; 
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         
         this.layers.get(RenderLayerType.Elements)!.render(ctx, camera);
@@ -74,7 +74,8 @@ export class Renderer {
     }
 
     public clear() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.fillStyle = clientConfiguration.boardBackgroundColor;
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
 }

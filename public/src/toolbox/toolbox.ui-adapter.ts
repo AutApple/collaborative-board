@@ -71,7 +71,7 @@ export class ToolboxUiAdapter {
         // set defaults from client configuration
         this.setStrokeColor(clientConfiguration.defaultStrokeData.color);
         this.setStrokeSize(clientConfiguration.defaultStrokeData.size);
-
+        this.setActive(clientConfiguration.defaultTool);
     }
 
 

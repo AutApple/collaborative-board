@@ -4,12 +4,11 @@ import { BoardMutationType, type BoardMutationList, type CreateBoardMutation, ty
 import { BaseTool } from './base.tool.js';
 import type { StrokeData } from '../../../../shared/board/elements/types/stroke-data.type.js';
 import { ToolResult } from '../tool-result.js';
-import { SemanticEvents } from '../../event-bus/index.js';
 
 export class EraserTool extends BaseTool {
     private erasing: boolean = false;
     private resultingMutationList: BoardMutationList;
-    private eraserRadius = 6; // TODO: controlled by stroke size
+    private eraserRadius: number = 3;
     private localToolResult: ToolResult = new ToolResult();
 
     constructor(protected board: Board) {
@@ -92,7 +91,9 @@ export class EraserTool extends BaseTool {
     public override startConstructing(worldCoords: Vec2, { size }: StrokeData): ToolResult | null {
         this.localToolResult.clear();
         this.erasing = true;
+
         this.eraserRadius = size;
+
         const mutations = this.erase(worldCoords);
         this.resultingMutationList.push(...mutations);
 
