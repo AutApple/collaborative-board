@@ -1,3 +1,4 @@
+import { sharedConfiguration } from '../../config/shared.config.js';
 import { Vec2 } from '../../utils/vec2.utils.js';
 import { BaseBoardElement } from './base.board-element.js';
 import type { RawStrokeBoardElement } from './raw/stroke.board-element.raw.js';
@@ -117,7 +118,7 @@ export class StrokeBoardElement extends BaseBoardElement {
             } else
                 return [first, last];
         }
-        const epsilon = 3; // TODO: retrieve epsilon from  the configuration. hardcoded value is temporary solution before i make proper config system
+        const epsilon = sharedConfiguration.rdpOptimizationEpsilon;
         const verticesList = this.getVertices();
         if (verticesList.length <= 2) return;
         // console.log(`Optimizaiton (e=${epsilon}) start. Initial points: ${pointsList.map(p => `{x: ${p.x},y: ${p.y}}, `)}`)
