@@ -15,7 +15,9 @@ export interface ClientConfiguration {
     debugOverlay: boolean;
     
     strokeMinSize: number;
-    strokeMaxSize: number; 
+    strokeMaxSize: number;
+
+    strokeToolDistanceThreshold: number;
 };
 
 export const clientConfiguration: ClientConfiguration = {
@@ -35,5 +37,7 @@ export const clientConfiguration: ClientConfiguration = {
     debugOverlay: false,
 
     strokeMaxSize: 20,
-    strokeMinSize: 1
+    strokeMinSize: 1,
+
+    strokeToolDistanceThreshold: 3
 };
