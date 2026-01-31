@@ -8,7 +8,7 @@ import { ToolResult } from '../tool-result.js';
 import { BaseTool } from './base.tool.js';
 
 export class OvalTool extends BaseTool {
-    constructor (protected board: Board) { super(board); }
+    constructor (readonly board: Board) { super(board); }
     private constructingOvalPointer: StrokeBoardElement | null = null;
 
     public isConstructing(): boolean {
@@ -46,11 +46,11 @@ export class OvalTool extends BaseTool {
 
     public startConstructing(worldCoords: Vec2, strokeData: StrokeData): ToolResult | null {
         this.constructingOvalPointer = new StrokeBoardElement(worldCoords, strokeData);
-        return new ToolResult().addBoardAction((board) => board.appendElement(this.constructingOvalPointer!)).addRenderBoardEmit(this.board);
+        return new ToolResult().addBoardAction((board) => board.appendElement(this.constructingOvalPointer!)).addRenderBoardEmit();
     }
     public stepConstructing(worldCoords: Vec2): ToolResult | null {
         this.constructingOvalPointer!.setVertices(this.getOvalVertices(this.constructingOvalPointer!.getPosition(), worldCoords));
-        return new ToolResult().addRenderBoardEmit(this.board);
+        return new ToolResult().addRenderBoardEmit();
     }
     public endConstructing(): ToolResult | null {
         const mutation: CreateBoardMutation = {
@@ -59,7 +59,7 @@ export class OvalTool extends BaseTool {
                 raw: this.constructingOvalPointer!.toRaw()
         };
         this.constructingOvalPointer = null;
-        return new ToolResult().setGlobalMutations([mutation]).addRenderBoardEmit(this.board);
+        return new ToolResult().setGlobalMutations([mutation]).addRenderBoardEmit();
     }
 
 }

@@ -9,7 +9,14 @@ export interface BoardDebugStats {
     overallElementsAmount: number; 
 }
 
-export class Board {
+export interface ReadonlyBoard {
+    getElements: () => BaseBoardElement[];
+    getLastElement: () => BaseBoardElement | undefined; 
+    findClosestElementTo: (worldCoords: Vec2) => BaseBoardElement | undefined;
+    getDebugStats: () => BoardDebugStats;
+}
+
+export class Board implements ReadonlyBoard {
     constructor() { }
 
     private elements: BaseBoardElement[] = [];

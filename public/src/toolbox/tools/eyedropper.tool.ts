@@ -7,7 +7,7 @@ import { ToolResult } from '../tool-result.js';
 import { BaseTool } from './base.tool.js';
 
 export class EyedropperTool extends BaseTool {
-    constructor (board: Board) { super(board); }
+    constructor (readonly board: Board) { super(board); }
     public isConstructing(): boolean {
         return this.picking; 
     }

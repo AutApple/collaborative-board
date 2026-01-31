@@ -1,5 +1,5 @@
 import { Vec2 } from '@shared/utils/vec2.utils.js';
-import type { Board } from '@shared/board/board.js';
+import type { Board, ReadonlyBoard } from '@shared/board/board.js';
 import { BoardMutationType, type BoardMutationList, type CreateBoardMutation, type RemoveBoardMutation, type UpdateBoardMutation } from '@shared/board/board-mutation.js';
 import { BaseTool } from './base.tool.js';
 import type { StrokeData } from '../../../../shared/board/elements/types/stroke-data.type.js';
@@ -11,12 +11,12 @@ export class EraserTool extends BaseTool {
     private eraserRadius: number = 3;
     private localToolResult: ToolResult = new ToolResult();
 
-    constructor(protected board: Board) {
+    constructor(readonly board: ReadonlyBoard) {
         super(board);
         this.resultingMutationList = [];
     }
     private removeElementAndMakeMutation(elementId: string): RemoveBoardMutation {
-        this.board.removeElement(elementId);
+        this.localToolResult.addBoardAction((board) => board.removeElement(elementId));
         return {
             type: BoardMutationType.Remove,
             id: elementId
@@ -97,7 +97,7 @@ export class EraserTool extends BaseTool {
         const mutations = this.erase(worldCoords);
         this.resultingMutationList.push(...mutations);
 
-        return this.localToolResult.addRenderBoardEmit(this.board);
+        return this.localToolResult.addRenderBoardEmit();
     }
 
     public override stepConstructing(worldCoords: Vec2): ToolResult | null {
@@ -105,12 +105,12 @@ export class EraserTool extends BaseTool {
         const mutations = this.erase(worldCoords);
         this.resultingMutationList.push(...mutations);
 
-        return this.localToolResult.addRenderBoardEmit(this.board);
+        return this.localToolResult.addRenderBoardEmit();
     }
 
     public override endConstructing(): ToolResult | null {
         this.localToolResult.clear();
-        const toolResult = new ToolResult().setGlobalMutations(this.resultingMutationList).addRenderBoardEmit(this.board);
+        const toolResult = new ToolResult().setGlobalMutations(this.resultingMutationList).addRenderBoardEmit();
         this.erasing = false;
         this.resultingMutationList = [];
         return toolResult;

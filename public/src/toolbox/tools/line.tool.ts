@@ -7,7 +7,7 @@ import { ToolResult } from '../tool-result.js';
 import { StrokeBoardElement } from '../../../../shared/board/elements/stroke.board-element.js';
 
 export class LineTool extends BaseTool {
-    constructor(protected board: Board) {
+    constructor(readonly board: Board) {
         super(board);
     }
 
@@ -20,12 +20,12 @@ export class LineTool extends BaseTool {
     public override startConstructing(worldCoords: Vec2, strokeData: StrokeData): ToolResult | null {
         const line = new StrokeBoardElement(worldCoords, { ...strokeData });
         this.constructingLinePointer = line;
-        return new ToolResult().addBoardAction(board => board.appendElement(line)).addRenderBoardEmit(this.board);
+        return new ToolResult().addBoardAction(board => board.appendElement(line)).addRenderBoardEmit();
     }
 
     public override stepConstructing(worldCoords: Vec2): ToolResult | null {
         this.constructingLinePointer?.setVertices([this.constructingLinePointer.getPosition(), worldCoords]);
-        return new ToolResult().addRenderBoardEmit(this.board);
+        return new ToolResult().addRenderBoardEmit();
     }
 
     public override endConstructing(): ToolResult | null {
@@ -36,6 +36,6 @@ export class LineTool extends BaseTool {
             raw
         };
         this.constructingLinePointer = null;
-        return new ToolResult().setGlobalMutations([mutation]).addRenderBoardEmit(this.board);
+        return new ToolResult().setGlobalMutations([mutation]).addRenderBoardEmit();
     }
 }

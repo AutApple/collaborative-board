@@ -11,15 +11,20 @@ import type { NetworkService } from '../network/network.service.js';
 type BoardAction = (board: Board) => void;
 type EmitAction = (bus: EventBus<SemanticEventMap>) => void;
 
+enum TemplateAction {
+    RerenderBoard
+}
+
 export class ToolResult {
     private globalMutations: BoardMutationList = [];
 
     private boardActions: BoardAction[] = [];
     private emitActions: EmitAction[] = [];
+    private templateActions: TemplateAction[] = []; // template actions are converged to bus emits on apply  
 
     constructor() { } // instanciated from the tool logic code
 
-    public clear() { 
+    public clear() {
         this.globalMutations = [];
         this.boardActions = [];
         this.emitActions = [];
@@ -29,21 +34,19 @@ export class ToolResult {
         this.globalMutations = [...mutations];
         return this;
     }
-    
+
     public addEmitAction(fn: EmitAction) {
         this.emitActions.push(fn);
         return this;
     }
-    public addBoardAction(fn: BoardAction) { 
+    public addBoardAction(fn: BoardAction) {
         this.boardActions.push(fn);
         return this;
     }
-    
 
-    public addRenderBoardEmit(board: Board) {
-        this.emitActions.push((bus) => {
-            bus.emit(SemanticEvents.RendererRedrawBoard, {elements: board.getElements(), debugStats: board.getDebugStats()});
-        });
+
+    public addRenderBoardEmit() {
+        this.templateActions.push(TemplateAction.RerenderBoard);
         return this;
     }
 
@@ -60,9 +63,16 @@ export class ToolResult {
             appContext.boardHistory.registerMutations(optimizedMutations);
         }
 
-        for (const boardAction of this.boardActions) 
+        for (const boardAction of this.boardActions)
             boardAction(appContext.board);
         for (const eventEmit of this.emitActions)
             eventEmit(bus);
+        for (const templateAction of this.templateActions) {
+            switch (templateAction) {
+                case TemplateAction.RerenderBoard:
+                    bus.emit(SemanticEvents.RendererRedrawBoard, { elements: appContext.board.getElements(), debugStats: appContext.board.getDebugStats() });
+                    break;
+            }
+        }
     }
 }

@@ -7,7 +7,7 @@ import { ToolResult } from '../tool-result.js';
 import { BaseTool } from './base.tool.js';
 
 export class RectangleTool extends BaseTool {
-    constructor (protected board: Board) { super(board); }
+    constructor (readonly board: Board) { super(board); }
     private constructingSquarePointer: StrokeBoardElement | null = null;
 
     public isConstructing(): boolean {
@@ -36,12 +36,12 @@ export class RectangleTool extends BaseTool {
 
     public startConstructing(worldCoords: Vec2, strokeData: StrokeData): ToolResult | null {
         this.constructingSquarePointer = new StrokeBoardElement(worldCoords, strokeData);
-        return new ToolResult().addBoardAction((board) => board.appendElement(this.constructingSquarePointer!)).addRenderBoardEmit(this.board);
+        return new ToolResult().addBoardAction((board) => board.appendElement(this.constructingSquarePointer!)).addRenderBoardEmit();
     }
     public stepConstructing(worldCoords: Vec2): ToolResult | null {
         if (!this.isConstructing()) return null;
         this.constructingSquarePointer!.setVertices(this.getRectVertices(this.constructingSquarePointer!.getPosition(), worldCoords));
-        return new ToolResult().addRenderBoardEmit(this.board);
+        return new ToolResult().addRenderBoardEmit();
     }
     public endConstructing(): ToolResult | null {
         if (!this.isConstructing()) return null;
@@ -51,7 +51,7 @@ export class RectangleTool extends BaseTool {
                 raw: this.constructingSquarePointer!.toRaw()
         };
         this.constructingSquarePointer = null;
-        return new ToolResult().setGlobalMutations([mutation]).addRenderBoardEmit(this.board);
+        return new ToolResult().setGlobalMutations([mutation]).addRenderBoardEmit();
     }
 
 }
