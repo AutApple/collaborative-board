@@ -6,7 +6,7 @@ import { Vec2 } from '@shared/utils/vec2.utils.js';
 export class BoardEventHandler {
     constructor(private appContext: AppContext, private semanticEventBus: EventBus<SemanticEventMap>) { }
 
-    private endDrawingHandler(): boolean { // TODO: Drawing logic and element type depends on 
+    private endDrawingHandler(): boolean {
         if (!this.appContext.toolbox.isConstructing()) return false; // if board isnt being drawn on, don't consume event 
         this.semanticEventBus.emit(SemanticEvents.ToolEndUsing, {});
         return true;
