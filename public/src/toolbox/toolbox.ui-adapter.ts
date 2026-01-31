@@ -69,6 +69,9 @@ export class ToolboxUiAdapter {
         });
 
         // set defaults from client configuration
+        this.strokeSizeElement.min = clientConfiguration.strokeMinSize.toString();
+        this.strokeSizeElement.max = clientConfiguration.strokeMaxSize.toString();
+
         this.setStrokeColor(clientConfiguration.defaultStrokeData.color);
         this.setStrokeSize(clientConfiguration.defaultStrokeData.size);
         this.setActive(clientConfiguration.defaultTool);

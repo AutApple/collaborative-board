@@ -13,14 +13,17 @@ export interface ClientConfiguration {
     maxCameraScale: number;
 
     debugOverlay: boolean;
+    
+    strokeMinSize: number;
+    strokeMaxSize: number; 
 };
 
 export const clientConfiguration: ClientConfiguration = {
     defaultStrokeData: {
-        color: '#4a69f4',
+        color: '#000000',
         size: 6
     }, 
-    defaultTool: Tools.Oval,
+    defaultTool: Tools.Pen,
 
     boardBackgroundColor: '#ffffff',
 
@@ -29,5 +32,8 @@ export const clientConfiguration: ClientConfiguration = {
     minCameraScale: 0.1,
     maxCameraScale: 3,
     
-    debugOverlay: false
+    debugOverlay: false,
+
+    strokeMaxSize: 20,
+    strokeMinSize: 1
 };
