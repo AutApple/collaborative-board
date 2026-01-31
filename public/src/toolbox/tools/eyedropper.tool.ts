@@ -1,4 +1,4 @@
-import type { Board } from '../../../../shared/board/board.js';
+import type { Board, ReadonlyBoard } from '../../../../shared/board/board.js';
 import type { StrokeData } from '../../../../shared/board/elements/types/stroke-data.type.js';
 import type { Vec2 } from '../../../../shared/utils/vec2.utils.js';
 import { clientConfiguration } from '../../config/client.config.js';
@@ -7,7 +7,7 @@ import { ToolResult } from '../tool-result.js';
 import { BaseTool } from './base.tool.js';
 
 export class EyedropperTool extends BaseTool {
-    constructor (readonly board: Board) { super(board); }
+    constructor (readonly board: ReadonlyBoard) { super(board); }
     public isConstructing(): boolean {
         return this.picking; 
     }
