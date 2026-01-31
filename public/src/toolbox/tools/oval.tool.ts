@@ -1,5 +1,5 @@
 import { BoardMutationType, type CreateBoardMutation } from '../../../../shared/board/board-mutation.js';
-import type { Board } from '../../../../shared/board/board.js';
+import type { Board, ReadonlyBoard } from '../../../../shared/board/board.js';
 import { StrokeBoardElement } from '../../../../shared/board/elements/stroke.board-element.js';
 import type { StrokeData } from '../../../../shared/board/elements/types/stroke-data.type.js';
 import { Vec2 } from '../../../../shared/utils/vec2.utils.js';
@@ -8,7 +8,7 @@ import { ToolResult } from '../tool-result.js';
 import { BaseTool } from './base.tool.js';
 
 export class OvalTool extends BaseTool {
-    constructor (readonly board: Board) { super(board); }
+    constructor (readonly board: ReadonlyBoard) { super(board); }
     private constructingOvalPointer: StrokeBoardElement | null = null;
 
     public isConstructing(): boolean {
