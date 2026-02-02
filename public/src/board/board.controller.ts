@@ -5,6 +5,7 @@ import { optimizeMutations } from '@shared/board/board-mutation.js';
 import type { NetworkService } from '../network/network.service.js';
 import { RenderLayerType } from '../renderer/types/render-layer.type.js';
 import { BaseBoardElement } from '../../../shared/board-elements/base.board-element.js';
+import { BoardElementFactory } from '../../../shared/board-elements/board-element-factory.js';
 
 export class BoardController {
     constructor(private appContext: AppContext, private networkService: NetworkService) { }
@@ -26,7 +27,7 @@ export class BoardController {
     }
 
     private onBoardRefresh(e: BoardRefreshEvent) {
-        const data = e.rawData.map((raw) => BaseBoardElement.fromRaw(raw));
+        const data = e.rawData.map((raw) => BoardElementFactory.fromRaw(raw));
         this.appContext.board.refresh(data);
 
         this.appContext.renderer.setLayerData(RenderLayerType.DebugStats, this.appContext.board.getDebugStats());

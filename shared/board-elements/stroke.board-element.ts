@@ -79,10 +79,6 @@ export class StrokeBoardElement extends BaseBoardElement {
         });
     }
 
-    public static override fromRaw(raw: RawStrokeBoardElement, id?: string) {
-        return new StrokeBoardElement(Vec2.fromXY(raw.pos), raw.strokeData, raw.offsets.map(off => Vec2.fromXY(off)), id);
-    }
-
     public override toRaw(): RawStrokeBoardElement {
         return {
             id: this._id,

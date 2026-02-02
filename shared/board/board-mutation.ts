@@ -1,6 +1,7 @@
 import type { Vec2 } from '@shared/utils/vec2.utils.js';
 import type { RawBoardElement } from '../board-elements/raw/index.js';
 import { BaseBoardElement } from '../board-elements/base.board-element.js';
+import { BoardElementFactory } from '../board-elements/board-element-factory.js';
 
 export enum BoardMutationType {
     Create,
@@ -59,7 +60,7 @@ export function optimizeMutations(mutations: BoardMutationList): BoardMutationLi
                 case BoardMutationType.Update:
                     idxToDelete.set(i, true);
                     const createMutation = (mutations[createMutationIndex] as CreateBoardMutation)!; 
-                    const element = BaseBoardElement.fromRaw(createMutation.raw);
+                    const element = BoardElementFactory.fromRaw(createMutation.raw);
                     element.setVertices((mutations[i] as UpdateBoardMutation)!.points);
                     createMutation.raw = element.toRaw();
                     break;

@@ -1,6 +1,6 @@
 import { BoardMutationType, type BaseBoardMutation, type BoardMutationList, type CreateBoardMutation, type RemoveBoardMutation, type UpdateBoardMutation } from '../../../shared/board/board-mutation.js';
 import { BaseBoardElement } from '../../../shared/board-elements/base.board-element.js';
-
+import { BoardElementFactory } from '@shared/board-elements/board-element-factory.js'
 
 // update L1
 // create L2
@@ -40,7 +40,7 @@ class BoardAction {
                     }
                 }
                 if (!createMutation || !lastUpdateMutation) return null;
-                const element = BaseBoardElement.fromRaw(createMutation.raw);
+                const element = BoardElementFactory.fromRaw(createMutation.raw);
                 element.setVertices(lastUpdateMutation.points);
 
                 return {
@@ -55,7 +55,7 @@ class BoardAction {
                     if (mutationList[i]!.id === mutation.id && (isUpdateMutation || isCreateMutation)) {
                         if (isCreateMutation) {
                             const m = mutationList[i]! as CreateBoardMutation;
-                            const element = BaseBoardElement.fromRaw(m.raw);
+                            const element = BoardElementFactory.fromRaw(m.raw);
                             const points = element.getVertices();
                             return {
                                 id: mutation.id,
