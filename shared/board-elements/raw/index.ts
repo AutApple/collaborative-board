@@ -4,4 +4,4 @@ import type { RawStrokeBoardElement } from './stroke.board-element.raw.js';
 export * from './base.board-element.raw.js';
 export * from './stroke.board-element.raw.js';
 
-export type RawBoardElement = RawStrokeBoardElement | RawBaseBoardElement ;
+export type RawBoardElement = RawStrokeBoardElement | RawBaseBoardElement;

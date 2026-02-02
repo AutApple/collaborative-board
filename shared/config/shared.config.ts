@@ -1,7 +1,7 @@
 export interface SharedConfiguration {
-    rdpOptimizationEpsilon: number; 
+  rdpOptimizationEpsilon: number;
 }
 
 export const sharedConfiguration = {
-    rdpOptimizationEpsilon: 3
-}
+  rdpOptimizationEpsilon: 3,
+};

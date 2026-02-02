@@ -1,32 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 html,
 body {
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background: #111;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #111;
 }
 
 #disconnect-text {
-    position: fixed; 
-    z-index: 10000;
-    font-family: 'Inter', sans-serif;
-    font-weight: 400;  /* normal text */
-    line-height: 1.6;  /* comfortable spacing */
-    color: white;
-    text-align: center;
-    width: 100vw;  
+  position: fixed;
+  z-index: 10000;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400; /* normal text */
+  line-height: 1.6; /* comfortable spacing */
+  color: white;
+  text-align: center;
+  width: 100vw;
 }
 
 #disconnect-overlay {
-  position: fixed;       /* cover viewport */
+  position: fixed; /* cover viewport */
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5); /* base gray */
-  pointer-events: all;   /* block clicks */
-  z-index: 9999;         /* above all content */
+  pointer-events: all; /* block clicks */
+  z-index: 9999; /* above all content */
 
   /* Animate opacity with sine-wave-like motion */
   animation: sineFade 2s infinite alternate;
@@ -34,52 +34,62 @@ body {
 }
 
 .disabled {
-    display: none;
-    pointer-events: none;
+  display: none;
+  pointer-events: none;
 }
 
 /* Keyframes using cubic-bezier to approximate sine-wave easing */
 @keyframes sineFade {
-  0%   { opacity: 0.6; }
-  25%  { opacity: 0.7; }
-  50%  { opacity: 0.8; }
-  75%  { opacity: 0.7; }
-  100% { opacity: 0.6; }
+  0% {
+    opacity: 0.6;
+  }
+  25% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  75% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0.6;
+  }
 }
 
 #top-panel {
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    z-index: 1000;
-    display: flex;
-    gap: 0.5rem;
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 1000;
+  display: flex;
+  gap: 0.5rem;
 }
 
 #top-panel-save-button {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    padding: 0.4rem 0.6rem;
-    background-color: #2a2a2a6a;
-    color: white;
-    border: none;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.4rem 0.6rem;
+  background-color: #2a2a2a6a;
+  color: white;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
 }
 
 #top-panel-save-button:hover {
-    background-color: rgb(50, 50, 50);
-    color: rgb(183, 239, 183);
+  background-color: rgb(50, 50, 50);
+  color: rgb(183, 239, 183);
 }
 
 canvas {
-    display: block;
-    background: #fff;
-    cursor: crosshair;
-    z-index: 999;
+  display: block;
+  background: #fff;
+  cursor: crosshair;
+  z-index: 999;
 }
 
 #cursors-layer {
@@ -99,68 +109,68 @@ canvas {
 }
 
 #toolbox {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    z-index: 1000;
-    top: 0.5rem;
-    left: 0.5rem;
-    width: 3rem;
-    height: 10rem;
-    background-color: #2a2a2a6a;
-    border-radius: 0.2rem;
-    color: white;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  z-index: 1000;
+  top: 0.5rem;
+  left: 0.5rem;
+  width: 3rem;
+  height: 10rem;
+  background-color: #2a2a2a6a;
+  border-radius: 0.2rem;
+  color: white;
+  align-items: center;
 }
 
 #toolbox-settings {
-    display: flex;
-    flex-direction: row;
-    position: absolute;
-    z-index: 1000;
-    bottom: 0.5rem;
-    left: 0.5rem;
-    width: 10rem;
-    height: 3rem;
-    background-color: #2a2a2a6a;
-    border-radius: 0.2rem;
-    color: white;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  z-index: 1000;
+  bottom: 0.5rem;
+  left: 0.5rem;
+  width: 10rem;
+  height: 3rem;
+  background-color: #2a2a2a6a;
+  border-radius: 0.2rem;
+  color: white;
+  align-items: center;
+  justify-content: center;
 }
 
 #toolbox-setting-color {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 
-    width: 1.2rem;              
-    height: 1.2rem;
-    border-radius: 50%;       
-    border: 1px solid #ccc;   
-    cursor: pointer;
-    overflow: hidden;
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  overflow: hidden;
 
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 #toolbox-setting-color::-webkit-color-swatch-wrapper {
-    padding: 0;
-    border-radius: 50%;
-    background: none;
+  padding: 0;
+  border-radius: 50%;
+  background: none;
 }
 
 #toolbox-setting-color::-webkit-color-swatch {
-    border: none;
-    border-radius: 50%;
-    background: currentColor; /* forces swatch to match input value */
+  border: none;
+  border-radius: 50%;
+  background: currentColor; /* forces swatch to match input value */
 }
 
 .toolbox-button {
-    cursor: pointer;
-    padding-top: 0.3rem;
+  cursor: pointer;
+  padding-top: 0.3rem;
 }
 
 .active {
-    color: rgb(183, 239, 183);
+  color: rgb(183, 239, 183);
 }

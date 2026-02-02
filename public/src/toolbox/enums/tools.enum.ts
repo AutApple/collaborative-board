@@ -1,8 +1,8 @@
 export enum Tools {
-    Pen = 'pen',
-    Line = 'line',
-    Eraser = 'eraser',
-    Eyedropper = 'eyedropper',
-    Rectangle = 'rectangle',
-    Oval = 'oval'
-};
+  Pen = 'pen',
+  Line = 'line',
+  Eraser = 'eraser',
+  Eyedropper = 'eyedropper',
+  Rectangle = 'rectangle',
+  Oval = 'oval',
+}

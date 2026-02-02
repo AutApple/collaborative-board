@@ -10,11 +10,11 @@ export default defineConfig({
   root: 'public',
   build: {
     outDir: path.resolve(ROOT, 'public-dist'),
-    emptyOutDir: true
+    emptyOutDir: true,
   },
   resolve: {
     alias: {
-      '@shared': path.resolve(ROOT, 'shared')
-    }
-  }
+      '@shared': path.resolve(ROOT, 'shared'),
+    },
+  },
 });

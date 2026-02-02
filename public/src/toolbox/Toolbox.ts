@@ -13,54 +13,53 @@ import { OvalTool } from './tools/oval.tool.js';
 import { clientConfiguration } from '../config/client.config.js';
 
 export class Toolbox {
-    private currentTool: BaseTool;
-    private currentStrokeData: StrokeData;
-    public toolInstances: Record<Tools, BaseTool>;
-    
-    
-    constructor(private board: Board) {
-        this.currentStrokeData = {... clientConfiguration.defaultStrokeData};
+  private currentTool: BaseTool;
+  private currentStrokeData: StrokeData;
+  public toolInstances: Record<Tools, BaseTool>;
 
-        // make instances of a tools
-        this.toolInstances = {
-            [Tools.Pen]: new StrokeTool(board),
-            [Tools.Line]: new LineTool(board),
-            [Tools.Eraser]: new EraserTool(board),
-            [Tools.Eyedropper]: new EyedropperTool(board),
-            [Tools.Rectangle]: new RectangleTool(board),
-            [Tools.Oval]: new OvalTool(board)
-        };
-        this.currentTool = this.toolInstances[clientConfiguration.defaultTool];
-    }
-    
-    changeColor(color: string) {
-        this.currentStrokeData.color = color;
-    } 
-    changeSize(size: number) {
-        this.currentStrokeData.size = size;
-    }
+  constructor(private board: Board) {
+    this.currentStrokeData = { ...clientConfiguration.defaultStrokeData };
 
-    changeTool(tool: Tools) {
-        this.currentTool = this.toolInstances[tool];
-    }
-    getCurrentStrokeData(): StrokeData {
-        return this.currentStrokeData;
-    }
+    // make instances of a tools
+    this.toolInstances = {
+      [Tools.Pen]: new StrokeTool(board),
+      [Tools.Line]: new LineTool(board),
+      [Tools.Eraser]: new EraserTool(board),
+      [Tools.Eyedropper]: new EyedropperTool(board),
+      [Tools.Rectangle]: new RectangleTool(board),
+      [Tools.Oval]: new OvalTool(board),
+    };
+    this.currentTool = this.toolInstances[clientConfiguration.defaultTool];
+  }
 
-    public isConstructing(): boolean {
-        return this.currentTool.isConstructing();
-    }
+  changeColor(color: string) {
+    this.currentStrokeData.color = color;
+  }
+  changeSize(size: number) {
+    this.currentStrokeData.size = size;
+  }
 
-    startConstructing(worldCoords: Vec2): ToolResult | null { 
-        if (this.isConstructing()) return null;
-        return this.currentTool.startConstructing(worldCoords, this.currentStrokeData);
-    }
-    stepConstructing(worldCoords: Vec2): ToolResult | null {
-        if (!this.isConstructing()) return null;
-        return this.currentTool.stepConstructing(worldCoords);
-    }
-    endConstructing(): ToolResult | null {
-        if (!this.isConstructing()) return null;
-        return this.currentTool.endConstructing();
-    }
+  changeTool(tool: Tools) {
+    this.currentTool = this.toolInstances[tool];
+  }
+  getCurrentStrokeData(): StrokeData {
+    return this.currentStrokeData;
+  }
+
+  public isConstructing(): boolean {
+    return this.currentTool.isConstructing();
+  }
+
+  startConstructing(worldCoords: Vec2): ToolResult | null {
+    if (this.isConstructing()) return null;
+    return this.currentTool.startConstructing(worldCoords, this.currentStrokeData);
+  }
+  stepConstructing(worldCoords: Vec2): ToolResult | null {
+    if (!this.isConstructing()) return null;
+    return this.currentTool.stepConstructing(worldCoords);
+  }
+  endConstructing(): ToolResult | null {
+    if (!this.isConstructing()) return null;
+    return this.currentTool.endConstructing();
+  }
 }

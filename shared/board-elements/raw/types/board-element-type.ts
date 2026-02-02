@@ -1,3 +1,3 @@
 export enum BoardElementType {
-    Stroke = 0,
+  Stroke = 0,
 }

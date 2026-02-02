@@ -1,4 +1,4 @@
 export interface StrokeData {
-    color: string; 
-    size: number;
+  color: string;
+  size: number;
 }
