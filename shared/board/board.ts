@@ -41,6 +41,8 @@ export class Board implements ReadonlyBoard {
     appendElement(element: BaseBoardElement) {
         if (!this.validateId(element.id)) return; // Check if element's id is valid
         element.optimizeVertices();
+
+        
         this.elements.push(element);
     }
 
@@ -95,7 +97,7 @@ export class Board implements ReadonlyBoard {
                 break;
         }
     }
-
+   
     getDebugStats(): BoardDebugStats {
         const debugStats: BoardDebugStats = {
             overallPointsAmount: 0,

@@ -93,6 +93,56 @@ export class StrokeBoardElement extends BaseBoardElement {
         };
     }
 
+    private hexToRgbBytes(hex: string): [number, number, number] {
+        if (!/^#?[0-9a-fA-F]{6}$/.test(hex)) {
+            throw new Error("Invalid hex color");
+        }
+
+        if (hex.startsWith("#")) {
+            hex = hex.slice(1);
+        }
+
+        return [
+            parseInt(hex.slice(0, 2), 16), // R
+            parseInt(hex.slice(2, 4), 16), // G
+            parseInt(hex.slice(4, 6), 16), // B
+        ];
+    }
+
+    public override encode(): ArrayBuffer {
+        // 1 byte for element type (uint8), 
+        // 1 byte for stroke size (uint8), 
+        // 3 bytes for color data (uint8 * 3),
+        // 4  bytes for X and 4 bytes for Y, 
+        // 4 bytes for each offset x and 4 bytes for offset y
+        const buffer = new ArrayBuffer(1 + 1 + 3 + 8 + this.offsets.length * 8);
+        const view = new DataView(buffer);
+
+
+        let byteOffset = 0;
+
+        view.setUint8(byteOffset++, BoardElementType.Stroke);
+        view.setUint8(byteOffset++, this.strokeData.size);
+
+        const [r, g, b] = this.hexToRgbBytes(this.strokeData.color);
+
+        view.setUint8(byteOffset++, r);
+        view.setUint8(byteOffset++, g);
+        view.setUint8(byteOffset++, b);
+
+
+        view.setInt32(byteOffset, this.pos.x, true); byteOffset += 4;
+        view.setInt32(byteOffset, this.pos.y, true); byteOffset += 4;
+
+        for (const offset of this.offsets) {
+            view.setInt32(byteOffset, offset.x, true); byteOffset += 4;
+            view.setInt32(byteOffset, offset.y, true); byteOffset += 4;
+        }
+
+        return buffer;
+    }
+
+
     public override optimizeVertices(): void { // use RDP algorhythm for stroke optimization. 
         function rdp(vertices: readonly Vec2[]): Vec2[] {
             let maxDist = 0;
