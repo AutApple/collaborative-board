@@ -25,7 +25,7 @@
     "build:client": "vite build",
     "build": "npm run build:server && npm run build:client",
     "dev": "npm run build && node dist/src/index.js",
-    "dev-old": "node --loader ts-node/esm src/index.ts"
+    "pretty": "prettier --write \"./**/*.{ts,tsx,html,css}\"" 
   },
   "dependencies": {
     "dotenv": "^17.2.3",
@@ -39,6 +39,7 @@
     "@types/node": "^25.0.3",
     "@types/socket.io": "^3.0.1",
     "@types/socket.io-client": "^1.4.36",
+    "prettier": "^3.8.1",
     "ts-node": "^10.9.2",
     "tsc-alias": "^1.8.16",
     "typescript": "^5.9.3",
