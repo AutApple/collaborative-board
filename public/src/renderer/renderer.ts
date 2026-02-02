@@ -1,5 +1,5 @@
 import { type XY } from '@shared/utils/vec2.utils.js';
-import { BaseBoardElement } from '@shared/board/elements/';
+import { BaseBoardElement } from '@shared/board-elements/';
 import type { BoardDebugStats } from '@shared/board/board.js';
 import { Camera } from '../camera/camera.js';
 import type { BaseRenderLayer } from './layers/base.render-layer.js';

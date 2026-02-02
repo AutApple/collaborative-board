@@ -1,4 +1,4 @@
-import type { StrokeData } from '../../../shared/board/elements/types/stroke-data.type.js';
+import type { StrokeData } from '../../../shared/board-elements/types/stroke-data.type.js';
 import { Tools } from '../toolbox/enums/tools.enum.js';
 
 export interface ClientConfiguration {

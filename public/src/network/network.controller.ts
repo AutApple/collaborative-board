@@ -1,6 +1,6 @@
 import { ClientBoardEvents, ServerBoardEvents, type BoardClientSocket } from '@shared/socket-events/board.socket-events.js';
 import type { AppContext } from '../app-context.js';
-import type { RawBoardElement } from '../../../shared/board/elements/raw/index.js';
+import type { RawBoardElement } from '../../../shared/board-elements/raw/index.js';
 import type { BoardMutationList } from '../../../shared/board/board-mutation.js';
 import type { EventBus } from '../event-bus/event-bus.js';
 import { SemanticEvents, type SemanticEventMap } from '../event-bus/index.js';

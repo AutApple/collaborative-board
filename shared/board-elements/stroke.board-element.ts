@@ -1,5 +1,5 @@
-import { sharedConfiguration } from '../../config/shared.config.js';
-import { Vec2 } from '../../utils/vec2.utils.js';
+import { sharedConfiguration } from '../config/shared.config.js';
+import { Vec2 } from '../utils/vec2.utils.js';
 import { BaseBoardElement } from './base.board-element.js';
 import type { RawStrokeBoardElement } from './raw/stroke.board-element.raw.js';
 import { BoardElementType } from './raw/types/board-element-type.js';

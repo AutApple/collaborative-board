@@ -1,6 +1,6 @@
 import type { Vec2 } from '@shared/utils/vec2.utils.js';
-import type { RawBoardElement } from './elements/raw/index.js';
-import { BaseBoardElement } from './elements/base.board-element.js';
+import type { RawBoardElement } from '../board-elements/raw/index.js';
+import { BaseBoardElement } from '../board-elements/base.board-element.js';
 
 export enum BoardMutationType {
     Create,

@@ -1,5 +1,5 @@
 import type { Board, ReadonlyBoard } from '../../../../shared/board/board.js';
-import type { StrokeData } from '../../../../shared/board/elements/types/stroke-data.type.js';
+import type { StrokeData } from '../../../../shared/board-elements/types/stroke-data.type.js';
 import type { Vec2 } from '../../../../shared/utils/vec2.utils.js';
 import { clientConfiguration } from '../../config/client.config.js';
 import { SemanticEvents } from '../../event-bus/index.js';

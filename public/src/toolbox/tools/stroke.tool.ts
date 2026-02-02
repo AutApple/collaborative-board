@@ -1,9 +1,9 @@
-import { StrokeBoardElement } from '@shared/board/elements/stroke.board-element.js';
+import { StrokeBoardElement } from '@shared/board-elements/stroke.board-element.js';
 import { Vec2, type XY } from '@shared/utils/vec2.utils.js';
 import type { Board, ReadonlyBoard } from '@shared/board/board.js';
 import { BaseTool } from './base.tool.js';
 import { BoardMutationType, type BoardMutationList, type CreateBoardMutation } from '@shared/board/board-mutation.js';
-import type { StrokeData } from '@shared/board/elements/types/stroke-data.type.js';
+import type { StrokeData } from '@shared/board-elements/types/stroke-data.type.js';
 import { ToolResult } from '../tool-result.js';
 import { clientConfiguration } from '../../config/client.config.js';
 

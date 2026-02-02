@@ -1,4 +1,4 @@
-import { Vec2, type XY } from '../../utils/vec2.utils.js';
+import { Vec2, type XY } from '../utils/vec2.utils.js';
 import type { RawBaseBoardElement } from './raw/base.board-element.raw.js';
 import type { RawStrokeBoardElement } from './raw/stroke.board-element.raw.js';
 import { BoardElementType } from './raw/types/board-element-type.js';
@@ -60,6 +60,7 @@ export abstract class BaseBoardElement {
                 return this.strokeFromEncoded(buffer, id);
         }
     }
+    
     private static strokeFromEncoded(buffer: ArrayBuffer, id: string): StrokeBoardElement {
         // 1 byte for element type (uint8), 
         // 1 byte for stroke size (uint8), 

@@ -2,7 +2,7 @@ import { Vec2 } from '@shared/utils/vec2.utils.js';
 import type { Board, ReadonlyBoard } from '@shared/board/board.js';
 import { BoardMutationType, type BoardMutationList, type CreateBoardMutation, type RemoveBoardMutation, type UpdateBoardMutation } from '@shared/board/board-mutation.js';
 import { BaseTool } from './base.tool.js';
-import type { StrokeData } from '../../../../shared/board/elements/types/stroke-data.type.js';
+import type { StrokeData } from '../../../../shared/board-elements/types/stroke-data.type.js';
 import { ToolResult } from '../tool-result.js';
 
 export class EraserTool extends BaseTool {

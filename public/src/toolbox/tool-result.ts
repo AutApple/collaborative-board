@@ -1,6 +1,6 @@
 import { optimizeMutations, type BoardMutationList } from '../../../shared/board/board-mutation.js';
 import type { Board } from '../../../shared/board/board.js';
-import type { BaseBoardElement } from '../../../shared/board/elements/base.board-element.js';
+import type { BaseBoardElement } from '../../../shared/board-elements/base.board-element.js';
 import type { AppContext } from '../app-context.js';
 import type { EventBus } from '../event-bus/event-bus.js';
 import { SemanticEvents, type SemanticEventMap } from '../event-bus/index.js';

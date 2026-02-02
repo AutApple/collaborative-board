@@ -1,5 +1,5 @@
 import { BaseRenderLayer } from './base.render-layer.js';
-import type { BaseBoardElement } from '../../../../shared/board/elements/base.board-element.js';
+import type { BaseBoardElement } from '../../../../shared/board-elements/base.board-element.js';
 import type { Camera } from '../../camera/camera.js';
 
 export class BoardElementsRenderLayer extends BaseRenderLayer {

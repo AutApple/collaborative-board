@@ -1,7 +1,7 @@
 import { validate, version } from 'uuid';
 import { Vec2 } from '../utils/vec2.utils.js';
 import { BoardMutationType, type BaseBoardMutation, type CreateBoardMutation, type RemoveBoardMutation, type UpdateBoardMutation } from './board-mutation.js';
-import { BaseBoardElement } from './elements/index.js';
+import { BaseBoardElement } from '../board-elements/index.js';
 
 export interface BoardDebugStats {
     overallPointsAmount:  number;

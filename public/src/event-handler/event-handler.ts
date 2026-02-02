@@ -1,10 +1,5 @@
-import type { BoardMutationList } from '@shared/board/board-mutation.js';
-import type { RawBoardElement } from '@shared/board/elements/raw/index.js';
-import { ClientBoardEvents, ServerBoardEvents, type ClientBoardEventPayloads, type ServerBoardEventPayloads } from '@shared/socket-events/board.socket-events.js';
-import type { Socket } from 'socket.io-client';
-import type { Cursor } from '../../../shared/remote-cursor/types/cursor.js';
 import type { AppContext } from '../app-context.js';
-import { EventBus, SemanticEvents, type SemanticEventMap } from '../event-bus';
+import { EventBus, type SemanticEventMap } from '../event-bus';
 import { BoardEventHandler } from './handlers/board.event-handler.js';
 import { CameraEventHandler } from './handlers/camera.event-handler.js';
 import { CursorEventHandler } from './handlers/cursor.event-handler.js';

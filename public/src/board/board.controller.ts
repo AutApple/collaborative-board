@@ -4,7 +4,7 @@ import type { BoardHistoryMutationsEvent, BoardMutationsEvent, EventBus, Semanti
 import { optimizeMutations } from '@shared/board/board-mutation.js';
 import type { NetworkService } from '../network/network.service.js';
 import { RenderLayerType } from '../renderer/types/render-layer.type.js';
-import { BaseBoardElement } from '../../../shared/board/elements/base.board-element.js';
+import { BaseBoardElement } from '../../../shared/board-elements/base.board-element.js';
 
 export class BoardController {
     constructor(private appContext: AppContext, private networkService: NetworkService) { }

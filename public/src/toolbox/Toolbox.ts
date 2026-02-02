@@ -5,7 +5,7 @@ import type { BaseTool } from './tools/base.tool.js';
 import { LineTool } from './tools/line.tool.js';
 import { StrokeTool } from './tools/stroke.tool.js';
 import { EraserTool } from './tools/eraser.tool.js';
-import type { StrokeData } from '@shared/board/elements/types/stroke-data.type.js';
+import type { StrokeData } from '@shared/board-elements/types/stroke-data.type.js';
 import type { ToolResult } from './tool-result.js';
 import { EyedropperTool } from './tools/eyedropper.tool.js';
 import { RectangleTool } from './tools/rectangle.tool.js';

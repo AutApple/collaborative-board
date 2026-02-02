@@ -1,5 +1,5 @@
 import { BoardMutationType, type BaseBoardMutation, type BoardMutationList, type CreateBoardMutation, type RemoveBoardMutation, type UpdateBoardMutation } from '../../../shared/board/board-mutation.js';
-import { BaseBoardElement } from '../../../shared/board/elements/base.board-element.js';
+import { BaseBoardElement } from '../../../shared/board-elements/base.board-element.js';
 
 
 // update L1
