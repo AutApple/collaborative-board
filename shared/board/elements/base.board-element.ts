@@ -1,8 +1,12 @@
 import { Vec2, type XY } from '../../utils/vec2.utils.js';
 import type { RawBaseBoardElement } from './raw/base.board-element.raw.js';
+import type { RawStrokeBoardElement } from './raw/stroke.board-element.raw.js';
 import { BoardElementType } from './raw/types/board-element-type.js';
 import { StrokeBoardElement } from './stroke.board-element.js';
 import type { StrokeData } from './types/stroke-data.type.js';
+
+
+
 
 export abstract class BaseBoardElement {
     protected _id: string;
@@ -34,7 +38,12 @@ export abstract class BaseBoardElement {
     public abstract setVertices(vertices: Vec2[]): void;
 
     public static fromRaw(raw: RawBaseBoardElement, id?: string | undefined) {
-        throw new Error('Must be implemented in subclass');
+        switch (raw.type) {
+            case BoardElementType.Stroke:
+                return StrokeBoardElement.fromRaw(raw as RawStrokeBoardElement, raw.id);
+            default:
+                throw Error(`Unrecognized raw board element. Does board element registered properly?`);
+        }
     }
 
     public abstract toRaw(): RawBaseBoardElement;

@@ -1,10 +1,10 @@
 import type { AppContext } from '../app-context.js';
-import { rawElementToInstance } from '@shared/board/elements/utils/raw-element-to-instance.js';
 import { SemanticEvents, type ToolProcessUsingEvent, type BoardRefreshEvent, type BoardResizeEvent, type ToolStartUsingEvent } from '../event-bus/events/index.js';
 import type { BoardHistoryMutationsEvent, BoardMutationsEvent, EventBus, SemanticEventMap } from '../event-bus';
 import { optimizeMutations } from '@shared/board/board-mutation.js';
 import type { NetworkService } from '../network/network.service.js';
 import { RenderLayerType } from '../renderer/types/render-layer.type.js';
+import { BaseBoardElement } from '../../../shared/board/elements/base.board-element.js';
 
 export class BoardController {
     constructor(private appContext: AppContext, private networkService: NetworkService) { }
@@ -26,7 +26,7 @@ export class BoardController {
     }
 
     private onBoardRefresh(e: BoardRefreshEvent) {
-        const data = e.rawData.map((raw) => rawElementToInstance(raw));
+        const data = e.rawData.map((raw) => BaseBoardElement.fromRaw(raw));
         this.appContext.board.refresh(data);
 
         this.appContext.renderer.setLayerData(RenderLayerType.DebugStats, this.appContext.board.getDebugStats());

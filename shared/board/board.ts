@@ -2,7 +2,6 @@ import { validate, version } from 'uuid';
 import { Vec2 } from '../utils/vec2.utils.js';
 import { BoardMutationType, type BaseBoardMutation, type CreateBoardMutation, type RemoveBoardMutation, type UpdateBoardMutation } from './board-mutation.js';
 import { BaseBoardElement } from './elements/index.js';
-import { rawElementToInstance } from './elements/utils/raw-element-to-instance.js';
 
 export interface BoardDebugStats {
     overallPointsAmount:  number;
@@ -81,7 +80,7 @@ export class Board implements ReadonlyBoard {
             case BoardMutationType.Create:
                 const createMutation = mutation as CreateBoardMutation;
                 if (!createMutation.raw) throw Error('Wrong create board mutation signature'); // TODO: generic centralized messages
-                const element = rawElementToInstance(createMutation.raw);
+                const element = BaseBoardElement.fromRaw(createMutation.raw);
                 this.appendElement(element);
                 // console.log('Created element with id ', element.id);
                 break;
