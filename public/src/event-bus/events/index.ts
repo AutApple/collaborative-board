@@ -7,33 +7,33 @@ import type { Cursor } from '../../../../shared/remote-cursor/types/cursor.js';
 import type { Tools } from '../../toolbox/enums/tools.enum.js';
 
 export enum SemanticEvents {
-  ToolStartUsing,
-  ToolEndUsing,
-  ToolProcessUsing,
-  BoardMutations,
-  BoardRefresh,
-  BoardResize,
+	ToolStartUsing,
+	ToolEndUsing,
+	ToolProcessUsing,
+	BoardMutations,
+	BoardRefresh,
+	BoardResize,
 
-  CameraProcessPanning,
-  CameraStartPanning,
-  CameraEndPanning,
-  CameraZoom,
+	CameraProcessPanning,
+	CameraStartPanning,
+	CameraEndPanning,
+	CameraZoom,
 
-  ToolboxChangeTool,
-  ToolboxChangeStrokeColor,
-  ToolboxChangeStrokeSize,
+	ToolboxChangeTool,
+	ToolboxChangeStrokeColor,
+	ToolboxChangeStrokeSize,
 
-  BoardHistoryUndoAction,
-  BoardHistoryRedoAction,
-  BoardHistoryMutations,
+	BoardHistoryUndoAction,
+	BoardHistoryRedoAction,
+	BoardHistoryMutations,
 
-  RemoteCursorConnect,
-  RemoteCursorDisconnect,
-  RemoteCursorMove,
-  LocalCursorMove,
+	RemoteCursorConnect,
+	RemoteCursorDisconnect,
+	RemoteCursorMove,
+	LocalCursorMove,
 
-  RendererRedrawBoard,
-  RendererExportBoard,
+	RendererRedrawBoard,
+	RendererExportBoard,
 }
 
 export type ToolStartUsingEvent = { screenCoords: Vec2 };
@@ -62,38 +62,38 @@ export type RemoteCursorMoveEvent = { cursor: Cursor };
 export type LocalCursorMoveEvent = { screenCoords: Vec2 };
 
 export type RendererRedrawBoardEvent = {
-  elements: BaseBoardElement[];
-  debugStats: BoardDebugStats;
+	elements: BaseBoardElement[];
+	debugStats: BoardDebugStats;
 };
 export type RendererExportBoardEvent = {};
 
 export type SemanticEventMap = {
-  // board
-  [SemanticEvents.ToolStartUsing]: ToolStartUsingEvent;
-  [SemanticEvents.ToolProcessUsing]: ToolProcessUsingEvent;
-  [SemanticEvents.ToolEndUsing]: ToolEndUsingEvent;
-  [SemanticEvents.BoardRefresh]: BoardRefreshEvent;
-  [SemanticEvents.BoardResize]: BoardResizeEvent;
-  [SemanticEvents.BoardMutations]: BoardMutationsEvent;
-  // camera
-  [SemanticEvents.CameraStartPanning]: CameraStartPanningEvent;
-  [SemanticEvents.CameraProcessPanning]: CameraProcessPanningEvent;
-  [SemanticEvents.CameraEndPanning]: CameraEndPanningEvent;
-  [SemanticEvents.CameraZoom]: CameraZoomEvent;
-  // toolbox
-  [SemanticEvents.ToolboxChangeTool]: ToolboxChangeToolEvent;
-  [SemanticEvents.ToolboxChangeStrokeColor]: ToolboxChangeStrokeColorEvent;
-  [SemanticEvents.ToolboxChangeStrokeSize]: ToolboxChangeStrokeSizeEvent;
-  // board history
-  [SemanticEvents.BoardHistoryMutations]: BoardHistoryMutationsEvent;
-  [SemanticEvents.BoardHistoryRedoAction]: BoardHistoryRedoActionEvent;
-  [SemanticEvents.BoardHistoryUndoAction]: BoardHistoryUndoActionEvent;
-  // cursors
-  [SemanticEvents.RemoteCursorConnect]: RemoteCursorConnectEvent;
-  [SemanticEvents.RemoteCursorDisconnect]: RemoteCursorDisconnectEvent;
-  [SemanticEvents.RemoteCursorMove]: RemoteCursorMoveEvent;
-  [SemanticEvents.LocalCursorMove]: LocalCursorMoveEvent;
-  // renderer
-  [SemanticEvents.RendererRedrawBoard]: RendererRedrawBoardEvent;
-  [SemanticEvents.RendererExportBoard]: RendererExportBoardEvent;
+	// board
+	[SemanticEvents.ToolStartUsing]: ToolStartUsingEvent;
+	[SemanticEvents.ToolProcessUsing]: ToolProcessUsingEvent;
+	[SemanticEvents.ToolEndUsing]: ToolEndUsingEvent;
+	[SemanticEvents.BoardRefresh]: BoardRefreshEvent;
+	[SemanticEvents.BoardResize]: BoardResizeEvent;
+	[SemanticEvents.BoardMutations]: BoardMutationsEvent;
+	// camera
+	[SemanticEvents.CameraStartPanning]: CameraStartPanningEvent;
+	[SemanticEvents.CameraProcessPanning]: CameraProcessPanningEvent;
+	[SemanticEvents.CameraEndPanning]: CameraEndPanningEvent;
+	[SemanticEvents.CameraZoom]: CameraZoomEvent;
+	// toolbox
+	[SemanticEvents.ToolboxChangeTool]: ToolboxChangeToolEvent;
+	[SemanticEvents.ToolboxChangeStrokeColor]: ToolboxChangeStrokeColorEvent;
+	[SemanticEvents.ToolboxChangeStrokeSize]: ToolboxChangeStrokeSizeEvent;
+	// board history
+	[SemanticEvents.BoardHistoryMutations]: BoardHistoryMutationsEvent;
+	[SemanticEvents.BoardHistoryRedoAction]: BoardHistoryRedoActionEvent;
+	[SemanticEvents.BoardHistoryUndoAction]: BoardHistoryUndoActionEvent;
+	// cursors
+	[SemanticEvents.RemoteCursorConnect]: RemoteCursorConnectEvent;
+	[SemanticEvents.RemoteCursorDisconnect]: RemoteCursorDisconnectEvent;
+	[SemanticEvents.RemoteCursorMove]: RemoteCursorMoveEvent;
+	[SemanticEvents.LocalCursorMove]: LocalCursorMoveEvent;
+	// renderer
+	[SemanticEvents.RendererRedrawBoard]: RendererRedrawBoardEvent;
+	[SemanticEvents.RendererExportBoard]: RendererExportBoardEvent;
 };

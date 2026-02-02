@@ -7,38 +7,38 @@ import { ToolResult } from '../tool-result.js';
 import { BaseTool } from './base.tool.js';
 
 export class EyedropperTool extends BaseTool {
-  constructor(readonly board: ReadonlyBoard) {
-    super(board);
-  }
-  public isConstructing(): boolean {
-    return this.picking;
-  }
-  private picking = false;
-  private pickColor(worldCoords: Vec2): string {
-    const defaultColor = clientConfiguration.boardBackgroundColor;
-    const element = this.board.findClosestElementTo(worldCoords);
-    if (!element) return defaultColor;
-    const distance = element.findClosestPointTo(worldCoords).distanceTo(worldCoords);
-    if (distance > element.getStrokeData().size) return defaultColor;
-    return element.getStrokeData().color;
-  }
-  private pickColorAndMakeToolResult(worldCoords: Vec2): ToolResult {
-    return new ToolResult().addEmitAction((bus) => {
-      bus.emit(SemanticEvents.ToolboxChangeStrokeColor, {
-        value: this.pickColor(worldCoords),
-      });
-    });
-  }
+	constructor(readonly board: ReadonlyBoard) {
+		super(board);
+	}
+	public isConstructing(): boolean {
+		return this.picking;
+	}
+	private picking = false;
+	private pickColor(worldCoords: Vec2): string {
+		const defaultColor = clientConfiguration.boardBackgroundColor;
+		const element = this.board.findClosestElementTo(worldCoords);
+		if (!element) return defaultColor;
+		const distance = element.findClosestPointTo(worldCoords).distanceTo(worldCoords);
+		if (distance > element.getStrokeData().size) return defaultColor;
+		return element.getStrokeData().color;
+	}
+	private pickColorAndMakeToolResult(worldCoords: Vec2): ToolResult {
+		return new ToolResult().addEmitAction((bus) => {
+			bus.emit(SemanticEvents.ToolboxChangeStrokeColor, {
+				value: this.pickColor(worldCoords),
+			});
+		});
+	}
 
-  public startConstructing(worldCoords: Vec2, _: StrokeData): ToolResult | null {
-    this.picking = true;
-    return this.pickColorAndMakeToolResult(worldCoords);
-  }
-  public stepConstructing(worldCoords: Vec2): ToolResult | null {
-    return this.pickColorAndMakeToolResult(worldCoords);
-  }
-  public endConstructing(): ToolResult | null {
-    this.picking = false;
-    return null;
-  }
+	public startConstructing(worldCoords: Vec2, _: StrokeData): ToolResult | null {
+		this.picking = true;
+		return this.pickColorAndMakeToolResult(worldCoords);
+	}
+	public stepConstructing(worldCoords: Vec2): ToolResult | null {
+		return this.pickColorAndMakeToolResult(worldCoords);
+	}
+	public endConstructing(): ToolResult | null {
+		this.picking = false;
+		return null;
+	}
 }

@@ -1,6 +1,6 @@
 import {
-  ServerBoardEvents,
-  type BoardClientSocket,
+	ServerBoardEvents,
+	type BoardClientSocket,
 } from '@shared/socket-events/board.socket-events.js';
 import type { RawBoardElement } from '../../../shared/board-elements/raw/index.js';
 import type { BoardMutationList } from '../../../shared/board/board-mutation.js';
@@ -12,48 +12,48 @@ import type { NetworkService } from './network.service.js';
 import type { NetworkUiAdapter } from './network.ui-adapter.js';
 
 export class NetworkController {
-  constructor(
-    private appContext: AppContext,
-    private networkUiAdapter: NetworkUiAdapter,
-    private bus: EventBus<SemanticEventMap>,
-    private networkService: NetworkService,
-  ) {}
+	constructor(
+		private appContext: AppContext,
+		private networkUiAdapter: NetworkUiAdapter,
+		private bus: EventBus<SemanticEventMap>,
+		private networkService: NetworkService,
+	) {}
 
-  public bind(socket: BoardClientSocket) {
-    socket.on(ServerBoardEvents.RefreshBoard, this.onRefreshBoard.bind(this));
-    socket.on(ServerBoardEvents.BoardMutations, this.onBoardMutations.bind(this));
-    socket.on(ServerBoardEvents.Handshake, this.onHandshake.bind(this));
-    socket.on(ServerBoardEvents.ClientConnected, this.onClientConnected.bind(this));
-    socket.on(ServerBoardEvents.ClientDisconnected, this.onClientDisconnected.bind(this));
-    socket.on(ServerBoardEvents.RemoteCursorMove, this.onRemoteCursorMove.bind(this));
-    socket.on('disconnect', this.onDisconnect.bind(this));
-  }
+	public bind(socket: BoardClientSocket) {
+		socket.on(ServerBoardEvents.RefreshBoard, this.onRefreshBoard.bind(this));
+		socket.on(ServerBoardEvents.BoardMutations, this.onBoardMutations.bind(this));
+		socket.on(ServerBoardEvents.Handshake, this.onHandshake.bind(this));
+		socket.on(ServerBoardEvents.ClientConnected, this.onClientConnected.bind(this));
+		socket.on(ServerBoardEvents.ClientDisconnected, this.onClientDisconnected.bind(this));
+		socket.on(ServerBoardEvents.RemoteCursorMove, this.onRemoteCursorMove.bind(this));
+		socket.on('disconnect', this.onDisconnect.bind(this));
+	}
 
-  public onDisconnect() {
-    this.networkUiAdapter.showDisconnectOverlay();
-  }
+	public onDisconnect() {
+		this.networkUiAdapter.showDisconnectOverlay();
+	}
 
-  public onClientConnected(_: string, cursor: Cursor) {
-    this.bus.emit(SemanticEvents.RemoteCursorConnect, { cursor });
-  }
+	public onClientConnected(_: string, cursor: Cursor) {
+		this.bus.emit(SemanticEvents.RemoteCursorConnect, { cursor });
+	}
 
-  public onClientDisconnected(clientId: string) {
-    this.bus.emit(SemanticEvents.RemoteCursorDisconnect, { clientId });
-  }
+	public onClientDisconnected(clientId: string) {
+		this.bus.emit(SemanticEvents.RemoteCursorDisconnect, { clientId });
+	}
 
-  public onRemoteCursorMove(cursor: Cursor) {
-    this.bus.emit(SemanticEvents.RemoteCursorMove, { cursor });
-  }
+	public onRemoteCursorMove(cursor: Cursor) {
+		this.bus.emit(SemanticEvents.RemoteCursorMove, { cursor });
+	}
 
-  public onRefreshBoard(raw: RawBoardElement[]) {
-    this.bus.emit(SemanticEvents.BoardRefresh, { rawData: raw });
-  }
-  public onBoardMutations(mutations: BoardMutationList) {
-    this.bus.emit(SemanticEvents.BoardMutations, { mutations });
-  }
-  public onHandshake(raw: RawBoardElement[], cursors: Cursor[]) {
-    for (const cursor of cursors) this.bus.emit(SemanticEvents.RemoteCursorConnect, { cursor });
-    this.bus.emit(SemanticEvents.BoardRefresh, { rawData: raw });
-    this.networkService.sendHandshake(this.appContext.localCursorWorldCoords);
-  }
+	public onRefreshBoard(raw: RawBoardElement[]) {
+		this.bus.emit(SemanticEvents.BoardRefresh, { rawData: raw });
+	}
+	public onBoardMutations(mutations: BoardMutationList) {
+		this.bus.emit(SemanticEvents.BoardMutations, { mutations });
+	}
+	public onHandshake(raw: RawBoardElement[], cursors: Cursor[]) {
+		for (const cursor of cursors) this.bus.emit(SemanticEvents.RemoteCursorConnect, { cursor });
+		this.bus.emit(SemanticEvents.BoardRefresh, { rawData: raw });
+		this.networkService.sendHandshake(this.appContext.localCursorWorldCoords);
+	}
 }

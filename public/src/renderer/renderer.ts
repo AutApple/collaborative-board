@@ -10,75 +10,75 @@ import { StrokePreviewRenderLayer } from './layers/stroke-preview.render-layer.j
 import { clientConfiguration } from '../config/client.config.js';
 
 export class Renderer {
-  private ctx: CanvasRenderingContext2D;
-  private layers: Map<RenderLayerType, BaseRenderLayer> = new Map<RenderLayerType, BaseRenderLayer>(
-    [
-      [RenderLayerType.Elements, new BoardElementsRenderLayer()],
-      [RenderLayerType.DebugStats, new DebugStatsRenderLayer()],
-      [RenderLayerType.StrokePreview, new StrokePreviewRenderLayer()],
-    ],
-  );
+	private ctx: CanvasRenderingContext2D;
+	private layers: Map<RenderLayerType, BaseRenderLayer> = new Map<RenderLayerType, BaseRenderLayer>(
+		[
+			[RenderLayerType.Elements, new BoardElementsRenderLayer()],
+			[RenderLayerType.DebugStats, new DebugStatsRenderLayer()],
+			[RenderLayerType.StrokePreview, new StrokePreviewRenderLayer()],
+		],
+	);
 
-  constructor(private canvas: HTMLCanvasElement) {
-    const _ctx = canvas.getContext('2d');
-    if (!_ctx) throw Error("Can't get 2D context of a canvas");
-    this.ctx = _ctx;
-    this.resizeCanvas(window.innerWidth, window.innerHeight);
-  }
+	constructor(private canvas: HTMLCanvasElement) {
+		const _ctx = canvas.getContext('2d');
+		if (!_ctx) throw Error("Can't get 2D context of a canvas");
+		this.ctx = _ctx;
+		this.resizeCanvas(window.innerWidth, window.innerHeight);
+	}
 
-  public resizeCanvas(w: number, h: number) {
-    this.canvas.width = w;
-    this.canvas.height = h;
-  }
+	public resizeCanvas(w: number, h: number) {
+		this.canvas.width = w;
+		this.canvas.height = h;
+	}
 
-  public async saveBoardToPNG(camera: Camera): Promise<Blob> {
-    const canvas = new OffscreenCanvas(this.canvas.width, this.canvas.height); // no HTML element needed
-    const ctx = canvas.getContext('2d');
-    if (!ctx) throw new Error('Unable to make a canvas instance');
+	public async saveBoardToPNG(camera: Camera): Promise<Blob> {
+		const canvas = new OffscreenCanvas(this.canvas.width, this.canvas.height); // no HTML element needed
+		const ctx = canvas.getContext('2d');
+		if (!ctx) throw new Error('Unable to make a canvas instance');
 
-    ctx.fillStyle = clientConfiguration.boardBackgroundColor;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+		ctx.fillStyle = clientConfiguration.boardBackgroundColor;
+		ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    this.layers.get(RenderLayerType.Elements)!.render(ctx, camera);
+		this.layers.get(RenderLayerType.Elements)!.render(ctx, camera);
 
-    const blob = await canvas.convertToBlob({ type: 'image/png' });
-    return blob;
-  }
+		const blob = await canvas.convertToBlob({ type: 'image/png' });
+		return blob;
+	}
 
-  public getCanvasDimensions(): XY {
-    return { x: this.canvas.width, y: this.canvas.height };
-  }
+	public getCanvasDimensions(): XY {
+		return { x: this.canvas.width, y: this.canvas.height };
+	}
 
-  public setLayerData(layer: RenderLayerType, ...data: any) {
-    this.layers.get(layer)?.updateData(...data);
-  }
+	public setLayerData(layer: RenderLayerType, ...data: any) {
+		this.layers.get(layer)?.updateData(...data);
+	}
 
-  public setLayerDataAndRender(camera: Camera, layer: RenderLayerType, ...data: any) {
-    this.setLayerData(layer, ...data);
-    this.renderAll(camera);
-  }
+	public setLayerDataAndRender(camera: Camera, layer: RenderLayerType, ...data: any) {
+		this.setLayerData(layer, ...data);
+		this.renderAll(camera);
+	}
 
-  public refreshBoardLayersAndRender(
-    camera: Camera,
-    elements: BaseBoardElement[],
-    debugStats: BoardDebugStats,
-  ) {
-    this.setLayerData(RenderLayerType.Elements, elements);
-    this.setLayerData(RenderLayerType.DebugStats, debugStats);
-    this.renderAll(camera);
-  }
+	public refreshBoardLayersAndRender(
+		camera: Camera,
+		elements: BaseBoardElement[],
+		debugStats: BoardDebugStats,
+	) {
+		this.setLayerData(RenderLayerType.Elements, elements);
+		this.setLayerData(RenderLayerType.DebugStats, debugStats);
+		this.renderAll(camera);
+	}
 
-  public renderAll(camera: Camera) {
-    this.clear();
-    for (const layerType of this.layers.keys()) {
-      if (layerType === RenderLayerType.DebugStats && !clientConfiguration.debugOverlay) continue; // TODO: layer.hide() and layer.show()
-      const layer = this.layers.get(layerType);
-      layer?.render(this.ctx, camera);
-    }
-  }
+	public renderAll(camera: Camera) {
+		this.clear();
+		for (const layerType of this.layers.keys()) {
+			if (layerType === RenderLayerType.DebugStats && !clientConfiguration.debugOverlay) continue; // TODO: layer.hide() and layer.show()
+			const layer = this.layers.get(layerType);
+			layer?.render(this.ctx, camera);
+		}
+	}
 
-  public clear() {
-    this.ctx.fillStyle = clientConfiguration.boardBackgroundColor;
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-  }
+	public clear() {
+		this.ctx.fillStyle = clientConfiguration.boardBackgroundColor;
+		this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+	}
 }

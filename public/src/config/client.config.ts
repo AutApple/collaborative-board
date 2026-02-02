@@ -2,42 +2,42 @@ import type { StrokeData } from '../../../shared/board-elements/types/stroke-dat
 import { Tools } from '../toolbox/enums/tools.enum.js';
 
 export interface ClientConfiguration {
-  defaultStrokeData: StrokeData;
-  defaultTool: Tools;
+	defaultStrokeData: StrokeData;
+	defaultTool: Tools;
 
-  boardBackgroundColor: string;
+	boardBackgroundColor: string;
 
-  ovalSegments: number;
+	ovalSegments: number;
 
-  minCameraScale: number;
-  maxCameraScale: number;
+	minCameraScale: number;
+	maxCameraScale: number;
 
-  debugOverlay: boolean;
+	debugOverlay: boolean;
 
-  strokeMinSize: number;
-  strokeMaxSize: number;
+	strokeMinSize: number;
+	strokeMaxSize: number;
 
-  strokeToolDistanceThreshold: number;
+	strokeToolDistanceThreshold: number;
 }
 
 export const clientConfiguration: ClientConfiguration = {
-  defaultStrokeData: {
-    color: '#000000',
-    size: 6,
-  },
-  defaultTool: Tools.Pen,
+	defaultStrokeData: {
+		color: '#000000',
+		size: 6,
+	},
+	defaultTool: Tools.Pen,
 
-  boardBackgroundColor: '#ffffff',
+	boardBackgroundColor: '#ffffff',
 
-  ovalSegments: 32,
+	ovalSegments: 32,
 
-  minCameraScale: 0.1,
-  maxCameraScale: 3,
+	minCameraScale: 0.1,
+	maxCameraScale: 3,
 
-  debugOverlay: true,
+	debugOverlay: true,
 
-  strokeMaxSize: 20,
-  strokeMinSize: 1,
+	strokeMaxSize: 20,
+	strokeMinSize: 1,
 
-  strokeToolDistanceThreshold: 3,
+	strokeToolDistanceThreshold: 3,
 };

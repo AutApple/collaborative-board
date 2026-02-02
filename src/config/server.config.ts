@@ -1,15 +1,15 @@
 export interface ServerConfiguration {
-  cursorMoveThrottlingTimeoutMs: number;
-  boardMutationsThrottlingTimeoutMs: number;
-  requestRefreshThrottlingTimeoutMs: number;
+	cursorMoveThrottlingTimeoutMs: number;
+	boardMutationsThrottlingTimeoutMs: number;
+	requestRefreshThrottlingTimeoutMs: number;
 
-  handshakeTimeoutMs: number;
+	handshakeTimeoutMs: number;
 }
 
 export const serverConfiguraion: ServerConfiguration = {
-  cursorMoveThrottlingTimeoutMs: 16,
-  boardMutationsThrottlingTimeoutMs: 100,
-  requestRefreshThrottlingTimeoutMs: 1000,
+	cursorMoveThrottlingTimeoutMs: 16,
+	boardMutationsThrottlingTimeoutMs: 100,
+	requestRefreshThrottlingTimeoutMs: 1000,
 
-  handshakeTimeoutMs: 5000,
+	handshakeTimeoutMs: 5000,
 };

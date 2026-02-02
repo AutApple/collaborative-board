@@ -16,10 +16,10 @@ boardApp.run();
 console.log(path.join(__rootdir, 'public-dist', 'index.html'));
 app.use(express.static(path.join(__rootdir, 'public-dist')));
 app.get('/', (_, res) => {
-  console.log(path.join(__rootdir, 'public-dist', 'index.html'));
-  res.sendFile(path.join(__rootdir, 'public-dist', 'index.html'));
+	console.log(path.join(__rootdir, 'public-dist', 'index.html'));
+	res.sendFile(path.join(__rootdir, 'public-dist', 'index.html'));
 });
 
 httpServer.listen(process.env.APP_PORT || 3000, () => {
-  console.log(`Server running on port ${process.env.APP_PORT || 3000}`);
+	console.log(`Server running on port ${process.env.APP_PORT || 3000}`);
 });
