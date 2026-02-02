@@ -13,8 +13,8 @@ export class BoardElementsRenderLayer extends BaseRenderLayer {
     element: BaseBoardElement,
     camera: Camera,
   ) {
-    const points = element.getVertices();
-    if (points.length === 0) return;
+    const verts = element.getVertices();
+    if (verts.length === 0) return;
 
     const { color, size } = element.getStrokeData();
     ctx.lineWidth = size;
@@ -22,21 +22,22 @@ export class BoardElementsRenderLayer extends BaseRenderLayer {
     ctx.strokeStyle = color;
 
     // Single-point stroke = dot
-    if (points.length === 1) {
-      const p = camera.worldToScreen(points[0]!);
+    if (verts.length === 1) {
+      const p = camera.worldToScreen(verts[0]!);
       ctx.beginPath();
       ctx.arc(p.x, p.y, size * 0.5, 0, Math.PI * 2);
+      ctx.fillStyle = color;
       ctx.fill();
       return;
     }
 
-    const start = camera.worldToScreen(points[0]!);
+    const start = camera.worldToScreen(verts[0]!);
     ctx.beginPath();
     ctx.moveTo(start.x, start.y);
 
-    for (let i = 1; i < points.length; i++) {
-      const prev = camera.worldToScreen(points[i - 1]!);
-      const curr = camera.worldToScreen(points[i]!);
+    for (let i = 1; i < verts.length; i++) {
+      const prev = camera.worldToScreen(verts[i - 1]!);
+      const curr = camera.worldToScreen(verts[i]!);
 
       // calculate midpoint between prev and curr
       const cx = (prev.x + curr.x) / 2;
@@ -46,7 +47,7 @@ export class BoardElementsRenderLayer extends BaseRenderLayer {
     }
 
     // connect to last point
-    const last = camera.worldToScreen(points[points.length - 1]!);
+    const last = camera.worldToScreen(verts[verts.length - 1]!);
     ctx.lineTo(last.x, last.y);
     ctx.stroke();
   }

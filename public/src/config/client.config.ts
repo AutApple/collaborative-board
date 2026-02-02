@@ -34,7 +34,7 @@ export const clientConfiguration: ClientConfiguration = {
   minCameraScale: 0.1,
   maxCameraScale: 3,
 
-  debugOverlay: false,
+  debugOverlay: true,
 
   strokeMaxSize: 20,
   strokeMinSize: 1,
