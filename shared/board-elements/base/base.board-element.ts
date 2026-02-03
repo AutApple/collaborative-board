@@ -1,6 +1,6 @@
-import { Vec2 } from '../utils/vec2.utils.js';
-import type { AnyRawBoardElement, AnyUpdateElementData } from './index.js';
-import type { BoardElementType } from './types/board-element-type.js';
+import { Vec2 } from '../../utils/vec2.utils.js';
+import type { AnyRawBoardElement, AnyUpdateElementData } from '../index.js';
+import type { BoardElementType } from '../types/board-element-type.js';
 
 export interface BaseUpdateElementData {
 	type: BoardElementType;

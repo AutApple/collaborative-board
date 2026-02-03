@@ -1,10 +1,14 @@
 import { sharedConfiguration } from '../config/shared.config.js';
 import { Vec2 } from '../utils/vec2.utils.js';
 import {
+	BaseVectorBoardElement,
+	type RawBaseVectorBoardElement,
+} from './base/base-vector.board-element.js';
+import {
 	BaseBoardElement,
 	type BaseUpdateElementData,
 	type RawBaseBoardElement,
-} from './base.board-element.js';
+} from './base/base.board-element.js';
 import { BoardElementType } from './types/board-element-type.js';
 import type { StrokeData } from './types/stroke-data.type.js';
 
@@ -13,23 +17,21 @@ export interface UpdateStrokeElementData extends BaseUpdateElementData {
 	vertices: readonly Vec2[];
 }
 
-export interface RawStrokeBoardElement extends RawBaseBoardElement {
+export interface RawStrokeBoardElement extends RawBaseVectorBoardElement {
 	type: BoardElementType.Stroke;
 	strokeData: StrokeData;
 	offsets: Vec2[];
 }
 
-export class StrokeBoardElement extends BaseBoardElement {
+export class StrokeBoardElement extends BaseVectorBoardElement {
 	public readonly type: BoardElementType = BoardElementType.Stroke;
-	private strokeData: StrokeData;
 	constructor(
 		pos: Vec2,
 		strokeData: StrokeData,
 		protected offsets: Vec2[] = [], // store individual vertecies as offsets
 		id?: string | undefined,
 	) {
-		super(pos, id);
-		this.strokeData = { ...strokeData };
+		super(pos, strokeData, id);
 	}
 
 	public onAdd(): void {
@@ -41,10 +43,6 @@ export class StrokeBoardElement extends BaseBoardElement {
 	}
 	public onRemove(): void {
 		return;
-	}
-
-	public getStrokeData(): StrokeData {
-		return this.strokeData;
 	}
 
 	public override clone(): StrokeBoardElement {
@@ -112,7 +110,7 @@ export class StrokeBoardElement extends BaseBoardElement {
 	}
 
 	public updateData(payload: BaseUpdateElementData): void {
-		if (payload.type !== this.type)
+		if (payload.type !== BoardElementType.Stroke)
 			throw new Error(
 				"Error on updating element: element type doesn't match the type stated in a payload",
 			);
@@ -124,7 +122,7 @@ export class StrokeBoardElement extends BaseBoardElement {
 
 	public toUpdateData(): UpdateStrokeElementData {
 		return {
-			type: this.type,
+			type: BoardElementType.Stroke,
 			vertices: this.getVertices(),
 		};
 	}

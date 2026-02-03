@@ -1,4 +1,5 @@
-import type { BaseBoardElement } from '../../../../shared/board-elements/base.board-element.js';
+import type { BaseBoardElement } from '../../../../shared/board-elements/base/base.board-element.js';
+import type { OvalBoardElement } from '../../../../shared/board-elements/oval.board-element.js';
 import type { StrokeBoardElement } from '../../../../shared/board-elements/stroke.board-element.js';
 import { BoardElementType } from '../../../../shared/board-elements/types/board-element-type.js';
 import type { Camera } from '../../camera/camera.js';
@@ -9,6 +10,7 @@ export class BoardElementsRenderLayer extends BaseRenderLayer {
 	constructor() {
 		super();
 	}
+
 	private renderStroke(
 		ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
 		element: StrokeBoardElement,
@@ -16,6 +18,8 @@ export class BoardElementsRenderLayer extends BaseRenderLayer {
 	) {
 		const verts = element.getVertices();
 		if (verts.length === 0) return;
+
+		ctx.save();
 
 		const { color, size } = element.getStrokeData();
 		ctx.lineWidth = size;
@@ -51,7 +55,48 @@ export class BoardElementsRenderLayer extends BaseRenderLayer {
 		const last = camera.worldToScreen(verts[verts.length - 1]!);
 		ctx.lineTo(last.x, last.y);
 		ctx.stroke();
+		ctx.restore();
 	}
+
+	private renderOval(
+		ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
+		element: OvalBoardElement,
+		camera: Camera,
+	) {
+		const topLeftPoint = element.position;
+		const bottomRightPoint = element.getBottomRightPoint();
+
+		// screen space
+		const a = camera.worldToScreen(topLeftPoint);
+		const b = camera.worldToScreen(bottomRightPoint);
+
+		// center + radii
+		const cx = (a.x + b.x) / 2;
+		const cy = (a.y + b.y) / 2;
+		const rx = Math.abs(b.x - a.x) / 2;
+		const ry = Math.abs(b.y - a.y) / 2;
+
+		const { size, color } = element.getStrokeData();
+
+		const halfStroke = size / 2;
+		const safeRx = Math.max(0, rx - halfStroke);
+		const safeRy = Math.max(0, ry - halfStroke);
+
+		if (safeRx === 0 || safeRy === 0) return;
+
+		ctx.save();
+
+		ctx.beginPath();
+
+		ctx.ellipse(cx, cy, rx - size / 2, ry - size / 2, 0, 0, Math.PI * 2);
+
+		ctx.lineWidth = size;
+		ctx.strokeStyle = color;
+		ctx.stroke();
+
+		ctx.restore();
+	}
+
 	private renderElement(
 		ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
 		element: BaseBoardElement,
@@ -60,6 +105,9 @@ export class BoardElementsRenderLayer extends BaseRenderLayer {
 		switch (element.type) {
 			case BoardElementType.Stroke:
 				this.renderStroke(ctx, element as StrokeBoardElement, camera);
+				break;
+			case BoardElementType.Oval:
+				this.renderOval(ctx, element as OvalBoardElement, camera);
 				break;
 		}
 	}

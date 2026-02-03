@@ -9,48 +9,26 @@ import { Vec2 } from '../../../../shared/utils/vec2.utils.js';
 import { clientConfiguration } from '../../config/client.config.js';
 import { ToolResult } from '../tool-result.js';
 import { BaseTool } from './base.tool.js';
+import { OvalBoardElement } from '../../../../shared/board-elements/oval.board-element.js';
 
 export class OvalTool extends BaseTool {
 	constructor(readonly board: ReadonlyBoard) {
 		super(board);
 	}
-	private constructingOvalPointer: StrokeBoardElement | null = null;
+	private constructingOvalPointer: OvalBoardElement | null = null;
 
 	public isConstructing(): boolean {
 		return this.constructingOvalPointer !== null;
 	}
 
-	public getOvalVertices(topLeft: Vec2, bottomRight: Vec2): Vec2[] {
-		const segments = clientConfiguration.ovalSegments;
-		const cx = (topLeft.x + bottomRight.x) / 2;
-		const cy = (topLeft.y + bottomRight.y) / 2;
-
-		const rx = Math.abs(bottomRight.x - topLeft.x) / 2;
-		const ry = Math.abs(bottomRight.y - topLeft.y) / 2;
-
-		const vertices: Vec2[] = [];
-
-		for (let i = 0; i < segments; i++) {
-			const t = (i / segments) * Math.PI * 2;
-			vertices.push(new Vec2(cx + rx * Math.cos(t), cy + ry * Math.sin(t)));
-		}
-
-		// close path
-		vertices.push(vertices[0]!);
-
-		return vertices;
-	}
-
 	public startConstructing(worldCoords: Vec2, strokeData: StrokeData): ToolResult | null {
-		this.constructingOvalPointer = new StrokeBoardElement(worldCoords, strokeData);
+		this.constructingOvalPointer = new OvalBoardElement(worldCoords, strokeData, worldCoords);
 		return new ToolResult()
 			.addBoardAction((board) => board.appendElement(this.constructingOvalPointer!))
 			.addRenderBoardEmit();
 	}
 	public stepConstructing(worldCoords: Vec2): ToolResult | null {
-		this.constructingOvalPointer!.setVertices(
-			this.getOvalVertices(this.constructingOvalPointer!.getPosition(), worldCoords),
-		);
+		this.constructingOvalPointer!.setBottomRightPoint(worldCoords);
 		return new ToolResult().addRenderBoardEmit();
 	}
 	public endConstructing(): ToolResult | null {
