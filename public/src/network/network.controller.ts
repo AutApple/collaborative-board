@@ -2,7 +2,7 @@ import {
 	ServerBoardEvents,
 	type BoardClientSocket,
 } from '@shared/socket-events/board.socket-events.js';
-import type { RawBoardElement } from '../../../shared/board-elements/raw/index.js';
+import type { AnyRawBoardElement } from '../../../shared/board-elements/index.js';
 import type { BoardMutationList } from '../../../shared/board/board-mutation.js';
 import type { Cursor } from '../../../shared/remote-cursor/types/cursor.js';
 import type { AppContext } from '../app-context.js';
@@ -45,13 +45,13 @@ export class NetworkController {
 		this.bus.emit(SemanticEvents.RemoteCursorMove, { cursor });
 	}
 
-	public onRefreshBoard(raw: RawBoardElement[]) {
+	public onRefreshBoard(raw: AnyRawBoardElement[]) {
 		this.bus.emit(SemanticEvents.BoardRefresh, { rawData: raw });
 	}
 	public onBoardMutations(mutations: BoardMutationList) {
 		this.bus.emit(SemanticEvents.BoardMutations, { mutations });
 	}
-	public onHandshake(raw: RawBoardElement[], cursors: Cursor[]) {
+	public onHandshake(raw: AnyRawBoardElement[], cursors: Cursor[]) {
 		for (const cursor of cursors) this.bus.emit(SemanticEvents.RemoteCursorConnect, { cursor });
 		this.bus.emit(SemanticEvents.BoardRefresh, { rawData: raw });
 		this.networkService.sendHandshake(this.appContext.localCursorWorldCoords);

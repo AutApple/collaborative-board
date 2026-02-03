@@ -1,4 +1,4 @@
-import type { RawBoardElement } from '@shared/board-elements/raw/index.js';
+import type { AnyRawBoardElement } from '../../../../shared/board-elements/index.js';
 import type { BoardMutationList } from '@shared/board/board-mutation.js';
 import type { Vec2 } from '@shared/utils/vec2.utils.js';
 import type { BaseBoardElement } from '../../../../shared/board-elements/base.board-element.js';
@@ -38,7 +38,7 @@ export enum SemanticEvents {
 
 export type ToolStartUsingEvent = { screenCoords: Vec2 };
 export type ToolProcessUsingEvent = { screenCoords: Vec2 };
-export type BoardRefreshEvent = { rawData: RawBoardElement[] };
+export type BoardRefreshEvent = { rawData: AnyRawBoardElement[] };
 export type ToolEndUsingEvent = {};
 export type BoardResizeEvent = { w: number; h: number };
 export type BoardMutationsEvent = { mutations: BoardMutationList };

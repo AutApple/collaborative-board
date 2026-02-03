@@ -29,7 +29,6 @@ export class RemoteCursorMap {
 	public toList(): Cursor[] {
 		const list: Cursor[] = [];
 		for (const clientId of this.map.keys()) {
-			console.log(clientId);
 			list.push(this.map.get(clientId)!);
 		}
 		return list;

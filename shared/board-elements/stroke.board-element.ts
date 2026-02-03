@@ -1,26 +1,60 @@
 import { sharedConfiguration } from '../config/shared.config.js';
 import { Vec2 } from '../utils/vec2.utils.js';
-import { BaseBoardElement } from './base.board-element.js';
-import type { RawStrokeBoardElement } from './raw/stroke.board-element.raw.js';
-import { BoardElementType } from './raw/types/board-element-type.js';
+import {
+	BaseBoardElement,
+	type BaseUpdateElementData,
+	type RawBaseBoardElement,
+} from './base.board-element.js';
+import { BoardElementType } from './types/board-element-type.js';
 import type { StrokeData } from './types/stroke-data.type.js';
 
+export interface UpdateStrokeElementData extends BaseUpdateElementData {
+	type: BoardElementType.Stroke;
+	vertices: readonly Vec2[];
+}
+
+export interface RawStrokeBoardElement extends RawBaseBoardElement {
+	type: BoardElementType.Stroke;
+	strokeData: StrokeData;
+	offsets: Vec2[];
+}
+
 export class StrokeBoardElement extends BaseBoardElement {
+	public readonly type: BoardElementType = BoardElementType.Stroke;
+	private strokeData: StrokeData;
 	constructor(
 		pos: Vec2,
 		strokeData: StrokeData,
-		protected offsets: Vec2[] = [],
+		protected offsets: Vec2[] = [], // store individual vertecies as offsets
 		id?: string | undefined,
 	) {
-		// store individual points as offsets
-		super(pos, strokeData, id);
+		super(pos, id);
+		this.strokeData = { ...strokeData };
+	}
+
+	public onAdd(): void {
+		this.optimizeVertices();
+	}
+
+	public onUpdate(): void {
+		this.optimizeVertices();
+	}
+	public onRemove(): void {
+		return;
+	}
+
+	public getStrokeData(): StrokeData {
+		return this.strokeData;
 	}
 
 	public override clone(): StrokeBoardElement {
-		return new StrokeBoardElement(this.pos, this.strokeData, this.offsets);
+		return new StrokeBoardElement(this.pos, this.strokeData, [...this.offsets]);
 	}
 
-	public override findClosestPointTo(worldCoords: Vec2): Vec2 {
+	private computeClosestPointData(worldCoords: Vec2): {
+		closestPoint: Vec2;
+		distance: number;
+	} {
 		const vertices = this.getVertices();
 
 		let closestPoint = this.pos;
@@ -33,28 +67,35 @@ export class StrokeBoardElement extends BaseBoardElement {
 			const AB = B.sub(A);
 			const AP = worldCoords.sub(A);
 
-			let t = AB.dot(AP) / AB.dot(AB);
+			const abLenSq = AB.dot(AB);
+			if (abLenSq === 0) continue;
+
+			let t = AB.dot(AP) / abLenSq;
 			t = Math.max(0, Math.min(1, t));
 
 			const projection = A.add(AB.mulScalar(t));
-
 			const dist = projection.distanceTo(worldCoords);
+
 			if (dist < minDistance) {
 				minDistance = dist;
 				closestPoint = projection;
 			}
 		}
 
-		return closestPoint;
+		return { closestPoint, distance: minDistance };
+	}
+
+	public override distanceTo(worldCoords: Vec2): number {
+		return this.computeClosestPointData(worldCoords).distance;
+	}
+	public findClosestPointTo(worldCoords: Vec2): Vec2 {
+		return this.computeClosestPointData(worldCoords).closestPoint;
 	}
 
 	private static pointToOffset(point: Vec2, pos: Vec2): Vec2 {
 		return point.sub(pos);
 	}
 
-	protected static override validateVertices(points: Vec2[]) {
-		return !(points.length < 1 && !points.every((p) => p !== undefined));
-	}
 	public addVertex(worldCoords: Vec2) {
 		this.offsets.push(StrokeBoardElement.pointToOffset(worldCoords, this.pos));
 	}
@@ -70,17 +111,34 @@ export class StrokeBoardElement extends BaseBoardElement {
 		return this.offsets;
 	}
 
-	public override getVertices(): readonly Vec2[] {
+	public updateData(payload: BaseUpdateElementData): void {
+		if (payload.type !== this.type)
+			throw new Error(
+				"Error on updating element: element type doesn't match the type stated in a payload",
+			);
+		const updateStrokePayload = payload as UpdateStrokeElementData;
+		if (updateStrokePayload.vertices) {
+			this.setVertices([...updateStrokePayload.vertices.map((v) => Vec2.fromXY(v))]);
+		}
+	}
+
+	public toUpdateData(): UpdateStrokeElementData {
+		return {
+			type: this.type,
+			vertices: this.getVertices(),
+		};
+	}
+
+	public getVertices(): readonly Vec2[] {
 		return this.offsets.map((off) => {
 			return off.add(this.pos);
 		}); // convert offsets to positions
 	}
 
-	public override setVertices(points: Vec2[]) {
-		if (!StrokeBoardElement.validateVertices(points)) throw Error('Wrong points array signature'); // TODO: replace with centralized messages
-		// this.setPosition(points[0]!);
-		this.offsets = points.map((p) => {
-			return StrokeBoardElement.pointToOffset(p, this.pos);
+	public setVertices(vertecies: Vec2[]) {
+		if (vertecies.length === 0) return;
+		this.offsets = vertecies.map((v) => {
+			return StrokeBoardElement.pointToOffset(v, this.pos);
 		});
 	}
 
@@ -145,7 +203,7 @@ export class StrokeBoardElement extends BaseBoardElement {
 		return buffer;
 	}
 
-	public override optimizeVertices(): void {
+	public optimizeVertices(): void {
 		// use RDP algorhythm for stroke optimization.
 		function rdp(vertices: readonly Vec2[]): Vec2[] {
 			let maxDist = 0;

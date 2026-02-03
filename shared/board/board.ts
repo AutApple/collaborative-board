@@ -7,8 +7,13 @@ import {
 	type RemoveBoardMutation,
 	type UpdateBoardMutation,
 } from './board-mutation.js';
-import { BaseBoardElement } from '../board-elements/index.js';
+import {
+	BaseBoardElement,
+	StrokeBoardElement,
+	type AnyUpdateElementData,
+} from '../board-elements/index.js';
 import { BoardElementFactory } from '../board-elements/board-element-factory.js';
+import { BoardElementType } from '../board-elements/types/board-element-type.js';
 
 export interface BoardDebugStats {
 	overallPointsAmount: number;
@@ -46,28 +51,39 @@ export class Board implements ReadonlyBoard {
 
 	appendElement(element: BaseBoardElement) {
 		if (!this.validateId(element.id)) return; // Check if element's id is valid
-		element.optimizeVertices();
-
 		this.elements.push(element);
+		element.onAdd();
 	}
 
 	removeElement(elementId: string) {
+		const elementToRemove = this.elements.find((el) => el.id === elementId);
+		if (!elementToRemove) return;
+
+		elementToRemove.onRemove();
 		this.elements = this.elements.filter((el) => el.id !== elementId);
 	}
 
-	updateElement(elementId: string, points: Vec2[]) {
+	updateElement(elementId: string, payload: AnyUpdateElementData) {
 		const element = this.elements.find((e) => e.id === elementId);
 		if (!element) return;
-		element.setVertices(points);
-		element.optimizeVertices();
+		if (element.type !== payload.type)
+			throw new Error(
+				"On Board.updateElement: element with specified id doesn't match the type stated in a payload",
+			);
+
+		element.updateData(payload);
+		element.onUpdate();
 	}
 
-	findClosestElementTo(worldCoords: Vec2): BaseBoardElement | undefined {
+	findClosestElementTo(
+		worldCoords: Vec2,
+		type?: BoardElementType | undefined,
+	): BaseBoardElement | undefined {
 		let minDistance = Infinity;
 		let minElement: BaseBoardElement | undefined = undefined;
 		for (const element of this.elements) {
-			const closestPoint = element.findClosestPointTo(worldCoords);
-			const distance = closestPoint.distanceTo(worldCoords);
+			if (type !== undefined && element.type !== type) continue;
+			const distance = element.distanceTo(worldCoords);
 			const isNewMinDistance = minDistance > distance;
 			minDistance = isNewMinDistance ? distance : minDistance;
 			minElement = isNewMinDistance ? element : minElement;
@@ -96,11 +112,12 @@ export class Board implements ReadonlyBoard {
 				break;
 			case BoardMutationType.Update:
 				const updateMutation = mutation as UpdateBoardMutation;
-				if (!updateMutation.id || !updateMutation.points)
+				if (!updateMutation.id || !updateMutation.payload)
 					throw Error('Wrong remove board mutation signature');
 				this.updateElement(
 					updateMutation.id,
-					updateMutation.points.map((p) => Vec2.fromXY(p)),
+					updateMutation.payload,
+					// updateMutation.points.map((p) => Vec2.fromXY(p)),
 				);
 				break;
 		}
@@ -112,7 +129,8 @@ export class Board implements ReadonlyBoard {
 			overallElementsAmount: this.elements.length,
 		};
 		for (const element of this.elements) {
-			for (const point of element.getVertices()) {
+			if (element.type !== BoardElementType.Stroke) continue;
+			for (const point of (element as StrokeBoardElement).getVertices()) {
 				debugStats.overallPointsAmount += 1;
 			}
 		}

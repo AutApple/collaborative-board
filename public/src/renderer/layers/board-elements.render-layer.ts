@@ -1,4 +1,6 @@
 import type { BaseBoardElement } from '../../../../shared/board-elements/base.board-element.js';
+import type { StrokeBoardElement } from '../../../../shared/board-elements/stroke.board-element.js';
+import { BoardElementType } from '../../../../shared/board-elements/types/board-element-type.js';
 import type { Camera } from '../../camera/camera.js';
 import { BaseRenderLayer } from './base.render-layer.js';
 
@@ -7,10 +9,9 @@ export class BoardElementsRenderLayer extends BaseRenderLayer {
 	constructor() {
 		super();
 	}
-
-	private renderElement(
+	private renderStroke(
 		ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
-		element: BaseBoardElement,
+		element: StrokeBoardElement,
 		camera: Camera,
 	) {
 		const verts = element.getVertices();
@@ -50,6 +51,17 @@ export class BoardElementsRenderLayer extends BaseRenderLayer {
 		const last = camera.worldToScreen(verts[verts.length - 1]!);
 		ctx.lineTo(last.x, last.y);
 		ctx.stroke();
+	}
+	private renderElement(
+		ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
+		element: BaseBoardElement,
+		camera: Camera,
+	) {
+		switch (element.type) {
+			case BoardElementType.Stroke:
+				this.renderStroke(ctx, element as StrokeBoardElement, camera);
+				break;
+		}
 	}
 
 	public override updateData(elements: BaseBoardElement[]): void {

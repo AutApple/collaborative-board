@@ -8,11 +8,6 @@ import {
 	type UpdateBoardMutation,
 } from '../../../shared/board/board-mutation.js';
 
-// update L1
-// create L2
-
-// remove L2
-
 class BoardAction {
 	constructor(private mutations: BoardMutationList) {}
 
@@ -56,7 +51,7 @@ class BoardAction {
 				}
 				if (!createMutation || !lastUpdateMutation) return null;
 				const element = BoardElementFactory.fromRaw(createMutation.raw);
-				element.setVertices(lastUpdateMutation.points);
+				element.updateData(lastUpdateMutation.payload);
 
 				return {
 					id: mutation.id,
@@ -71,18 +66,18 @@ class BoardAction {
 						if (isCreateMutation) {
 							const m = mutationList[i]! as CreateBoardMutation;
 							const element = BoardElementFactory.fromRaw(m.raw);
-							const points = element.getVertices();
+							const updateData = element.toUpdateData(); // convert element to the update data required to get to it's form
 							return {
 								id: mutation.id,
 								type: BoardMutationType.Update,
-								points: [...points],
+								payload: updateData,
 							} as UpdateBoardMutation;
 						}
 						const m = mutationList[i]! as UpdateBoardMutation;
 						return {
 							id: m.id,
 							type: m.type,
-							points: [...m.points],
+							payload: m.payload,
 						} as UpdateBoardMutation;
 					}
 				}
@@ -112,7 +107,7 @@ export class BoardHistory {
 	public registerMutations(mutations: BoardMutationList): void {
 		this.redoStack = [];
 		this.undoStack.push(new BoardAction(mutations));
-		console.log(`New action! ${mutations.map((m) => `[With ID: ${m.id}, do ${m.type}] | `)}`);
+		// console.log(`New action! ${mutations.map((m) => `[With ID: ${m.id}, do ${m.type}] | `)}`);
 	}
 	public retrieveUndo(): BoardMutationList | null {
 		const lastAction = this.undoStack.pop();

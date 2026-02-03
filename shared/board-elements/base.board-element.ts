@@ -1,38 +1,58 @@
 import { Vec2 } from '../utils/vec2.utils.js';
-import type { RawBaseBoardElement } from './raw/base.board-element.raw.js';
-import type { StrokeData } from './types/stroke-data.type.js';
+import type { AnyRawBoardElement, AnyUpdateElementData } from './index.js';
+import type { BoardElementType } from './types/board-element-type.js';
+
+export interface BaseUpdateElementData {
+	type: BoardElementType;
+}
+
+export interface RawBaseBoardElement {
+	type: BoardElementType;
+	id: string;
+	pos: Vec2;
+}
 
 export abstract class BaseBoardElement {
 	protected _id: string;
 	protected pos: Vec2 = new Vec2(0, 0);
-	protected strokeData: StrokeData;
-	constructor(pos: Vec2, strokeData: StrokeData, id?: string | undefined) {
+	public abstract readonly type: BoardElementType;
+
+	constructor(pos: Vec2, id?: string | undefined) {
 		this._id = id ?? crypto.randomUUID();
-		this.strokeData = { ...strokeData };
 		this.pos.set(pos);
 	}
+
 	public get position() {
 		return this.pos;
 	}
+
 	public get id() {
 		return this._id;
 	}
-	public getStrokeData() {
-		return this.strokeData;
-	}
+
+	// Custom handlers for board actions
+	public abstract onAdd(): void;
+	public abstract onUpdate(): void;
+	public abstract onRemove(): void;
 
 	public abstract clone(): BaseBoardElement;
-	public abstract findClosestPointTo(worldCoords: Vec2): Vec2;
 
-	protected static validateVertices(points: Vec2[]) {
-		return points.length >= 1;
-	}
+	public abstract updateData(payload: AnyUpdateElementData): void;
+	public abstract toUpdateData(): AnyUpdateElementData;
 
-	public abstract getVertices(): readonly Vec2[];
-	public abstract setVertices(vertices: Vec2[]): void;
+	public abstract distanceTo(worldCoords: Vec2): number;
 
-	public abstract toRaw(): RawBaseBoardElement;
-	public abstract optimizeVertices(): void;
-
+	public abstract toRaw(): AnyRawBoardElement;
 	public abstract encode(): ArrayBuffer;
+
+	// === TODO: move to another abstract class defining vector stuff
+	// public getStrokeData() {
+	//     return this.strokeData;
+	// }
+	// protected strokeData: StrokeData;
+	// public abstract findClosestPointTo(worldCoords: Vec2): Vec2;
+	// public abstract getVertices(): readonly Vec2[];
+	// public abstract setVertices(vertices: Vec2[]): void;
+	// public abstract optimizeVertices(): void;
+	// ===
 }

@@ -1,6 +1,4 @@
-import type { Vec2 } from '@shared/utils/vec2.utils.js';
-import type { RawBoardElement } from '../board-elements/raw/index.js';
-import { BaseBoardElement } from '../board-elements/base.board-element.js';
+import type { AnyRawBoardElement, AnyUpdateElementData } from '../board-elements/index.js';
 import { BoardElementFactory } from '../board-elements/board-element-factory.js';
 
 export enum BoardMutationType {
@@ -16,12 +14,12 @@ export interface BaseBoardMutation {
 
 export interface CreateBoardMutation extends BaseBoardMutation {
 	type: BoardMutationType.Create;
-	raw: RawBoardElement;
+	raw: AnyRawBoardElement;
 }
 
 export interface UpdateBoardMutation extends BaseBoardMutation {
 	type: BoardMutationType.Update;
-	points: Vec2[];
+	payload: AnyUpdateElementData;
 }
 
 export interface RemoveBoardMutation extends BaseBoardMutation {
@@ -60,7 +58,7 @@ export function optimizeMutations(mutations: BoardMutationList): BoardMutationLi
 					idxToDelete.set(i, true);
 					const createMutation = (mutations[createMutationIndex] as CreateBoardMutation)!;
 					const element = BoardElementFactory.fromRaw(createMutation.raw);
-					element.setVertices((mutations[i] as UpdateBoardMutation)!.points);
+					element.updateData((mutations[i] as UpdateBoardMutation)!.payload);
 					createMutation.raw = element.toRaw();
 					break;
 				case BoardMutationType.Remove:

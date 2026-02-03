@@ -10,6 +10,8 @@ import {
 import { BaseTool } from './base.tool.js';
 import type { StrokeData } from '../../../../shared/board-elements/types/stroke-data.type.js';
 import { ToolResult } from '../tool-result.js';
+import { BoardElementType } from '../../../../shared/board-elements/types/board-element-type.js';
+import { StrokeBoardElement } from '../../../../shared/board-elements/stroke.board-element.js';
 
 export class EraserTool extends BaseTool {
 	private erasing: boolean = false;
@@ -32,8 +34,9 @@ export class EraserTool extends BaseTool {
 	private erase(worldCoords: Vec2): BoardMutationList {
 		const closestElement = this.board.findClosestElementTo(worldCoords);
 		if (!closestElement) return [];
-
-		const point = closestElement.findClosestPointTo(worldCoords);
+		if (closestElement.type !== BoardElementType.Stroke) return []; // TODO: define erase logic on the element itself
+		const closestStrokeElement = closestElement as StrokeBoardElement;
+		const point = closestStrokeElement.findClosestPointTo(worldCoords);
 		const distance = point.distanceTo(worldCoords);
 
 		if (distance > this.eraserRadius) return [];
@@ -42,7 +45,7 @@ export class EraserTool extends BaseTool {
 		// 2 - point is in the middle. remove the point. get all of the points after it and put them into the buffer, while removing from the stroke
 		// if there is no points left - completely dissolve the element
 		// then append new stroke with these saved points
-		const allPoints = closestElement.getVertices();
+		const allPoints = closestStrokeElement.getVertices();
 		let idx = 0;
 		let minDist = Infinity;
 		for (let i = 0; i < allPoints.length; i++) {
@@ -57,22 +60,25 @@ export class EraserTool extends BaseTool {
 
 			if (updatedPoints.length < 1) return [this.removeElementAndMakeMutation(closestElement.id)];
 			this.localToolResult.addBoardAction((board) => {
-				board.updateElement(closestElement.id, updatedPoints);
+				board.updateElement(closestElement.id, {
+					type: BoardElementType.Stroke,
+					vertices: updatedPoints,
+				});
 			});
 			let resMutation: UpdateBoardMutation = {
 				type: BoardMutationType.Update,
 				id: closestElement.id,
-				points: updatedPoints,
+				payload: { type: BoardElementType.Stroke, vertices: updatedPoints },
 			};
 			return [resMutation];
 		}
 		const left = allPoints.slice(0, idx);
 		const right = allPoints.slice(idx + 1);
 		this.localToolResult.addBoardAction((board) => {
-			board.updateElement(closestElement.id, left);
+			board.updateElement(closestElement.id, { type: BoardElementType.Stroke, vertices: left });
 		});
 
-		const newElement = closestElement.clone();
+		const newElement = closestStrokeElement.clone();
 		newElement.setVertices(right);
 		this.localToolResult.addBoardAction((board) => {
 			board.appendElement(newElement);
@@ -81,7 +87,7 @@ export class EraserTool extends BaseTool {
 		const updateMutation: UpdateBoardMutation = {
 			type: BoardMutationType.Update,
 			id: closestElement.id,
-			points: left,
+			payload: { type: BoardElementType.Stroke, vertices: left },
 		};
 		const createMutation: CreateBoardMutation = {
 			type: BoardMutationType.Create,

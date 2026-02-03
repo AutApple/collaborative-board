@@ -1,20 +1,21 @@
 import { Vec2 } from '../utils/vec2.utils.js';
 import type { BaseBoardElement } from './base.board-element.js';
-import type { RawBaseBoardElement } from './raw/base.board-element.raw.js';
-import type { RawStrokeBoardElement } from './raw/stroke.board-element.raw.js';
-import { BoardElementType } from './raw/types/board-element-type.js';
+import type { RawBaseBoardElement } from './base.board-element.js';
+import type { RawStrokeBoardElement } from './stroke.board-element.js';
+import { BoardElementType } from './types/board-element-type.js';
 import { StrokeBoardElement } from './stroke.board-element.js';
 import type { StrokeData } from './types/stroke-data.type.js';
+import type { AnyRawBoardElement } from './index.js';
 
 export class BoardElementFactory {
-	public static fromRaw(raw: RawBaseBoardElement, id?: string | undefined) {
+	public static fromRaw(raw: AnyRawBoardElement): BaseBoardElement {
 		switch (raw.type) {
 			case BoardElementType.Stroke:
 				return new StrokeBoardElement(
 					Vec2.fromXY(raw.pos),
-					raw.strokeData,
+					(raw as RawStrokeBoardElement).strokeData,
 					(raw as RawStrokeBoardElement).offsets.map((off) => Vec2.fromXY(off)),
-					id,
+					raw.id,
 				);
 			default:
 				throw Error(`Unrecognized raw board element. Does board element registered properly?`);

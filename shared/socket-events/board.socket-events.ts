@@ -2,7 +2,7 @@ import type { Socket as ClientSocket } from 'socket.io-client';
 import type { Socket as ServerSocket } from 'socket.io';
 import type { Server as SocketIOServer } from 'socket.io';
 import type { BoardMutationList } from '../board/board-mutation.js';
-import type { RawBoardElement } from '../board-elements/raw/index.js';
+import type { AnyRawBoardElement } from '../board-elements/index.js';
 import type { Cursor } from '../remote-cursor/types/cursor.js';
 import type { XY } from '../utils/vec2.utils.js';
 
@@ -23,11 +23,11 @@ export enum ClientBoardEvents {
 }
 
 export interface ServerBoardEventPayloads {
-	[ServerBoardEvents.Handshake]: (raw: RawBoardElement[], cursors: Cursor[]) => void;
+	[ServerBoardEvents.Handshake]: (raw: AnyRawBoardElement[], cursors: Cursor[]) => void;
 	[ServerBoardEvents.ClientConnected]: (clientId: string, cursor: Cursor) => void;
 	[ServerBoardEvents.ClientDisconnected]: (clientId: string) => void;
 	[ServerBoardEvents.BoardMutations]: (mutations: BoardMutationList) => void;
-	[ServerBoardEvents.RefreshBoard]: (raw: RawBoardElement[]) => void;
+	[ServerBoardEvents.RefreshBoard]: (raw: AnyRawBoardElement[]) => void;
 	[ServerBoardEvents.RemoteCursorMove]: (cursor: Cursor) => void;
 }
 

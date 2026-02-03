@@ -1,8 +1,7 @@
-import { optimizeMutations, type BoardMutationList } from '../shared/board/board-mutation.js';
+import { type BoardMutationList } from '../shared/board/board-mutation.js';
 import {
 	ClientBoardEvents,
 	ServerBoardEvents,
-	type BoardClientSocket,
 	type BoardServerSocket,
 } from '../shared/socket-events/board.socket-events.js';
 import type { XY } from '../shared/utils/vec2.utils.js';

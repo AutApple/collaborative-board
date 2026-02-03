@@ -5,6 +5,8 @@ import { clientConfiguration } from '../../config/client.config.js';
 import { SemanticEvents } from '../../event-bus/index.js';
 import { ToolResult } from '../tool-result.js';
 import { BaseTool } from './base.tool.js';
+import { BoardElementType } from '../../../../shared/board-elements/types/board-element-type.js';
+import type { StrokeBoardElement } from '../../../../shared/board-elements/stroke.board-element.js';
 
 export class EyedropperTool extends BaseTool {
 	constructor(readonly board: ReadonlyBoard) {
@@ -18,9 +20,13 @@ export class EyedropperTool extends BaseTool {
 		const defaultColor = clientConfiguration.boardBackgroundColor;
 		const element = this.board.findClosestElementTo(worldCoords);
 		if (!element) return defaultColor;
-		const distance = element.findClosestPointTo(worldCoords).distanceTo(worldCoords);
-		if (distance > element.getStrokeData().size) return defaultColor;
-		return element.getStrokeData().color;
+		if (element.type !== BoardElementType.Stroke) return defaultColor; // TODO: color picking defined on an element itself
+
+		const strokeElement = element as StrokeBoardElement;
+
+		const distance = strokeElement.findClosestPointTo(worldCoords).distanceTo(worldCoords);
+		if (distance > strokeElement.getStrokeData().size) return defaultColor;
+		return strokeElement.getStrokeData().color;
 	}
 	private pickColorAndMakeToolResult(worldCoords: Vec2): ToolResult {
 		return new ToolResult().addEmitAction((bus) => {
