@@ -2,12 +2,12 @@ import type { OvalBoardElement } from '../../../../shared/board-elements/oval.bo
 import type { Camera } from '../../camera/camera.js';
 
 export class OvalRenderer {
-    static render (
-        ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
-        element: OvalBoardElement,
-        camera: Camera,
-    ) {
-        const aWorld = element.position;
+	static render(
+		ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
+		element: OvalBoardElement,
+		camera: Camera,
+	) {
+		const aWorld = element.position;
 		const bWorld = element.getBottomRightPoint();
 
 		// screen space
@@ -39,5 +39,5 @@ export class OvalRenderer {
 		ctx.stroke();
 
 		ctx.restore();
-    }
+	}
 }

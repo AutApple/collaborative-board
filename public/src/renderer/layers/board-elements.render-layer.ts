@@ -15,7 +15,7 @@ export class BoardElementsRenderLayer extends BaseRenderLayer {
 	constructor() {
 		super();
 	}
-	
+
 	private renderElement(
 		ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
 		element: BaseBoardElement,

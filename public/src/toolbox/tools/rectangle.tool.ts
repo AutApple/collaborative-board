@@ -19,9 +19,13 @@ export class RectangleTool extends BaseTool {
 	public isConstructing(): boolean {
 		return this.constructingRectanglePointer !== null;
 	}
-	
+
 	public startConstructing(worldCoords: Vec2, strokeData: StrokeData): ToolResult | null {
-		this.constructingRectanglePointer = new RectangleBoardElement(worldCoords, strokeData, worldCoords);
+		this.constructingRectanglePointer = new RectangleBoardElement(
+			worldCoords,
+			strokeData,
+			worldCoords,
+		);
 		return new ToolResult()
 			.addBoardAction((board) => board.appendElement(this.constructingRectanglePointer!))
 			.addRenderBoardEmit();
