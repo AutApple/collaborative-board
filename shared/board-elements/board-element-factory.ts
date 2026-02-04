@@ -7,6 +7,7 @@ import { StrokeBoardElement } from './stroke.board-element.js';
 import type { StrokeData } from './types/stroke-data.type.js';
 import type { AnyRawBoardElement } from './index.js';
 import { OvalBoardElement, type RawOvalBoardElement } from './oval.board-element.js';
+import { RectangleBoardElement, type RawRectangleBoardElement } from './rectangle.board-element.js';
 
 export class BoardElementFactory {
 	public static fromRaw(raw: AnyRawBoardElement): BaseBoardElement {
@@ -25,6 +26,13 @@ export class BoardElementFactory {
 					Vec2.fromXY((raw as RawOvalBoardElement).bottomRightPoint),
 					raw.id,
 				);
+			case BoardElementType.Rectangle:
+				return new RectangleBoardElement(
+					Vec2.fromXY(raw.pos),
+					(raw as RawRectangleBoardElement).strokeData,
+					Vec2.fromXY((raw as RawRectangleBoardElement).bottomRightPoint),
+					raw.id,
+				);
 		}
 	}
 
@@ -36,6 +44,8 @@ export class BoardElementFactory {
 			case BoardElementType.Stroke:
 				return this.strokeFromEncoded(buffer, id);
 			case BoardElementType.Oval:
+				throw new Error('Not implemented yet');
+			case BoardElementType.Rectangle:
 				throw new Error('Not implemented yet');
 		}
 	}
