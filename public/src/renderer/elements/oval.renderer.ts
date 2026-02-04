@@ -8,7 +8,7 @@ export class OvalRenderer {
 		camera: Camera,
 	) {
 		const aWorld = element.position;
-		const bWorld = element.getBottomRightPoint();
+		const bWorld = element.getSecondPoint();
 
 		// screen space
 		const a = camera.worldToScreen(aWorld);

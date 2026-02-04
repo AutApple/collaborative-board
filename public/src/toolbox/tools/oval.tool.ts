@@ -28,7 +28,7 @@ export class OvalTool extends BaseTool {
 			.addRenderBoardEmit();
 	}
 	public stepConstructing(worldCoords: Vec2): ToolResult | null {
-		this.constructingOvalPointer!.setBottomRightPoint(worldCoords);
+		this.constructingOvalPointer!.setSecondPoint(worldCoords);
 		return new ToolResult().addRenderBoardEmit();
 	}
 	public endConstructing(): ToolResult | null {

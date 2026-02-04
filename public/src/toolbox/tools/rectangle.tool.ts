@@ -32,7 +32,7 @@ export class RectangleTool extends BaseTool {
 	}
 	public stepConstructing(worldCoords: Vec2): ToolResult | null {
 		if (!this.isConstructing()) return null;
-		this.constructingRectanglePointer!.setBottomRightPoint(worldCoords);
+		this.constructingRectanglePointer!.setSecondPoint(worldCoords);
 		return new ToolResult().addRenderBoardEmit();
 	}
 	public endConstructing(): ToolResult | null {

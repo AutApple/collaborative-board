@@ -23,14 +23,14 @@ export class BoardElementFactory {
 				return new OvalBoardElement(
 					Vec2.fromXY(raw.pos),
 					(raw as RawOvalBoardElement).strokeData,
-					Vec2.fromXY((raw as RawOvalBoardElement).bottomRightPoint),
+					Vec2.fromXY((raw as RawOvalBoardElement).secondPoint),
 					raw.id,
 				);
 			case BoardElementType.Rectangle:
 				return new RectangleBoardElement(
 					Vec2.fromXY(raw.pos),
 					(raw as RawRectangleBoardElement).strokeData,
-					Vec2.fromXY((raw as RawRectangleBoardElement).bottomRightPoint),
+					Vec2.fromXY((raw as RawRectangleBoardElement).secondPoint),
 					raw.id,
 				);
 		}

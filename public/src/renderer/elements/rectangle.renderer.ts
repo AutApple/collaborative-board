@@ -22,7 +22,7 @@ export class RectangleRenderer {
 		camera: Camera,
 	) {
 		const aWorld = element.position;
-		const bWorld = element.getBottomRightPoint();
+		const bWorld = element.getSecondPoint();
 
 		const rect = this.normalizeWorldRect(aWorld, bWorld);
 
