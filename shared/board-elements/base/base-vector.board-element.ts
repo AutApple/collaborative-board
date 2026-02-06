@@ -14,6 +14,7 @@ export abstract class BaseVectorBoardElement extends BaseBoardElement {
 		super(pos, id);
 		this.strokeData = { ...strokeData };
 	}
+
 	public getStrokeData(): StrokeData {
 		return this.strokeData;
 	}
@@ -22,4 +23,7 @@ export abstract class BaseVectorBoardElement extends BaseBoardElement {
 		if (distance > this.getStrokeData().size) return null;
 		return this.getStrokeData().color;
 	}
+	
+	public abstract findClosestPointTo(worldCoords: Vec2): Vec2;
+
 }

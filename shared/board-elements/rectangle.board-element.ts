@@ -54,8 +54,13 @@ export class RectangleBoardElement extends BaseCornerDefinedBoardElement {
 			secondPoint: this.secondPoint,
 		};
 	}
+	
 	public distanceTo(worldCoords: Vec2): number {
 		return this.pos.distanceTo(worldCoords);
+	}
+	
+	public findClosestPointTo(worldCoords: Vec2): Vec2 {
+		return new Vec2(0, 0);
 	}
 
 	public toRaw(): RawRectangleBoardElement {
