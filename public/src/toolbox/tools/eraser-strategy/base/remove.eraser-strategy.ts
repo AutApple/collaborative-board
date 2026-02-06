@@ -6,7 +6,7 @@ import {
 } from '@shared/board/board-mutation.js';
 import type { ToolResult } from '../../../tool-result.js';
 
-export abstract class BaseRemoveEraserStrategy {
+export abstract class RemoveEraserStrategy {
 	static apply(element: BaseBoardElement, toolResult: ToolResult): BoardMutationList {
 		toolResult.addBoardAction((board) => {
 			board.removeElement(element.id);

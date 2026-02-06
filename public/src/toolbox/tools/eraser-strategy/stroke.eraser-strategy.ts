@@ -9,19 +9,9 @@ import type { ToolResult } from '../../tool-result.js';
 import type { StrokeBoardElement } from '../../../../../shared/board-elements/stroke.board-element.js';
 import type { Vec2 } from '../../../../../shared/utils/vec2.utils.js';
 import { BoardElementType } from '../../../../../shared/board-elements/types/board-element-type.js';
+import { RemoveEraserStrategy } from './base/remove.eraser-strategy.js';
 
 export class StrokeEraserStrategy {
-	private static removeElementAndMakeMutation(
-		toolResult: ToolResult,
-		elementId: string,
-	): RemoveBoardMutation {
-		toolResult.addBoardAction((board) => board.removeElement(elementId));
-		return {
-			type: BoardMutationType.Remove,
-			id: elementId,
-		};
-	}
-
 	static apply(
 		worldCoords: Vec2,
 		element: StrokeBoardElement,
@@ -49,7 +39,7 @@ export class StrokeEraserStrategy {
 			const updatedPoints = allPoints.filter((_, i) => i !== idx);
 
 			if (updatedPoints.length < 1)
-				return [StrokeEraserStrategy.removeElementAndMakeMutation(toolResult, element.id)];
+				return RemoveEraserStrategy.apply(element, toolResult);
 			toolResult.addBoardAction((board) => {
 				board.updateElement(element.id, {
 					type: BoardElementType.Stroke,
