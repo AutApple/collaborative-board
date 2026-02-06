@@ -22,6 +22,41 @@ export class OvalBoardElement extends BaseCornerDefinedBoardElement {
 		super(pos, secondPoint, strokeData, id);
 	}
 
+	// helper to retrieve oval coordinates based on angle 
+	private getOvalCoords(angle: number): XY { 
+		const c = this.getCenter();
+		const r = this.getRadius();
+		return {
+			x: c.x + r.x * Math.cos(angle),
+			y: c.y + r.y * Math.sin(angle)
+		}
+	}
+	
+	private computeClosestPointData(worldCoords: Vec2): {
+		closestPoint: Vec2;
+		distance: number;
+	} {
+		let t = 0;
+
+		let minCoords = this.getOvalCoords(t);
+		let minDistance: number = worldCoords.distanceTo(minCoords);
+		
+		while  (t < Math.PI * 2){
+			t += 0.01; // TODO: right now its kinda like magic number. i'd say moving it to config would be better, but  i think the better overall idea would be to use derivatives on distance in the future
+			
+			const coords = this.getOvalCoords(t);
+			const dist = worldCoords.distanceTo(coords);
+
+			minCoords = dist < minDistance ? coords : minCoords; 
+			minDistance = Math.min(minDistance, dist);
+		}
+		return {
+			closestPoint: Vec2.fromXY(minCoords),
+			distance: minDistance
+		}
+	}
+
+
 	public onAdd(): void {
 		return;
 	}
@@ -49,8 +84,12 @@ export class OvalBoardElement extends BaseCornerDefinedBoardElement {
 			secondPoint: this.secondPoint,
 		};
 	}
+
 	public distanceTo(worldCoords: Vec2): number {
-		return this.pos.distanceTo(worldCoords);
+		return this.computeClosestPointData(worldCoords).distance;
+	}
+	public findClosestPointTo(worldCoords: Vec2): Vec2 {
+		return this.computeClosestPointData(worldCoords).closestPoint;
 	}
 
 	public toRaw(): RawOvalBoardElement {
