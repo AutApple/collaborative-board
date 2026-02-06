@@ -1,14 +1,10 @@
+import type { BoardMutationList } from '../board/board-mutation.js';
 import { Vec2, type XY } from '../utils/vec2.utils.js';
 import {
 	BaseCornerDefinedBoardElement,
-	type RawBaseCornerDefinedBoardElement,
 	type BaseUpdateCornerDefinedElementData,
+	type RawBaseCornerDefinedBoardElement,
 } from './base/base-corner-defined.board-element.js';
-import {
-	BaseVectorBoardElement,
-	type RawBaseVectorBoardElement,
-} from './base/base-vector.board-element.js';
-import { type BaseUpdateElementData } from './base/base.board-element.js';
 import { BoardElementType } from './types/board-element-type.js';
 import type { StrokeData } from './types/stroke-data.type.js';
 
@@ -64,6 +60,19 @@ export class OvalBoardElement extends BaseCornerDefinedBoardElement {
 			pos: this.pos,
 			secondPoint: this.secondPoint,
 			strokeData: this.strokeData,
+		};
+	}
+
+	public getRadius(): XY {
+		return {
+			x: Math.abs(this.pos.x - this.secondPoint.x) * 0.5,
+			y: Math.abs(this.pos.y - this.secondPoint.y) * 0.5,
+		};
+	}
+	public getCenter(): XY {
+		return {
+			x: (this.pos.x + this.secondPoint.x) * 0.5,
+			y: (this.pos.y + this.secondPoint.y) * 0.5,
 		};
 	}
 
