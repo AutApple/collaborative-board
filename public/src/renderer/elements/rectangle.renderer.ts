@@ -8,9 +8,6 @@ export class RectangleRenderer {
 		element: RectangleBoardElement,
 		camera: Camera,
 	) {
-		const aWorld = element.position;
-		const bWorld = element.getSecondPoint();
-
 		const rect = element.getRectPoints();
 
 		const a = camera.worldToScreen(Vec2.fromXY(rect.topLeft));
