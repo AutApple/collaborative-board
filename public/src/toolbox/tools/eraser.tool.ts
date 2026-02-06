@@ -12,20 +12,20 @@ import { StrokeEraserStrategy } from './eraser-strategy/stroke.eraser-strategy.j
 export class EraserTool extends BaseTool {
 	private erasing: boolean = false;
 	private resultingMutationList: BoardMutationList;
-	private eraserRadius: number = 3;
 	private localToolResult: ToolResult = new ToolResult();
+	private eraserRadius: number | undefined;
 
 	constructor(readonly board: ReadonlyBoard) {
 		super(board);
 		this.resultingMutationList = [];
 	}
 
-	private erase(worldCoords: Vec2): BoardMutationList {
+	private erase(worldCoords: Vec2, eraserRadius: number): BoardMutationList {
 		const closestElement = this.board.findClosestElementTo(worldCoords);
 		if (!closestElement) return [];
 
 		const distance = closestElement.distanceTo(worldCoords);
-		if (distance > this.eraserRadius) return [];
+		if (distance > eraserRadius) return [];
 
 		switch (closestElement.type) {
 			case BoardElementType.Stroke:
@@ -51,15 +51,16 @@ export class EraserTool extends BaseTool {
 
 		this.eraserRadius = size;
 
-		const mutations = this.erase(worldCoords);
+		const mutations = this.erase(worldCoords, this.eraserRadius);
 		this.resultingMutationList.push(...mutations);
 
 		return this.localToolResult.addRenderBoardEmit();
 	}
 
 	public override stepConstructing(worldCoords: Vec2): ToolResult | null {
+		if (!this.eraserRadius) return null; 
 		this.localToolResult.clear();
-		const mutations = this.erase(worldCoords);
+		const mutations = this.erase(worldCoords, this.eraserRadius);
 		this.resultingMutationList.push(...mutations);
 
 		return this.localToolResult.addRenderBoardEmit();
