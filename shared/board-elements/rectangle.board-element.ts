@@ -27,6 +27,44 @@ export class RectangleBoardElement extends BaseCornerDefinedBoardElement {
 		super(pos, secondPoint, strokeData, id);
 	}
 
+	private computeClosestPointData(worldCoords: Vec2): {
+		closestPoint: Vec2;
+		distance: number;
+	} {
+		const rect = this.getRectPoints();
+
+		const minX = rect.topLeft.x;
+		const maxX = rect.bottomRight.x;
+		const minY = rect.topLeft.y;
+		const maxY = rect.bottomRight.y;
+
+		// compute the closest point on each edge
+		const topEdge = { x: Math.max(minX, Math.min(worldCoords.x, maxX)), y: maxY };
+		const bottomEdge = { x: Math.max(minX, Math.min(worldCoords.x, maxX)), y: minY };
+		const leftEdge = { x: minX, y: Math.max(minY, Math.min(worldCoords.y, maxY)) };
+		const rightEdge = { x: maxX, y: Math.max(minY, Math.min(worldCoords.y, maxY)) };
+
+		// compare edge distances
+		const edges = [topEdge, bottomEdge, leftEdge, rightEdge];
+		let minDist = Infinity;
+		let closest: XY = edges[0]!;
+
+		for (const pt of edges) {
+			const dx = worldCoords.x - pt.x;
+			const dy = worldCoords.y - pt.y;
+			const d = Math.sqrt(dx * dx + dy * dy);
+			if (d < minDist) {
+				minDist = d;
+				closest = pt;
+			}
+		}
+
+		return {
+			closestPoint: Vec2.fromXY(closest),
+			distance: minDist,
+		};
+	}
+
 	public onAdd(): void {
 		return;
 	}
@@ -56,11 +94,11 @@ export class RectangleBoardElement extends BaseCornerDefinedBoardElement {
 	}
 
 	public distanceTo(worldCoords: Vec2): number {
-		return this.pos.distanceTo(worldCoords);
+		return this.computeClosestPointData(worldCoords).distance;
 	}
 
 	public findClosestPointTo(worldCoords: Vec2): Vec2 {
-		return new Vec2(0, 0);
+		return this.computeClosestPointData(worldCoords).closestPoint;
 	}
 
 	public toRaw(): RawRectangleBoardElement {
