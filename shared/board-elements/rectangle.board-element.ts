@@ -1,3 +1,4 @@
+import type { BoardMutationList } from '../board/board-mutation.js';
 import { Vec2, type XY } from '../utils/vec2.utils.js';
 import {
 	BaseCornerDefinedBoardElement,
@@ -69,5 +70,9 @@ export class RectangleBoardElement extends BaseCornerDefinedBoardElement {
 
 	public encode(): ArrayBuffer {
 		throw new Error('Method not implemented.');
+	}
+
+	public pickColor(worldCoords: Vec2): string | null {
+		return null;
 	}
 }

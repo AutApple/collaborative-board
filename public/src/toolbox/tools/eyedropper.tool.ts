@@ -18,16 +18,13 @@ export class EyedropperTool extends BaseTool {
 	private picking = false;
 	private pickColor(worldCoords: Vec2): string {
 		const defaultColor = clientConfiguration.boardBackgroundColor;
+
 		const element = this.board.findClosestElementTo(worldCoords);
-		if (!element) return defaultColor;
-		if (element.type !== BoardElementType.Stroke) return defaultColor; // TODO: color picking defined on an element itself
+		const result = element?.pickColor(worldCoords);
 
-		const strokeElement = element as StrokeBoardElement;
-
-		const distance = strokeElement.findClosestPointTo(worldCoords).distanceTo(worldCoords);
-		if (distance > strokeElement.getStrokeData().size) return defaultColor;
-		return strokeElement.getStrokeData().color;
+		return result ?? defaultColor;
 	}
+
 	private pickColorAndMakeToolResult(worldCoords: Vec2): ToolResult {
 		return new ToolResult().addEmitAction((bus) => {
 			bus.emit(SemanticEvents.ToolboxChangeStrokeColor, {

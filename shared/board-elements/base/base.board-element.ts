@@ -1,3 +1,4 @@
+import type { BoardMutationList } from '../../board/board-mutation.js';
 import { Vec2 } from '../../utils/vec2.utils.js';
 import type { AnyRawBoardElement, AnyUpdateElementData } from '../index.js';
 import type { BoardElementType } from '../types/board-element-type.js';
@@ -44,6 +45,8 @@ export abstract class BaseBoardElement {
 
 	public abstract toRaw(): AnyRawBoardElement;
 	public abstract encode(): ArrayBuffer;
+
+	public abstract pickColor(worldCoords: Vec2): string | null;
 
 	// === TODO: move to another abstract class defining vector stuff
 	// public getStrokeData() {
