@@ -23,7 +23,6 @@ export abstract class BaseVectorBoardElement extends BaseBoardElement {
 		if (distance > this.getStrokeData().size) return null;
 		return this.getStrokeData().color;
 	}
-	
-	public abstract findClosestPointTo(worldCoords: Vec2): Vec2;
 
+	public abstract findClosestPointTo(worldCoords: Vec2): Vec2;
 }
