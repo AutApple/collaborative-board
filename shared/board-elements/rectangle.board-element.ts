@@ -1,15 +1,9 @@
-import type { BoardMutationList } from '../board/board-mutation.js';
 import { Vec2, type XY } from '../utils/vec2.utils.js';
 import {
 	BaseCornerDefinedBoardElement,
 	type BaseUpdateCornerDefinedElementData,
 	type RawBaseCornerDefinedBoardElement,
 } from './base/base-corner-defined.board-element.js';
-import {
-	BaseVectorBoardElement,
-	type RawBaseVectorBoardElement,
-} from './base/base-vector.board-element.js';
-import { type BaseUpdateElementData } from './base/base.board-element.js';
 import { BoardElementType } from './types/board-element-type.js';
 import type { StrokeData } from './types/stroke-data.type.js';
 
@@ -50,9 +44,7 @@ export class RectangleBoardElement extends BaseCornerDefinedBoardElement {
 		let closest: XY = edges[0]!;
 
 		for (const pt of edges) {
-			const dx = worldCoords.x - pt.x;
-			const dy = worldCoords.y - pt.y;
-			const d = Math.sqrt(dx * dx + dy * dy);
+			const d = worldCoords.distanceTo(pt);
 			if (d < minDist) {
 				minDist = d;
 				closest = pt;
