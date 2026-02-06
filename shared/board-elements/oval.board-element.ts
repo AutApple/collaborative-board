@@ -117,8 +117,4 @@ export class OvalBoardElement extends BaseCornerDefinedBoardElement {
 	public encode(): ArrayBuffer {
 		throw new Error('Method not implemented.');
 	}
-
-	public pickColor(worldCoords: Vec2): string | null {
-		return null;
-	}
 }
