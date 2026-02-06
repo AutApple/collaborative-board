@@ -236,10 +236,4 @@ export class StrokeBoardElement extends BaseVectorBoardElement {
 		// console.log(`Optimizaiton (e=${epsilon}) end. Resulting points: ${this.getPoints().map(p => `{x: ${p.x},y: ${p.y}}, `)}`)
 		return;
 	}
-
-	public pickColor(worldCoords: Vec2): string | null {
-		const distance = this.findClosestPointTo(worldCoords).distanceTo(worldCoords);
-		if (distance > this.getStrokeData().size) return null;
-		return this.getStrokeData().color;
-	}
 }

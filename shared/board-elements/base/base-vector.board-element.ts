@@ -17,4 +17,9 @@ export abstract class BaseVectorBoardElement extends BaseBoardElement {
 	public getStrokeData(): StrokeData {
 		return this.strokeData;
 	}
+	public pickColor(worldCoords: Vec2): string | null {
+		const distance = this.findClosestPointTo(worldCoords).distanceTo(worldCoords);
+		if (distance > this.getStrokeData().size) return null;
+		return this.getStrokeData().color;
+	}
 }
