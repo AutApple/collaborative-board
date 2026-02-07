@@ -1,4 +1,3 @@
-import type { BoardMutationList } from '../../board/board-mutation.js';
 import { Vec2 } from '../../utils/vec2.utils.js';
 import type { AnyRawBoardElement, AnyUpdateElementData } from '../index.js';
 import type { BoardElementType } from '../types/board-element-type.js';
@@ -44,18 +43,16 @@ export abstract class BaseBoardElement {
 	public abstract distanceTo(worldCoords: Vec2): number;
 
 	public abstract toRaw(): AnyRawBoardElement;
+	
 	public abstract encode(): ArrayBuffer;
 
+	// Subclasses must implement static fromEncoded() and fromRaw()
+	public static fromEncoded(buffer: ArrayBuffer, id: string): BaseBoardElement {
+		throw new Error('Method is not callable from base class.');	
+	};
+	public static fromRaw(raw: AnyRawBoardElement): BaseBoardElement {
+		throw new Error('Method is not callable from base class.');	
+	}; 
+	
 	public abstract pickColor(worldCoords: Vec2): string | null;
-
-	// === TODO: move to another abstract class defining vector stuff
-	// public getStrokeData() {
-	//     return this.strokeData;
-	// }
-	// protected strokeData: StrokeData;
-	// public abstract findClosestPointTo(worldCoords: Vec2): Vec2;
-	// public abstract getVertices(): readonly Vec2[];
-	// public abstract setVertices(vertices: Vec2[]): void;
-	// public abstract optimizeVertices(): void;
-	// ===
 }

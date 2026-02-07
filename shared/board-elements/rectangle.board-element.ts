@@ -103,7 +103,42 @@ export class RectangleBoardElement extends BaseCornerDefinedBoardElement {
 		};
 	}
 
-	public encode(): ArrayBuffer {
-		throw new Error('Method not implemented.');
+	public static fromRaw(raw: RawRectangleBoardElement) {
+		return new RectangleBoardElement(Vec2.fromXY(raw.pos), raw.strokeData, Vec2.fromXY(raw.secondPoint), raw.id);
+	}
+	
+	public static fromEncoded(buffer: ArrayBuffer, id: string): RectangleBoardElement {
+		// 1 byte for element type (uint8),
+		// 1 byte for stroke size (uint8),
+		// 3 bytes for color data (uint8 * 3),
+		// 4 bytes for X and 4 bytes for Y,
+		// 4 bytes for  second X  and 4 bytes for second Y
+		let byteOffset = 1; // not interested in type byte 
+		const view = new DataView(buffer);
+
+		const size = view.getUint8(byteOffset++);
+		const r = view.getUint8(byteOffset++);
+		const g = view.getUint8(byteOffset++);
+		const b = view.getUint8(byteOffset++);
+		const color: string = this.rgbBytesToHex(r, g, b);
+		const strokeData: StrokeData = {
+			color,
+			size,
+		};
+
+		const posX = view.getInt32(byteOffset, true);
+		byteOffset += 4;
+		const posY = view.getInt32(byteOffset, true);
+		byteOffset += 4;
+
+		const secondPosX = view.getInt32(byteOffset, true);
+		byteOffset += 4;
+		const secondPosY = view.getInt32(byteOffset, true);
+		byteOffset += 4;
+		 
+
+		const element = new RectangleBoardElement(new Vec2(posX, posY), strokeData, new Vec2(secondPosX, secondPosY), id);
+		return element;
 	}
 }
+

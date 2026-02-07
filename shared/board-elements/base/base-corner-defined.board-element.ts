@@ -1,5 +1,5 @@
 import { Vec2, type XY } from '../../utils/vec2.utils.js';
-import type { BoardElementType } from '../types/board-element-type.js';
+import { BoardElementType } from '../types/board-element-type.js';
 import type { StrokeData } from '../types/stroke-data.type.js';
 import {
 	BaseVectorBoardElement,
@@ -52,5 +52,33 @@ export abstract class BaseCornerDefinedBoardElement extends BaseVectorBoardEleme
 			bottomRight: { x: maxX, y: maxY },
 			bottomLeft: { x: minX, y: maxY },
 		};
+	}
+
+	public encode(): ArrayBuffer {
+		// 1 byte for element type (uint8),
+		// 1 byte for stroke size (uint8),
+		// 3 bytes for color data (uint8 * 3),
+		// 4  bytes for X and 4 bytes for Y,
+		// 4 bytes for second point's X and Y 
+		const buffer = new ArrayBuffer(1 + 1 + 3 + 8 + 8);
+		const view = new DataView(buffer);
+
+		let byteCount = 0;
+
+		view.setUint8(byteCount++, this.type);
+		view.setUint8(byteCount++, this.strokeData.size);
+
+		const [r, g, b] = BaseCornerDefinedBoardElement.hexToRgbBytes(this.strokeData.color);
+
+		view.setUint8(byteCount++, r);
+		view.setUint8(byteCount++, g);
+		view.setUint8(byteCount++, b);
+
+		view.setInt32(byteCount, this.pos.x, true); byteCount += 4;
+		view.setInt32(byteCount, this.pos.y, true); byteCount += 4;
+		view.setInt32(byteCount, this.secondPoint.x, true); byteCount += 4;
+		view.setInt32(byteCount, this.secondPoint.y, true); byteCount += 4;
+
+		return buffer;
 	}
 }

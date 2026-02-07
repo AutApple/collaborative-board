@@ -1,14 +1,12 @@
-import type { BoardMutationList } from '../board/board-mutation.js';
 import { sharedConfiguration } from '../config/shared.config.js';
 import { Vec2 } from '../utils/vec2.utils.js';
+import { BaseCornerDefinedBoardElement } from './base/base-corner-defined.board-element.js';
 import {
 	BaseVectorBoardElement,
 	type RawBaseVectorBoardElement,
 } from './base/base-vector.board-element.js';
 import {
-	BaseBoardElement,
-	type BaseUpdateElementData,
-	type RawBaseBoardElement,
+	type BaseUpdateElementData
 } from './base/base.board-element.js';
 import { BoardElementType } from './types/board-element-type.js';
 import type { StrokeData } from './types/stroke-data.type.js';
@@ -151,20 +149,49 @@ export class StrokeBoardElement extends BaseVectorBoardElement {
 		};
 	}
 
-	private hexToRgbBytes(hex: string): [number, number, number] {
-		if (!/^#?[0-9a-fA-F]{6}$/.test(hex)) {
-			throw new Error('Invalid hex color');
+	public static fromRaw(raw: RawStrokeBoardElement) {
+		return new StrokeBoardElement(Vec2.fromXY(raw.pos), raw.strokeData, raw.offsets.map(o => Vec2.fromXY(o)), raw.id);
+	}
+
+	public static fromEncoded(buffer: ArrayBuffer, id: string): StrokeBoardElement {
+		// 1 byte for element type (uint8),
+		// 1 byte for stroke size (uint8),
+		// 3 bytes for color data (uint8 * 3),
+		// 4 bytes for X and 4 bytes for Y,
+		// 4 bytes for each offset x and 4 bytes for offset y
+		let byteOffset = 1; // skip type byte cuz its irrelevant
+		const view = new DataView(buffer);
+
+		const size = view.getUint8(byteOffset++);
+		const r = view.getUint8(byteOffset++);
+		const g = view.getUint8(byteOffset++);
+		const b = view.getUint8(byteOffset++);
+		const color: string = this.rgbBytesToHex(r, g, b);
+		const strokeData: StrokeData = {
+			color,
+			size,
+		};
+
+		const posX = view.getInt32(byteOffset, true);
+		byteOffset += 4;
+		const posY = view.getInt32(byteOffset, true);
+		byteOffset += 4;
+
+		const offsets: Vec2[] = [];
+		const offsetsByteSize = buffer.byteLength - byteOffset;
+		if (offsetsByteSize % 8 !== 0) throw Error('Invalid data on decoding stroke');
+		const offsetsLength = offsetsByteSize / 8;
+
+		for (let i = 0; i < offsetsLength; i++) {
+			const x = view.getInt32(byteOffset, true);
+			byteOffset += 4;
+			const y = view.getInt32(byteOffset, true);
+			byteOffset += 4;
+			offsets.push(new Vec2(x, y));
 		}
 
-		if (hex.startsWith('#')) {
-			hex = hex.slice(1);
-		}
-
-		return [
-			parseInt(hex.slice(0, 2), 16), // R
-			parseInt(hex.slice(2, 4), 16), // G
-			parseInt(hex.slice(4, 6), 16), // B
-		];
+		const element = new StrokeBoardElement(new Vec2(posX, posY), strokeData, offsets, id);
+		return element;
 	}
 
 	public override encode(): ArrayBuffer {
@@ -181,7 +208,7 @@ export class StrokeBoardElement extends BaseVectorBoardElement {
 		view.setUint8(byteOffset++, BoardElementType.Stroke);
 		view.setUint8(byteOffset++, this.strokeData.size);
 
-		const [r, g, b] = this.hexToRgbBytes(this.strokeData.color);
+		const [r, g, b] = BaseCornerDefinedBoardElement.hexToRgbBytes(this.strokeData.color);
 
 		view.setUint8(byteOffset++, r);
 		view.setUint8(byteOffset++, g);
