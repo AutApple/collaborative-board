@@ -100,8 +100,8 @@ export class Board implements ReadonlyBoard {
 		switch (mutation.type) {
 			case BoardMutationType.Create:
 				const createMutation = mutation as CreateBoardMutation;
-				if (!createMutation.raw) throw Error('Wrong create board mutation signature'); // TODO: generic centralized messages
-				const element = BoardElementFactory.fromRaw(createMutation.raw);
+				if (!createMutation.element) throw Error('Wrong create board mutation signature'); // TODO: generic centralized messages
+				const element = BoardElementFactory.fromRaw(createMutation.element);
 				this.appendElement(element);
 				// console.log('Created element with id ', element.id);
 				break;

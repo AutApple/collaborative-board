@@ -35,7 +35,7 @@ export class OvalTool extends BaseTool {
 		const mutation: CreateBoardMutation = {
 			id: this.constructingOvalPointer!.id,
 			type: BoardMutationType.Create,
-			raw: this.constructingOvalPointer!.toRaw(),
+			element: this.constructingOvalPointer!.toRaw(),
 		};
 		this.constructingOvalPointer = null;
 		return new ToolResult().setGlobalMutations([mutation]).addRenderBoardEmit();

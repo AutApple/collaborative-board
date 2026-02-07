@@ -53,7 +53,7 @@ export class StrokeTool extends BaseTool {
 		const mutation: CreateBoardMutation = {
 			type: BoardMutationType.Create,
 			id: this.constructingStrokePointer!.id,
-			raw,
+			element: raw,
 		};
 		this.constructingStrokePointer = null;
 		return new ToolResult().setGlobalMutations([mutation]).addRenderBoardEmit();

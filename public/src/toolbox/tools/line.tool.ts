@@ -38,7 +38,7 @@ export class LineTool extends BaseTool {
 		const mutation: CreateBoardMutation = {
 			type: BoardMutationType.Create,
 			id: this.constructingLinePointer!.id,
-			raw,
+			element: raw,
 		};
 		this.constructingLinePointer = null;
 		return new ToolResult().setGlobalMutations([mutation]).addRenderBoardEmit();

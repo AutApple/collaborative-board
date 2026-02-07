@@ -40,7 +40,7 @@ export class RectangleTool extends BaseTool {
 		const mutation: CreateBoardMutation = {
 			id: this.constructingRectanglePointer!.id,
 			type: BoardMutationType.Create,
-			raw: this.constructingRectanglePointer!.toRaw(),
+			element: this.constructingRectanglePointer!.toRaw(),
 		};
 		this.constructingRectanglePointer = null;
 		return new ToolResult().setGlobalMutations([mutation]).addRenderBoardEmit();

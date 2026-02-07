@@ -14,6 +14,8 @@ export abstract class RemoveEraserStrategy {
 		const mutation = {
 			type: BoardMutationType.Remove,
 			id: element.id,
+			element: element.toRaw(),
+			previousState: element.toRaw()
 		} as RemoveBoardMutation;
 		return [mutation];
 	}

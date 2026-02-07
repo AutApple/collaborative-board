@@ -14,16 +14,18 @@ export interface BaseBoardMutation {
 
 export interface CreateBoardMutation extends BaseBoardMutation {
 	type: BoardMutationType.Create;
-	raw: AnyRawBoardElement;
+	element: AnyRawBoardElement;
 }
 
 export interface UpdateBoardMutation extends BaseBoardMutation {
 	type: BoardMutationType.Update;
+	inversePayload: AnyUpdateElementData;
 	payload: AnyUpdateElementData;
 }
 
 export interface RemoveBoardMutation extends BaseBoardMutation {
 	type: BoardMutationType.Remove;
+	element: AnyRawBoardElement;
 }
 
 export type BoardMutationList = Array<BaseBoardMutation>;
@@ -57,9 +59,9 @@ export function optimizeMutations(mutations: BoardMutationList): BoardMutationLi
 				case BoardMutationType.Update:
 					idxToDelete.set(i, true);
 					const createMutation = (mutations[createMutationIndex] as CreateBoardMutation)!;
-					const element = BoardElementFactory.fromRaw(createMutation.raw);
+					const element = BoardElementFactory.fromRaw(createMutation.element);
 					element.updateData((mutations[i] as UpdateBoardMutation)!.payload);
-					createMutation.raw = element.toRaw();
+					createMutation.element = element.toRaw();
 					break;
 				case BoardMutationType.Remove:
 					idxToDelete.set(i, true);

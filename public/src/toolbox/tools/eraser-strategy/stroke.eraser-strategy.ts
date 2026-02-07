@@ -2,7 +2,6 @@ import {
 	BoardMutationType,
 	type BoardMutationList,
 	type CreateBoardMutation,
-	type RemoveBoardMutation,
 	type UpdateBoardMutation,
 } from '@shared/board/board-mutation.js';
 import type { ToolResult } from '../../tool-result.js';
@@ -40,17 +39,20 @@ export class StrokeEraserStrategy {
 
 			if (updatedPoints.length < 1)
 				return RemoveEraserStrategy.apply(element, toolResult);
+			
+			let resMutation: UpdateBoardMutation = {
+				type: BoardMutationType.Update,
+				id: element.id,
+				inversePayload: element.toUpdateData(),
+				payload: { type: BoardElementType.Stroke, vertices: updatedPoints },
+			};
+
 			toolResult.addBoardAction((board) => {
 				board.updateElement(element.id, {
 					type: BoardElementType.Stroke,
 					vertices: updatedPoints,
 				});
 			});
-			let resMutation: UpdateBoardMutation = {
-				type: BoardMutationType.Update,
-				id: element.id,
-				payload: { type: BoardElementType.Stroke, vertices: updatedPoints },
-			};
 			return [resMutation];
 		}
 		const left = allPoints.slice(0, idx);
@@ -68,12 +70,13 @@ export class StrokeEraserStrategy {
 		const updateMutation: UpdateBoardMutation = {
 			type: BoardMutationType.Update,
 			id: element.id,
+			inversePayload: element.toUpdateData(),
 			payload: { type: BoardElementType.Stroke, vertices: left },
 		};
 		const createMutation: CreateBoardMutation = {
 			type: BoardMutationType.Create,
 			id: newElement.id,
-			raw: newElement.toRaw(),
+			element: newElement.toRaw(),
 		};
 		return [updateMutation, createMutation];
 	}
