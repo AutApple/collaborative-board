@@ -17,10 +17,10 @@ export class BoardAction {
 	}
 
 	public getMutations(): BoardMutationList {
-		return this.mutations;
+		return [... this.mutations];
 	};
 	public getInverseMutations(): BoardMutationList {
-		return this.inverseMutations;
+		return [ ...this.inverseMutations ];
 	}
 
 	private makeInverseMutations(mutationList: BoardMutationList) {
@@ -50,6 +50,7 @@ export class BoardAction {
 				case BoardMutationType.Remove:
 					const removeMutation = mutation as RemoveBoardMutation;
 					this.inverseMutations.unshift({
+						id: removeMutation.id,
 						type: BoardMutationType.Create,
 						element: removeMutation.element
 					} as CreateBoardMutation);
