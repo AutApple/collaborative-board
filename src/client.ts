@@ -50,16 +50,15 @@ export class Client {
 			);
 
 			// TODO: redefine save board behaviour, following code is for testing purposes only!
-			this.placeholderActionCounter += 1; 
+			this.placeholderActionCounter += 1;
 			if (this.placeholderActionCounter === 5) {
 				this.placeholderActionCounter = 0;
 				const elements = this.appContext.board.getElements();
-				
+
 				const elementRepo = this.repositoryManager.getRepo(BoardElementRepository);
 				if (!elementRepo) return;
 
-				await Promise.all(elements.map(el => elementRepo.upsert(el)));
-				
+				await Promise.all(elements.map((el) => elementRepo.upsert(el)));
 			}
 		},
 		onRequestRefresh: () => {
@@ -74,7 +73,7 @@ export class Client {
 		private socket: BoardServerSocket,
 		private appContext: AppContext,
 		private clientRegistry: ClientRegistry,
-		private repositoryManager: RepositoryManager
+		private repositoryManager: RepositoryManager,
 	) {
 		socket.emit(
 			ServerBoardEvents.Handshake,

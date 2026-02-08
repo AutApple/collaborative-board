@@ -17,23 +17,25 @@ export class BoardServer {
 
 	private clientRegistry: ClientRegistry = new ClientRegistry();
 	private repositoryManager: RepositoryManager;
-	
+
 	constructor(httpServer: HTTPServer) {
 		this.io = new Server<ClientBoardEventPayloads, ServerBoardEventPayloads>(httpServer);
 		this.repositoryManager = new RepositoryManager([
-			new BoardElementRepository(this.appContext.db)
+			new BoardElementRepository(this.appContext.db),
 		]);
 	}
 
 	public async run() {
 		const elementRepo = this.repositoryManager.getRepo(BoardElementRepository);
-		if (!elementRepo) throw new Error('Can\'t find the element repository');
+		if (!elementRepo) throw new Error("Can't find the element repository");
 
 		const elements = await elementRepo.getAll(); // TODO: do db load into board somewhere else
 		this.appContext.board.refresh(elements);
-		
+
 		this.io.on('connection', (socket: BoardServerSocket) => {
-			this.clientRegistry.registerClient(new Client(socket, this.appContext, this.clientRegistry, this.repositoryManager));
+			this.clientRegistry.registerClient(
+				new Client(socket, this.appContext, this.clientRegistry, this.repositoryManager),
+			);
 		});
 	}
 }

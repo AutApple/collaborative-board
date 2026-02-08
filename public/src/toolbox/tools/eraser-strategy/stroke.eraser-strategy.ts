@@ -21,12 +21,12 @@ export class StrokeEraserStrategy {
 		// 2 - point is in the middle. remove the point. get all of the points after it and put them into the buffer, while removing from the stroke
 		// if there is no points left - completely dissolve the element
 		// then append new stroke with these saved points
-
 		const point = element.findClosestPointTo(worldCoords);
 		const allPoints = element.getVertices();
 
 		let idx = 0;
 		let minDist = Infinity;
+
 		for (let i = 0; i < allPoints.length; i++) {
 			const d = allPoints[i]!.distanceTo(point);
 			if (d < minDist) {
