@@ -15,7 +15,7 @@ export abstract class BaseVectorBoardElement extends BaseBoardElement {
 		this.strokeData = { ...strokeData };
 	}
 
-	// For encoding color 
+	// For encoding color
 	protected static hexToRgbBytes(hex: string): [number, number, number] {
 		if (!/^#?[0-9a-fA-F]{6}$/.test(hex)) {
 			throw new Error('Invalid hex color');
@@ -34,10 +34,12 @@ export abstract class BaseVectorBoardElement extends BaseBoardElement {
 
 	// For decoding color
 	protected static rgbBytesToHex(r: number, g: number, b: number): string {
-		return '#' +
+		return (
+			'#' +
 			r.toString(16).padStart(2, '0') +
 			g.toString(16).padStart(2, '0') +
-			b.toString(16).padStart(2, '0');
+			b.toString(16).padStart(2, '0')
+		);
 	}
 
 	public getStrokeData(): StrokeData {

@@ -59,7 +59,7 @@ export abstract class BaseCornerDefinedBoardElement extends BaseVectorBoardEleme
 		// 1 byte for stroke size (uint8),
 		// 3 bytes for color data (uint8 * 3),
 		// 4  bytes for X and 4 bytes for Y,
-		// 4 bytes for second point's X and Y 
+		// 4 bytes for second point's X and Y
 		const buffer = new ArrayBuffer(1 + 1 + 3 + 8 + 8);
 		const view = new DataView(buffer);
 
@@ -74,10 +74,14 @@ export abstract class BaseCornerDefinedBoardElement extends BaseVectorBoardEleme
 		view.setUint8(byteCount++, g);
 		view.setUint8(byteCount++, b);
 
-		view.setInt32(byteCount, this.pos.x, true); byteCount += 4;
-		view.setInt32(byteCount, this.pos.y, true); byteCount += 4;
-		view.setInt32(byteCount, this.secondPoint.x, true); byteCount += 4;
-		view.setInt32(byteCount, this.secondPoint.y, true); byteCount += 4;
+		view.setInt32(byteCount, this.pos.x, true);
+		byteCount += 4;
+		view.setInt32(byteCount, this.pos.y, true);
+		byteCount += 4;
+		view.setInt32(byteCount, this.secondPoint.x, true);
+		byteCount += 4;
+		view.setInt32(byteCount, this.secondPoint.y, true);
+		byteCount += 4;
 
 		return buffer;
 	}

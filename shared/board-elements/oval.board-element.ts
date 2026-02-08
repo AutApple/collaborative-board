@@ -112,9 +112,14 @@ export class OvalBoardElement extends BaseCornerDefinedBoardElement {
 			y: (this.pos.y + this.secondPoint.y) * 0.5,
 		};
 	}
-	
+
 	public static fromRaw(raw: RawOvalBoardElement) {
-		return new OvalBoardElement(Vec2.fromXY(raw.pos), raw.strokeData, Vec2.fromXY(raw.secondPoint), raw.id);
+		return new OvalBoardElement(
+			Vec2.fromXY(raw.pos),
+			raw.strokeData,
+			Vec2.fromXY(raw.secondPoint),
+			raw.id,
+		);
 	}
 
 	public static fromEncoded(buffer: ArrayBuffer, id: string): OvalBoardElement {
@@ -123,7 +128,7 @@ export class OvalBoardElement extends BaseCornerDefinedBoardElement {
 		// 3 bytes for color data (uint8 * 3),
 		// 4 bytes for X and 4 bytes for Y,
 		// 4 bytes for  second X  and 4 bytes for second Y
-		let byteOffset = 1; // not interested in type byte 
+		let byteOffset = 1; // not interested in type byte
 		const view = new DataView(buffer);
 
 		const size = view.getUint8(byteOffset++);
@@ -145,9 +150,13 @@ export class OvalBoardElement extends BaseCornerDefinedBoardElement {
 		byteOffset += 4;
 		const secondPosY = view.getInt32(byteOffset, true);
 		byteOffset += 4;
-		 
 
-		const element = new OvalBoardElement(new Vec2(posX, posY), strokeData, new Vec2(secondPosX, secondPosY), id);
+		const element = new OvalBoardElement(
+			new Vec2(posX, posY),
+			strokeData,
+			new Vec2(secondPosX, secondPosY),
+			id,
+		);
 		return element;
 	}
 }

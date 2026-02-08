@@ -10,17 +10,17 @@ export class BoardAction {
 	private mutations: BoardMutationList;
 	private inverseMutations: BoardMutationList;
 
-	constructor (mutationList: BoardMutationList) {
-		this.mutations = [ ...mutationList ];
+	constructor(mutationList: BoardMutationList) {
+		this.mutations = [...mutationList];
 		this.inverseMutations = [];
 		this.makeInverseMutations(this.mutations);
 	}
 
 	public getMutations(): BoardMutationList {
-		return [... this.mutations];
-	};
+		return [...this.mutations];
+	}
 	public getInverseMutations(): BoardMutationList {
-		return [ ...this.inverseMutations ];
+		return [...this.inverseMutations];
 	}
 
 	private makeInverseMutations(mutationList: BoardMutationList) {
@@ -29,22 +29,22 @@ export class BoardAction {
 		// Update => Update to previous data
 		for (const mutation of mutationList) {
 			switch (mutation.type) {
-				case BoardMutationType.Create: 
+				case BoardMutationType.Create:
 					const createMutation = mutation as CreateBoardMutation;
 					this.inverseMutations.unshift({
-						id: createMutation.id, 
+						id: createMutation.id,
 						type: BoardMutationType.Remove,
-						element: createMutation.element
+						element: createMutation.element,
 					} as RemoveBoardMutation);
 					break;
 				case BoardMutationType.Update:
 					const updateMutation = mutation as UpdateBoardMutation;
-				
+
 					this.inverseMutations.unshift({
 						id: updateMutation.id,
 						type: BoardMutationType.Update,
 						payload: updateMutation.inversePayload,
-						inversePayload: updateMutation.payload  
+						inversePayload: updateMutation.payload,
 					} as UpdateBoardMutation);
 					break;
 				case BoardMutationType.Remove:
@@ -52,14 +52,13 @@ export class BoardAction {
 					this.inverseMutations.unshift({
 						id: removeMutation.id,
 						type: BoardMutationType.Create,
-						element: removeMutation.element
+						element: removeMutation.element,
 					} as CreateBoardMutation);
 					break;
 			}
 		}
 	}
 }
-
 
 export class BoardHistory {
 	private undoStack: BoardAction[] = [];
@@ -72,7 +71,7 @@ export class BoardHistory {
 	public retrieveUndo(): BoardMutationList | null {
 		const undoAction = this.undoStack.pop();
 		if (!undoAction) return null;
-		
+
 		this.redoStack.push(undoAction);
 		return undoAction.getInverseMutations();
 	}

@@ -58,7 +58,7 @@ export class EraserTool extends BaseTool {
 	}
 
 	public override stepConstructing(worldCoords: Vec2): ToolResult | null {
-		if (!this.eraserRadius) return null; 
+		if (!this.eraserRadius) return null;
 		this.localToolResult.clear();
 		const mutations = this.erase(worldCoords, this.eraserRadius);
 		this.resultingMutationList.push(...mutations);

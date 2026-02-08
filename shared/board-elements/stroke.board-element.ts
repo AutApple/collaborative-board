@@ -5,9 +5,7 @@ import {
 	BaseVectorBoardElement,
 	type RawBaseVectorBoardElement,
 } from './base/base-vector.board-element.js';
-import {
-	type BaseUpdateElementData
-} from './base/base.board-element.js';
+import { type BaseUpdateElementData } from './base/base.board-element.js';
 import { BoardElementType } from './types/board-element-type.js';
 import type { StrokeData } from './types/stroke-data.type.js';
 
@@ -150,7 +148,12 @@ export class StrokeBoardElement extends BaseVectorBoardElement {
 	}
 
 	public static fromRaw(raw: RawStrokeBoardElement) {
-		return new StrokeBoardElement(Vec2.fromXY(raw.pos), raw.strokeData, raw.offsets.map(o => Vec2.fromXY(o)), raw.id);
+		return new StrokeBoardElement(
+			Vec2.fromXY(raw.pos),
+			raw.strokeData,
+			raw.offsets.map((o) => Vec2.fromXY(o)),
+			raw.id,
+		);
 	}
 
 	public static fromEncoded(buffer: ArrayBuffer, id: string): StrokeBoardElement {

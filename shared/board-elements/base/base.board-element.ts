@@ -43,16 +43,16 @@ export abstract class BaseBoardElement {
 	public abstract distanceTo(worldCoords: Vec2): number;
 
 	public abstract toRaw(): AnyRawBoardElement;
-	
+
 	public abstract encode(): ArrayBuffer;
 
 	// Subclasses must implement static fromEncoded() and fromRaw()
 	public static fromEncoded(buffer: ArrayBuffer, id: string): BaseBoardElement {
-		throw new Error('Method is not callable from base class.');	
-	};
+		throw new Error('Method is not callable from base class.');
+	}
 	public static fromRaw(raw: AnyRawBoardElement): BaseBoardElement {
-		throw new Error('Method is not callable from base class.');	
-	}; 
-	
+		throw new Error('Method is not callable from base class.');
+	}
+
 	public abstract pickColor(worldCoords: Vec2): string | null;
 }

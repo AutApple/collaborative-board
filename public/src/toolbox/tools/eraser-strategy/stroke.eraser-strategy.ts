@@ -37,9 +37,8 @@ export class StrokeEraserStrategy {
 		if (idx === 0 || idx === allPoints.length - 1) {
 			const updatedPoints = allPoints.filter((_, i) => i !== idx);
 
-			if (updatedPoints.length < 1)
-				return RemoveEraserStrategy.apply(element, toolResult);
-			
+			if (updatedPoints.length < 1) return RemoveEraserStrategy.apply(element, toolResult);
+
 			let resMutation: UpdateBoardMutation = {
 				type: BoardMutationType.Update,
 				id: element.id,
