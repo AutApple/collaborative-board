@@ -51,6 +51,11 @@ export class StrokeBoardElement extends BaseVectorBoardElement {
 		distance: number;
 	} {
 		const vertices = this.getVertices();
+		if (vertices.length === 0) return { closestPoint: this.pos, distance: Infinity };
+		if (vertices.length === 1) {
+			const singleVertex = vertices[0]!;
+			return { closestPoint: singleVertex, distance: singleVertex.distanceTo(worldCoords) };
+		}
 
 		let closestPoint = this.pos;
 		let minDistance = Infinity;
