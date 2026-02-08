@@ -6,11 +6,13 @@ import {
 } from '../shared/socket-events/board.socket-events.js';
 import type { XY } from '../shared/utils/vec2.utils.js';
 import type { AppContext } from './app-context.js';
+import { BoardElementRepository } from './repos/board-element.repository.js';
 import type { ClientRegistry } from './client-registry.js';
 import { serverConfiguraion } from './config/server.config.js';
 import { BoardEventHandler } from './event-handlers/board.event-handler.js';
 import { CursorEventHandler } from './event-handlers/cursor.event-handler.js';
 import { NetworkingEventHandler } from './event-handlers/networking.event-handler.js';
+import type { RepositoryManager } from './repos/repository-manager.js';
 
 export class Client {
 	private connected = true;
@@ -23,6 +25,8 @@ export class Client {
 	private throttleMap: Map<(...args: any) => void, boolean> = new Map();
 
 	private handshakeTimer: NodeJS.Timeout;
+
+	private placeholderActionCounter = 0; // TODO: redefine save board behaviour, this exists for testing purposes only
 
 	private boundHandlers = {
 		onHandshake: (coords: XY) => {
@@ -38,12 +42,25 @@ export class Client {
 				pos,
 			);
 		},
-		onBoardMutations: (mutations: BoardMutationList) => {
+		onBoardMutations: async (mutations: BoardMutationList) => {
 			this.callAndThrottle(
 				serverConfiguraion.boardMutationsThrottlingTimeoutMs,
 				this.boardEventHandler.onBoardMutations,
 				mutations,
 			);
+
+			// TODO: redefine save board behaviour, following code is for testing purposes only!
+			this.placeholderActionCounter += 1; 
+			if (this.placeholderActionCounter === 5) {
+				this.placeholderActionCounter = 0;
+				const elements = this.appContext.board.getElements();
+				
+				const elementRepo = this.repositoryManager.getRepo(BoardElementRepository);
+				if (!elementRepo) return;
+
+				await Promise.all(elements.map(el => elementRepo.upsert(el)));
+				
+			}
 		},
 		onRequestRefresh: () => {
 			this.callAndThrottle(
@@ -57,6 +74,7 @@ export class Client {
 		private socket: BoardServerSocket,
 		private appContext: AppContext,
 		private clientRegistry: ClientRegistry,
+		private repositoryManager: RepositoryManager
 	) {
 		socket.emit(
 			ServerBoardEvents.Handshake,
