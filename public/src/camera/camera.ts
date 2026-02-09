@@ -30,7 +30,10 @@ export class Camera {
 		this.pos.set(this.initialPos);
 		this.scale = this.initialScale;
 	}
-
+	public getScale() {
+		return this.scale;
+	}
+	
 	public zoom(p: Vec2, factor: number) {
 		const mouse = this.screenToWorld(p);
 		const zoomFactor = factor < 0 ? 1.1 : 0.9;

@@ -8,17 +8,14 @@ export class OvalRenderer {
 		element: OvalBoardElement,
 		camera: Camera,
 	) {
-		const aWorld = element.position;
-		const bWorld = element.getSecondPoint();
-
-		// screen space
-		const a = camera.worldToScreen(aWorld);
-		const b = camera.worldToScreen(bWorld);
-
 		// center + radii
 		const c = camera.worldToScreen(Vec2.fromXY(element.getCenter()));
-		const r = element.getRadius();
-
+		const worldR = element.getRadius();
+		const cameraScale = camera.getScale();
+		const r = {
+			x: worldR.x * cameraScale,
+			y: worldR.y * cameraScale
+		}
 		const { size, color } = element.getStrokeData();
 
 		const halfStroke = size / 2;
