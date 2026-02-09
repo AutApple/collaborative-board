@@ -18,6 +18,9 @@ import { BoardElementType } from '../board-elements/types/board-element-type.js'
 export interface BoardDebugStats {
 	overallPointsAmount: number;
 	overallElementsAmount: number;
+
+	boardId: string;
+	boardName: string;
 }
 
 export interface ReadonlyBoard {
@@ -28,7 +31,22 @@ export interface ReadonlyBoard {
 }
 
 export class Board implements ReadonlyBoard {
-	constructor(private name?: string) {}
+	constructor(
+		private id?: string,
+		private name?: string,
+	) {}
+
+	getName(): string | undefined {
+		return this.name;
+	}
+	getId(): string | undefined {
+		return this.id;
+	}
+
+	public setMetadata(metadata: { id?: string; name?: string }) {
+		if (metadata.id !== undefined) this.id = metadata.id;
+		if (metadata.name !== undefined) this.name = metadata.name;
+	}
 
 	private elements: BaseBoardElement[] = [];
 
@@ -38,10 +56,6 @@ export class Board implements ReadonlyBoard {
 
 	private validateId(id: string) {
 		return validate(id) && version(id) === 4;
-	}
-
-	getName(): string | undefined {
-		return this.name;
 	}
 
 	getElements() {
@@ -95,9 +109,7 @@ export class Board implements ReadonlyBoard {
 		return minElement;
 	}
 
-	refresh(data: BaseBoardElement[], name?: string) {
-		this.name = name;
-
+	refresh(data: BaseBoardElement[]) {
 		this.resetData();
 		for (const element of data) this.appendElement(element);
 	}
@@ -133,6 +145,9 @@ export class Board implements ReadonlyBoard {
 		const debugStats: BoardDebugStats = {
 			overallPointsAmount: 0,
 			overallElementsAmount: this.elements.length,
+
+			boardId: this.id ?? 'undefined',
+			boardName: this.name ?? 'undefined'
 		};
 		for (const element of this.elements) {
 			if (element.type !== BoardElementType.Stroke) continue;

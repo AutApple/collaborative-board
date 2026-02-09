@@ -1,6 +1,6 @@
 import type { BoardServerSocket } from '../../shared/socket-events/board.socket-events.js';
 import type { AppContext } from '../app-context.js';
-import type { Client } from '../client.js';
+import type { Client } from '../client/client.js';
 
 export abstract class BaseEventHandler {
 	protected socket: BoardServerSocket;

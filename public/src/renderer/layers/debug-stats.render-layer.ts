@@ -6,6 +6,8 @@ export class DebugStatsRenderLayer extends BaseRenderLayer {
 	private debugStats: BoardDebugStats = {
 		overallElementsAmount: 0,
 		overallPointsAmount: 0,
+		boardId: 'undefined',
+		boardName: 'undefined'
 	};
 	constructor() {
 		super();
@@ -20,5 +22,7 @@ export class DebugStatsRenderLayer extends BaseRenderLayer {
 		ctx.fillStyle = 'black';
 		ctx.fillText(`Overall elements: ${this.debugStats.overallElementsAmount}`, 16, 16);
 		ctx.fillText(`Overall points: ${this.debugStats.overallPointsAmount}`, 16, 32);
+		ctx.fillText(`Board ID: ${this.debugStats.boardId}`, 16, 48);
+		ctx.fillText(`Board Name: ${this.debugStats.boardName}`, 16, 64);
 	}
 }

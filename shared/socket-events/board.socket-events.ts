@@ -23,7 +23,12 @@ export enum ClientBoardEvents {
 }
 
 export interface ServerBoardEventPayloads {
-	[ServerBoardEvents.Handshake]: (raw: AnyRawBoardElement[], cursors: Cursor[]) => void;
+	[ServerBoardEvents.Handshake]: (
+		boardId: string,
+		boardName: string,
+		raw: AnyRawBoardElement[],
+		cursors: Cursor[],
+	) => void;
 	[ServerBoardEvents.ClientConnected]: (clientId: string, cursor: Cursor) => void;
 	[ServerBoardEvents.ClientDisconnected]: (clientId: string) => void;
 	[ServerBoardEvents.BoardMutations]: (mutations: BoardMutationList) => void;

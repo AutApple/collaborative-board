@@ -6,10 +6,14 @@ import {
 import type { Server as HTTPServer } from 'node:http';
 import { Server } from 'socket.io';
 import { AppContext } from './app-context.js';
-import { ClientRegistry } from './client-registry.js';
-import { Client } from './client.js';
+import { ClientRegistry } from './client/client-registry.js';
+import { Client } from './client/client.js';
 import { BoardElementRepository } from './repos/board-element.repository.js';
 import { RepositoryManager } from './repos/repository-manager.js';
+import { Board } from '../shared/board/board.js';
+import { serverConfiguraion } from './config/server.config.js';
+import { BoardRepository } from './repos/board.repository.js';
+import { RoomService } from './room/room.service.js';
 
 export class BoardServer {
 	private io: Server<ClientBoardEventPayloads, ServerBoardEventPayloads>;
@@ -23,21 +27,22 @@ export class BoardServer {
 		this.io = new Server<ClientBoardEventPayloads, ServerBoardEventPayloads>(httpServer);
 		this.repositoryManager = new RepositoryManager([
 			new BoardElementRepository(this.appContext.db),
+			new BoardRepository(this.appContext.db),
 		]);
 	}
 
 	public async run() {
-		const elementRepo = this.repositoryManager.getRepo(BoardElementRepository);
-		if (!elementRepo) throw new Error("Can't find the element repository");
+		const boardRepo = this.repositoryManager.getRepo(BoardRepository);
+		if (!boardRepo) throw new Error("Can't find the board repository");
 
-		this.appContext.roomRegistry.add('placeholderId', 'Placeholder Board');
+		const boardList = await boardRepo.getAll(); // TODO: do db load into board somewhere else
+		this.appContext.roomRegistry.registerMany(boardList);
 
-		// const elements = await elementRepo.getAll(); // TODO: do db load into board somewhere else
-		// this.appContext.roomRegistry.get('placeholderId')?.board.refresh(elements);
+		const roomService = new RoomService(boardRepo, this.appContext.roomRegistry);
 
 		this.io.on('connection', (socket: BoardServerSocket) => {
 			this.clientRegistry.register(
-				new Client(socket, this.appContext, this.clientRegistry, this.repositoryManager),
+				new Client(socket, this.appContext, this.clientRegistry, roomService),
 			);
 		});
 	}

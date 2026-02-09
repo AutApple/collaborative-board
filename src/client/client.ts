@@ -1,19 +1,18 @@
-import { type BoardMutationList } from '../shared/board/board-mutation.js';
+import { type BoardMutationList } from '../../shared/board/board-mutation.js';
 import {
 	ClientBoardEvents,
-	ServerBoardEvents,
 	type BoardServerSocket,
-} from '../shared/socket-events/board.socket-events.js';
-import type { XY } from '../shared/utils/vec2.utils.js';
-import type { AppContext } from './app-context.js';
-import { BoardElementRepository } from './repos/board-element.repository.js';
+} from '../../shared/socket-events/board.socket-events.js';
+import type { XY } from '../../shared/utils/vec2.utils.js';
+import type { AppContext } from '../app-context.js';
 import type { ClientRegistry } from './client-registry.js';
-import { serverConfiguraion } from './config/server.config.js';
-import { BoardEventHandler } from './event-handlers/board.event-handler.js';
-import { CursorEventHandler } from './event-handlers/cursor.event-handler.js';
-import { NetworkingEventHandler } from './event-handlers/networking.event-handler.js';
-import type { RepositoryManager } from './repos/repository-manager.js';
-import type { BaseEventHandler } from './event-handlers/base.event-handler.js';
+import { serverConfiguraion } from '../config/server.config.js';
+import { BoardEventHandler } from '../event-handlers/board.event-handler.js';
+import { CursorEventHandler } from '../event-handlers/cursor.event-handler.js';
+import { NetworkingEventHandler } from '../event-handlers/networking.event-handler.js';
+import type { RepositoryManager } from '../repos/repository-manager.js';
+import type { BaseEventHandler } from '../event-handlers/base.event-handler.js';
+import type { RoomService } from '../room/room.service.js';
 
 export class Client {
 	private connected = true;
@@ -65,9 +64,9 @@ export class Client {
 		private socket: BoardServerSocket,
 		private appContext: AppContext,
 		private clientRegistry: ClientRegistry,
-		private repositoryManager: RepositoryManager,
+		private roomService: RoomService,
 	) {
-		this.networkingEventHandler = new NetworkingEventHandler(appContext, this);
+		this.networkingEventHandler = new NetworkingEventHandler(appContext, this, roomService);
 		this.boardEventHandler = new BoardEventHandler(appContext, this);
 		this.cursorEventHandler = new CursorEventHandler(appContext, this);
 
@@ -136,13 +135,7 @@ export class Client {
 		if (!room) return;
 		room.cursorMap.removeCursor(this.socket.id);
 
-		// TODO: redefine save board behaviour in BoardRepository, following code is for testing purposes only!
-		// const elements = room.board.getElements();
-
-		// const elementRepo = this.repositoryManager.getRepo(BoardElementRepository);
-		// if (!elementRepo) return;
-
-		// await Promise.all(elements.map((el) => elementRepo.save(el)));
+		await this.roomService.saveState(this.boardId!); // TODO: redefine save board behaviour somewhere else, do architecture cleaning
 	}
 
 	public didPassHandshake(): boolean {

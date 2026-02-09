@@ -51,8 +51,14 @@ export class NetworkController {
 	public onBoardMutations(mutations: BoardMutationList) {
 		this.bus.emit(SemanticEvents.BoardMutations, { mutations });
 	}
-	public onHandshake(raw: AnyRawBoardElement[], cursors: Cursor[]) {
+	public onHandshake(
+		boardId: string,
+		boardName: string,
+		raw: AnyRawBoardElement[],
+		cursors: Cursor[],
+	) {
 		for (const cursor of cursors) this.bus.emit(SemanticEvents.RemoteCursorConnect, { cursor });
+		this.appContext.board.setMetadata({ id: boardId, name: boardName });
 		this.bus.emit(SemanticEvents.BoardRefresh, { rawData: raw });
 	}
 }

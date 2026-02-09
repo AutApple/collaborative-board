@@ -1,7 +1,7 @@
 import { ServerBoardEvents } from '../../shared/socket-events/board.socket-events.js';
 import type { XY } from '../../shared/utils/vec2.utils.js';
 import type { AppContext } from '../app-context.js';
-import type { Client } from '../client.js';
+import type { Client } from '../client/client.js';
 import { BaseEventHandler } from './base.event-handler.js';
 
 export class CursorEventHandler extends BaseEventHandler {

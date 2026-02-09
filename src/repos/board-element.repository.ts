@@ -18,7 +18,7 @@ export class BoardElementRepository extends BaseRepository<BaseBoardElement> {
 		return elementObjects;
 	}
 
-	public async insert(element: BaseBoardElement): Promise<void> {
+	private async insert(element: BaseBoardElement, boardId: string): Promise<BaseBoardElement> {
 		const encoded = element.encode();
 		const id = element.id;
 
@@ -27,26 +27,28 @@ export class BoardElementRepository extends BaseRepository<BaseBoardElement> {
 			data: {
 				id,
 				data,
+				boardId,
 			},
 		});
+		return element;
 	}
 
-	public async update(element: BaseBoardElement): Promise<void> {
+	private async update(element: BaseBoardElement, boardId: string): Promise<BaseBoardElement> {
 		const encoded = element.encode();
 		const data = Buffer.from(encoded);
 		const id = element.id;
 		await this.client.boardElement.update({
-			where: { id },
+			where: { id, boardId },
 			data: { data },
 		});
+		return element;
 	}
 
-	public async save(element: BaseBoardElement): Promise<void> {
+	public async save(element: BaseBoardElement, boardId: string): Promise<BaseBoardElement> {
 		const id = element.id;
 
-		const el = await this.client.boardElement.findFirst({ where: { id } });
-		if (!el) return this.insert(element);
-
-		await this.update(element);
+		const el = await this.client.boardElement.findUnique({ where: { id } });
+		if (!el) return this.insert(element, boardId);
+		return this.update(element, boardId);
 	}
 }
