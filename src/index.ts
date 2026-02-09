@@ -15,7 +15,7 @@ boardApp.run();
 
 console.log(path.join(__rootdir, 'public-dist', 'index.html'));
 app.use(express.static(path.join(__rootdir, 'public-dist')));
-app.get('/', (_, res) => {
+app.get('/:id', (_, res) => {
 	console.log(path.join(__rootdir, 'public-dist', 'index.html'));
 	res.sendFile(path.join(__rootdir, 'public-dist', 'index.html'));
 });

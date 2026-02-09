@@ -13,10 +13,13 @@ import { BoardEventHandler } from './event-handlers/board.event-handler.js';
 import { CursorEventHandler } from './event-handlers/cursor.event-handler.js';
 import { NetworkingEventHandler } from './event-handlers/networking.event-handler.js';
 import type { RepositoryManager } from './repos/repository-manager.js';
+import type { BaseEventHandler } from './event-handlers/base.event-handler.js';
 
 export class Client {
 	private connected = true;
+
 	private passedHandshake = false;
+	private boardId: string | undefined;
 
 	private networkingEventHandler: NetworkingEventHandler;
 	private boardEventHandler: BoardEventHandler;
@@ -27,8 +30,8 @@ export class Client {
 	private handshakeTimer: NodeJS.Timeout;
 
 	private boundHandlers = {
-		onHandshake: (coords: XY) => {
-			this.networkingEventHandler.onHandshake(coords);
+		onHandshake: (boardId: string, coords: XY) => {
+			this.networkingEventHandler.onHandshake(boardId, coords);
 		},
 		onDisconnect: () => {
 			this.networkingEventHandler.onDisconnect();
@@ -37,6 +40,7 @@ export class Client {
 			this.callAndThrottle(
 				serverConfiguraion.cursorMoveThrottlingTimeoutMs,
 				this.cursorEventHandler.onLocalCursorMove,
+				this.cursorEventHandler,
 				pos,
 			);
 		},
@@ -44,6 +48,7 @@ export class Client {
 			this.callAndThrottle(
 				serverConfiguraion.boardMutationsThrottlingTimeoutMs,
 				this.boardEventHandler.onBoardMutations,
+				this.boardEventHandler,
 				mutations,
 			);
 		},
@@ -51,6 +56,7 @@ export class Client {
 			this.callAndThrottle(
 				serverConfiguraion.requestRefreshThrottlingTimeoutMs,
 				this.boardEventHandler.onRequestRefresh,
+				this.boardEventHandler,
 			);
 		},
 	};
@@ -77,11 +83,16 @@ export class Client {
 		socket.on(ClientBoardEvents.RequestRefresh, this.boundHandlers.onRequestRefresh);
 	}
 
-	private callAndThrottle(timeout: number, callback: (...args: any) => void, ...args: any) {
+	private callAndThrottle(
+		timeout: number,
+		callback: (...args: any) => void,
+		handler: BaseEventHandler,
+		...args: any
+	) {
 		const canCall: boolean = this.throttleMap.get(callback) ?? true;
 		if (canCall === false) return;
 
-		callback.apply(this, args);
+		callback.apply(handler, args);
 		this.throttleMap.set(callback, false);
 		setTimeout(() => {
 			this.throttleMap.set(callback, true);
@@ -96,12 +107,22 @@ export class Client {
 		return this.socket;
 	}
 
+	public setBoardId(id: string) {
+		this.boardId = id;
+		this.socket.join(this.boardId);
+
+		console.log(`Socket with id ${this.socket.id} joined ${this.boardId}`);
+	}
+
+	public getBoardId() {
+		return this.boardId;
+	}
+
 	public async disconnect() {
 		if (!this.connected) return;
 		this.connected = false;
 
-		this.clientRegistry.unregisterClient(this.socket.id);
-		this.appContext.cursorMap.removeCursor(this.socket.id);
+		this.clientRegistry.unregister(this.socket.id);
 
 		this.socket.off(ClientBoardEvents.Handshake, this.boundHandlers.onHandshake);
 		this.socket.off('disconnect', this.boundHandlers.onDisconnect);
@@ -111,14 +132,17 @@ export class Client {
 
 		this.socket.disconnect();
 
+		const room = this.appContext.roomRegistry.get(this.boardId!); // safely to assume that there is some boardId assigned on disconnect
+		if (!room) return;
+		room.cursorMap.removeCursor(this.socket.id);
+
 		// TODO: redefine save board behaviour in BoardRepository, following code is for testing purposes only!
-		const elements = this.appContext.board.getElements();
+		// const elements = room.board.getElements();
 
-		const elementRepo = this.repositoryManager.getRepo(BoardElementRepository);
-		if (!elementRepo) return;
+		// const elementRepo = this.repositoryManager.getRepo(BoardElementRepository);
+		// if (!elementRepo) return;
 
-		await Promise.all(elements.map((el) => elementRepo.save(el)));
-
+		// await Promise.all(elements.map((el) => elementRepo.save(el)));
 	}
 
 	public didPassHandshake(): boolean {

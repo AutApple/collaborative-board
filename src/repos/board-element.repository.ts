@@ -30,7 +30,7 @@ export class BoardElementRepository extends BaseRepository<BaseBoardElement> {
 			},
 		});
 	}
-	
+
 	public async update(element: BaseBoardElement): Promise<void> {
 		const encoded = element.encode();
 		const data = Buffer.from(encoded);

@@ -32,7 +32,7 @@ export interface ServerBoardEventPayloads {
 }
 
 export interface ClientBoardEventPayloads {
-	[ClientBoardEvents.Handshake]: (cursorWorldCoords: XY) => void;
+	[ClientBoardEvents.Handshake]: (boardId: string, cursorWorldCoords: XY) => void;
 	[ClientBoardEvents.BoardMutations]: (mutations: BoardMutationList) => void;
 	[ClientBoardEvents.RequestRefresh]: () => void;
 	[ClientBoardEvents.LocalCursorMove]: (worldCoords: XY) => void;

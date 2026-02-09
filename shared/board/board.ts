@@ -28,7 +28,7 @@ export interface ReadonlyBoard {
 }
 
 export class Board implements ReadonlyBoard {
-	constructor() {}
+	constructor(private name?: string) {}
 
 	private elements: BaseBoardElement[] = [];
 
@@ -38,6 +38,10 @@ export class Board implements ReadonlyBoard {
 
 	private validateId(id: string) {
 		return validate(id) && version(id) === 4;
+	}
+
+	getName(): string | undefined {
+		return this.name;
 	}
 
 	getElements() {
@@ -91,7 +95,9 @@ export class Board implements ReadonlyBoard {
 		return minElement;
 	}
 
-	refresh(data: BaseBoardElement[]) {
+	refresh(data: BaseBoardElement[], name?: string) {
+		this.name = name;
+
 		this.resetData();
 		for (const element of data) this.appendElement(element);
 	}

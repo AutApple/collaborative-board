@@ -16,6 +16,7 @@ export class BoardServer {
 	private appContext: AppContext = new AppContext();
 
 	private clientRegistry: ClientRegistry = new ClientRegistry();
+
 	private repositoryManager: RepositoryManager;
 
 	constructor(httpServer: HTTPServer) {
@@ -29,11 +30,13 @@ export class BoardServer {
 		const elementRepo = this.repositoryManager.getRepo(BoardElementRepository);
 		if (!elementRepo) throw new Error("Can't find the element repository");
 
-		const elements = await elementRepo.getAll(); // TODO: do db load into board somewhere else
-		this.appContext.board.refresh(elements);
+		this.appContext.roomRegistry.add('placeholderId', 'Placeholder Board');
+
+		// const elements = await elementRepo.getAll(); // TODO: do db load into board somewhere else
+		// this.appContext.roomRegistry.get('placeholderId')?.board.refresh(elements);
 
 		this.io.on('connection', (socket: BoardServerSocket) => {
-			this.clientRegistry.registerClient(
+			this.clientRegistry.register(
 				new Client(socket, this.appContext, this.clientRegistry, this.repositoryManager),
 			);
 		});

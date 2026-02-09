@@ -7,16 +7,21 @@ import { BaseEventHandler } from './base.event-handler.js';
 export class CursorEventHandler extends BaseEventHandler {
 	constructor(
 		protected appContext: AppContext,
-		protected client: Client,
+		client: Client,
 	) {
 		super(appContext, client);
 	}
 
 	public onLocalCursorMove(pos: XY) {
-		this.appContext.cursorMap.setPosition(this.socket.id, pos);
-		this.socket.broadcast.emit(ServerBoardEvents.RemoteCursorMove, {
+		const boardId = this.client.getBoardId()!;
+		const room = this.appContext.roomRegistry.get(boardId);
+		if (!room) return;
+
+		this.socket.to(boardId).emit(ServerBoardEvents.RemoteCursorMove, {
 			clientId: this.socket.id,
 			worldCoords: pos,
 		});
+
+		room.cursorMap.setPosition(this.socket.id, pos);
 	}
 }

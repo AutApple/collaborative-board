@@ -13,19 +13,29 @@ export class BoardEventHandler extends BaseEventHandler {
 	}
 
 	public onBoardMutations(mutations: BoardMutationList) {
+		const boardId = this.client.getBoardId()!;
+		const room = this.appContext.roomRegistry.get(boardId);
+
+		if (!room) return;
+
 		mutations = optimizeMutations(mutations);
 		for (const mutation of mutations) {
 			// console.log('Got mutation: ', mutation);
 			// TODO: validate point array length, etc etc. only then apply mutations. reject on weird data
-			this.appContext.board.applyMutation(mutation);
+			room.board.applyMutation(mutation);
 		}
-		this.socket.broadcast.emit(ServerBoardEvents.BoardMutations, mutations);
+		this.socket.to(boardId).emit(ServerBoardEvents.BoardMutations, mutations);
 	}
 
 	public onRequestRefresh() {
+		const boardId = this.client.getBoardId()!;
+		const room = this.appContext.roomRegistry.get(boardId);
+
+		if (!room) return;
+
 		this.socket.emit(
 			ServerBoardEvents.RefreshBoard,
-			this.appContext.board.getElements().map((element) => element.toRaw()),
+			room.board.getElements().map((element) => element.toRaw()),
 		);
 	}
 }

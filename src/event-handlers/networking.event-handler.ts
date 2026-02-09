@@ -12,25 +12,31 @@ export class NetworkingEventHandler extends BaseEventHandler {
 		super(appContext, client);
 	}
 
-	public onHandshake(cursorWorldCoords: XY) {
+	public onHandshake(boardId: string, cursorWorldCoords: XY) {
 		if (this.client.didPassHandshake() === true) return;
+
+		let room = this.appContext.roomRegistry.get(boardId);
+		if (!room) {
+			this.appContext.roomRegistry.add(boardId, 'Untitled Board');
+			room = this.appContext.roomRegistry.get(boardId)!;
+		}
+
+		this.client.setBoardId(boardId);
 
 		const cursor = {
 			clientId: this.client.getClientId(),
 			worldCoords: cursorWorldCoords,
 		};
 
-		this.appContext.cursorMap.addCursor(cursor);
+		room.cursorMap.addCursor(cursor);
 		this.socket.emit(
 			ServerBoardEvents.Handshake,
-			this.appContext.board.getElements().map((e) => e.toRaw()),
-			this.appContext.cursorMap.toList(),
+			room.board.getElements().map((e) => e.toRaw()),
+			room.cursorMap.toList(),
 		);
-		this.socket.broadcast.emit(
-			ServerBoardEvents.ClientConnected,
-			this.client.getClientId(),
-			cursor,
-		);
+		this.socket
+			.to(boardId)
+			.emit(ServerBoardEvents.ClientConnected, this.client.getClientId(), cursor);
 
 		this.client.markHandshakePass();
 	}

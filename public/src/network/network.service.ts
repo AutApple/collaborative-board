@@ -15,7 +15,11 @@ export class NetworkService {
 		this.socket.emit(ClientBoardEvents.BoardMutations, mutations);
 	}
 	sendHandshake(mousePos: XY) {
-		this.socket.emit(ClientBoardEvents.Handshake, mousePos);
+		// TODO: remove this shit, its for testing rooms only!
+		const path = window.location.pathname;
+		const segment = path.split('/').filter(Boolean)[0];
+
+		this.socket.emit(ClientBoardEvents.Handshake, segment ?? 'placeholderId', mousePos);
 	}
 	sendLocalCursorMove(mousePos: XY) {
 		this.socket.emit(ClientBoardEvents.LocalCursorMove, mousePos);
