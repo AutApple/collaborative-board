@@ -26,8 +26,6 @@ export class Client {
 
 	private handshakeTimer: NodeJS.Timeout;
 
-	private placeholderActionCounter = 0; // TODO: redefine save board behaviour, this exists for testing purposes only
-
 	private boundHandlers = {
 		onHandshake: (coords: XY) => {
 			this.networkingEventHandler.onHandshake(coords);
@@ -42,24 +40,12 @@ export class Client {
 				pos,
 			);
 		},
-		onBoardMutations: async (mutations: BoardMutationList) => {
+		onBoardMutations: (mutations: BoardMutationList) => {
 			this.callAndThrottle(
 				serverConfiguraion.boardMutationsThrottlingTimeoutMs,
 				this.boardEventHandler.onBoardMutations,
 				mutations,
 			);
-
-			// TODO: redefine save board behaviour, following code is for testing purposes only!
-			this.placeholderActionCounter += 1;
-			if (this.placeholderActionCounter === 5) {
-				this.placeholderActionCounter = 0;
-				const elements = this.appContext.board.getElements();
-
-				const elementRepo = this.repositoryManager.getRepo(BoardElementRepository);
-				if (!elementRepo) return;
-
-				await Promise.all(elements.map((el) => elementRepo.upsert(el)));
-			}
 		},
 		onRequestRefresh: () => {
 			this.callAndThrottle(
@@ -110,7 +96,7 @@ export class Client {
 		return this.socket;
 	}
 
-	public disconnect() {
+	public async disconnect() {
 		if (!this.connected) return;
 		this.connected = false;
 
@@ -124,6 +110,15 @@ export class Client {
 		this.socket.off(ClientBoardEvents.RequestRefresh, this.boundHandlers.onRequestRefresh);
 
 		this.socket.disconnect();
+
+		// TODO: redefine save board behaviour in BoardRepository, following code is for testing purposes only!
+		const elements = this.appContext.board.getElements();
+
+		const elementRepo = this.repositoryManager.getRepo(BoardElementRepository);
+		if (!elementRepo) return;
+
+		await Promise.all(elements.map((el) => elementRepo.save(el)));
+
 	}
 
 	public didPassHandshake(): boolean {
