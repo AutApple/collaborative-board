@@ -30,19 +30,23 @@ export class BoardElementRepository extends BaseRepository<BaseBoardElement> {
 			},
 		});
 	}
+	
+	public async update(element: BaseBoardElement): Promise<void> {
+		const encoded = element.encode();
+		const data = Buffer.from(encoded);
+		const id = element.id;
+		await this.client.boardElement.update({
+			where: { id },
+			data: { data },
+		});
+	}
 
-	public async upsert(element: BaseBoardElement): Promise<void> {
+	public async save(element: BaseBoardElement): Promise<void> {
 		const id = element.id;
 
 		const el = await this.client.boardElement.findFirst({ where: { id } });
 		if (!el) return this.insert(element);
 
-		const encoded = element.encode();
-		const data = Buffer.from(encoded);
-
-		await this.client.boardElement.update({
-			where: { id },
-			data: { data },
-		});
+		await this.update(element);
 	}
 }

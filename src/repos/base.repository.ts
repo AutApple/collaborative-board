@@ -5,5 +5,6 @@ export abstract class BaseRepository<T> {
 
 	public abstract getAll(): Promise<T[]>;
 	public abstract insert(entity: T): void;
-	public abstract upsert(entity: T): void;
+	public abstract update(entity: T): void; 
+	public abstract save(entity: T): void;
 }
