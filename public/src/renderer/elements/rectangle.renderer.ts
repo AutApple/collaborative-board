@@ -23,8 +23,9 @@ export class RectangleRenderer {
 		ctx.lineTo(d.x, d.y);
 		ctx.closePath();
 
-		const { size, color } = element.getStrokeData();
-
+		const { size: worldSize, color } = element.getStrokeData();
+		const size = worldSize * camera.getScale();
+		
 		ctx.lineWidth = size;
 		ctx.strokeStyle = color;
 

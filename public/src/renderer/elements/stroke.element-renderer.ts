@@ -12,9 +12,13 @@ export class StrokeRenderer {
 
 		ctx.save();
 
-		const { color, size } = element.getStrokeData();
+		const scale = camera.getScale();
+		const { color, size: worldSize } = element.getStrokeData();
+		const size = worldSize * scale;
+		
 		ctx.lineWidth = size;
-		ctx.lineCap = 'round';
+		ctx.lineCap = 'round'
+		ctx.lineJoin = 'round';
 		ctx.strokeStyle = color;
 
 		// Single-point stroke = dot

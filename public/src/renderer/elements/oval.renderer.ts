@@ -16,8 +16,9 @@ export class OvalRenderer {
 			x: worldR.x * cameraScale,
 			y: worldR.y * cameraScale
 		}
-		const { size, color } = element.getStrokeData();
-
+		const { size: worldSize, color } = element.getStrokeData();
+		const size = worldSize * camera.getScale();
+		
 		const halfStroke = size / 2;
 		const safeRx = Math.max(0, r.x - halfStroke);
 		const safeRy = Math.max(0, r.y - halfStroke);
