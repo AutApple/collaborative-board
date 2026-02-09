@@ -1,8 +1,4 @@
-import {
-	ServerBoardEvents,
-	type BoardClientSocket,
-	type BoardServerSocket,
-} from '../../shared/socket-events/board.socket-events.js';
+import { ServerBoardEvents } from '../../shared/socket-events/board.socket-events.js';
 import type { XY } from '../../shared/utils/vec2.utils.js';
 import type { AppContext } from '../app-context.js';
 import type { Client } from '../client.js';
@@ -25,6 +21,11 @@ export class NetworkingEventHandler extends BaseEventHandler {
 		};
 
 		this.appContext.cursorMap.addCursor(cursor);
+		this.socket.emit(
+			ServerBoardEvents.Handshake,
+			this.appContext.board.getElements().map((e) => e.toRaw()),
+			this.appContext.cursorMap.toList(),
+		);
 		this.socket.broadcast.emit(
 			ServerBoardEvents.ClientConnected,
 			this.client.getClientId(),

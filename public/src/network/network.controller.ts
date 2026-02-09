@@ -54,6 +54,5 @@ export class NetworkController {
 	public onHandshake(raw: AnyRawBoardElement[], cursors: Cursor[]) {
 		for (const cursor of cursors) this.bus.emit(SemanticEvents.RemoteCursorConnect, { cursor });
 		this.bus.emit(SemanticEvents.BoardRefresh, { rawData: raw });
-		this.networkService.sendHandshake(this.appContext.localCursorWorldCoords);
 	}
 }

@@ -68,6 +68,8 @@ export class BoardClient {
 		boardHistoryController.subscribe(semanticEventBus);
 		cursorController.subscribe(semanticEventBus);
 		rendererController.subscribe(semanticEventBus);
+
+		networkService.sendHandshake(appContext.localCursorWorldCoords);
 	}
 	run() {
 		const socket: BoardClientSocket = io();

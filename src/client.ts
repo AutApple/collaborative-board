@@ -75,12 +75,6 @@ export class Client {
 		private clientRegistry: ClientRegistry,
 		private repositoryManager: RepositoryManager,
 	) {
-		socket.emit(
-			ServerBoardEvents.Handshake,
-			appContext.board.getElements().map((e) => e.toRaw()),
-			appContext.cursorMap.toList(),
-		);
-
 		this.networkingEventHandler = new NetworkingEventHandler(appContext, this);
 		this.boardEventHandler = new BoardEventHandler(appContext, this);
 		this.cursorEventHandler = new CursorEventHandler(appContext, this);
