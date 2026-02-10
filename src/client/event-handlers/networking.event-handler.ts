@@ -6,11 +6,8 @@ import type { Client } from '../client.js';
 import { BaseEventHandler } from './base.event-handler.js';
 
 export class NetworkingEventHandler extends BaseEventHandler {
-	constructor(
-		protected appContext: AppContext,
-		protected roomService: RoomService,
-	) {
-		super(appContext);
+	constructor(protected roomService: RoomService) {
+		super();
 	}
 
 	public async onHandshake(client: Client, boardId: string, cursorWorldCoords: XY) {
@@ -18,8 +15,7 @@ export class NetworkingEventHandler extends BaseEventHandler {
 
 		const socket = client.getSocket();
 
-		let room = this.appContext.roomRegistry.get(boardId);
-		if (!room) room = await this.roomService.createRoom();
+		const room = await this.roomService.getOrCreate(boardId);
 
 		boardId = room.board.getId()!;
 		const boardName = room.board.getName()!;

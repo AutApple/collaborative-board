@@ -4,7 +4,7 @@ import {
 } from '../../shared/socket-events/board.socket-events.js';
 import { serverConfiguraion } from '../config/server.config.js';
 import type { ClientRegistry } from './client-registry.js';
-import type { ClientEventHandlers } from './client.event-handlers.js';
+import type { ClientEventHandlers } from './client-event-handlers.js';
 
 export class Client {
 	private connected = true;

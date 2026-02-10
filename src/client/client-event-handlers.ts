@@ -15,13 +15,12 @@ export class ClientEventHandlers {
 	private cursorEventHandler: CursorEventHandler;
 
 	constructor(
-		appContext: AppContext,
 		roomService: RoomService,
 		private client: Client,
 	) {
-		this.networkingEventHandler = new NetworkingEventHandler(appContext, roomService);
-		this.boardEventHandler = new BoardEventHandler(appContext);
-		this.cursorEventHandler = new CursorEventHandler(appContext);
+		this.networkingEventHandler = new NetworkingEventHandler(roomService);
+		this.boardEventHandler = new BoardEventHandler(roomService);
+		this.cursorEventHandler = new CursorEventHandler(roomService);
 	}
 
 	private throttleMap: Map<(...args: any) => void, boolean> = new Map();

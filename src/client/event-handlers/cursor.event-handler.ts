@@ -1,12 +1,13 @@
 import { ServerBoardEvents } from '../../../shared/socket-events/board.socket-events.js';
 import type { XY } from '../../../shared/utils/vec2.utils.js';
 import type { AppContext } from '../../app-context.js';
+import type { RoomService } from '../../room/room.service.js';
 import type { Client } from '../client.js';
 import { BaseEventHandler } from './base.event-handler.js';
 
 export class CursorEventHandler extends BaseEventHandler {
-	constructor(protected appContext: AppContext) {
-		super(appContext);
+	constructor(private roomService: RoomService) {
+		super();
 	}
 
 	public onLocalCursorMove(client: Client, pos: XY) {
@@ -15,7 +16,7 @@ export class CursorEventHandler extends BaseEventHandler {
 
 		if (!boardId) return;
 
-		const room = this.appContext.roomRegistry.get(boardId);
+		const room = this.roomService.get(boardId);
 		if (!room) return;
 
 		socket.to(boardId).emit(ServerBoardEvents.RemoteCursorMove, {

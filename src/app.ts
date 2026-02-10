@@ -14,7 +14,7 @@ import { Board } from '../shared/board/board.js';
 import { serverConfiguraion } from './config/server.config.js';
 import { BoardRepository } from './board/board.repository.js';
 import { RoomService } from './room/room.service.js';
-import { ClientEventHandlers } from './client/client.event-handlers.js';
+import { ClientEventHandlers } from './client/client-event-handlers.js';
 
 export class BoardServer {
 	private io: Server<ClientBoardEventPayloads, ServerBoardEventPayloads>;
@@ -36,14 +36,12 @@ export class BoardServer {
 		const boardRepo = this.repositoryManager.getRepo(BoardRepository);
 		if (!boardRepo) throw new Error("Can't find the board repository");
 
-		const boardList = await boardRepo.getAll(); // TODO: do db load into board somewhere else
-		this.appContext.roomRegistry.registerMany(boardList);
-
-		const roomService = new RoomService(boardRepo, this.appContext.roomRegistry);
+		const roomService = new RoomService(boardRepo, this.appContext);
+		await roomService.populateRegistryFromDb();
 
 		this.io.on('connection', (socket: BoardServerSocket) => {
 			const client = new Client(socket, this.clientRegistry);
-			const clientEventHandlers = new ClientEventHandlers(this.appContext, roomService, client);
+			const clientEventHandlers = new ClientEventHandlers(roomService, client);
 			client.bindHandlers(clientEventHandlers);
 
 			this.clientRegistry.register(client);

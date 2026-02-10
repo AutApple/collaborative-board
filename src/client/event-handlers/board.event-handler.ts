@@ -1,12 +1,13 @@
 import { optimizeMutations, type BoardMutationList } from '../../../shared/board/board-mutation.js';
 import { ServerBoardEvents } from '../../../shared/socket-events/board.socket-events.js';
 import type { AppContext } from '../../app-context.js';
+import type { RoomService } from '../../room/room.service.js';
 import type { Client } from '../client.js';
 import { BaseEventHandler } from './base.event-handler.js';
 
 export class BoardEventHandler extends BaseEventHandler {
-	constructor(protected appContext: AppContext) {
-		super(appContext);
+	constructor(private roomService: RoomService) {
+		super();
 	}
 
 	public onBoardMutations(client: Client, mutations: BoardMutationList) {
@@ -15,7 +16,7 @@ export class BoardEventHandler extends BaseEventHandler {
 
 		if (!boardId) return;
 
-		const room = this.appContext.roomRegistry.get(boardId);
+		const room = this.roomService.get(boardId);
 
 		if (!room) return;
 
@@ -33,7 +34,7 @@ export class BoardEventHandler extends BaseEventHandler {
 		const boardId = client.getBoardId();
 
 		if (!boardId) return;
-		const room = this.appContext.roomRegistry.get(boardId);
+		const room = this.roomService.get(boardId);
 
 		if (!room) return;
 
