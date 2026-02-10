@@ -17,6 +17,7 @@ import {
 	type ServiceContainer,
 } from './common/instance-container.js';
 import { RoomService } from './room/room.service.js';
+import dbClient from './common/db.js';
 
 export class BoardServer {
 	private io: Server<ClientBoardEventPayloads, ServerBoardEventPayloads>;
@@ -31,8 +32,8 @@ export class BoardServer {
 		this.io = new Server<ClientBoardEventPayloads, ServerBoardEventPayloads>(httpServer);
 
 		this.repositoryContainer = new InstanceContainer([
-			new BoardElementRepository(this.appContext.db),
-			new BoardRepository(this.appContext.db),
+			new BoardElementRepository(dbClient),
+			new BoardRepository(dbClient),
 		]);
 		this.serviceContainer = new InstanceContainer([
 			new RoomService(this.repositoryContainer.getInstance(BoardRepository), this.appContext),

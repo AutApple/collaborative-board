@@ -8,9 +8,7 @@ import { BaseEventHandler } from './base.event-handler.js';
 
 export class NetworkingEventHandler extends BaseEventHandler {
 	private roomService: RoomService;
-	constructor(
-		serviceContainer: ServiceContainer,
-	) {
+	constructor(serviceContainer: ServiceContainer) {
 		super(serviceContainer);
 		this.roomService = serviceContainer.getInstance(RoomService);
 	}
