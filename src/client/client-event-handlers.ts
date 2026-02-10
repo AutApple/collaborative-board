@@ -8,6 +8,7 @@ import type { BaseEventHandler } from './event-handlers/base.event-handler.js';
 import { BoardEventHandler } from './event-handlers/board.event-handler.js';
 import { CursorEventHandler } from './event-handlers/cursor.event-handler.js';
 import { NetworkingEventHandler } from './event-handlers/networking.event-handler.js';
+import type { ServiceContainer } from '../common/instance-container.js';
 
 export class ClientEventHandlers {
 	private networkingEventHandler: NetworkingEventHandler;
@@ -15,12 +16,12 @@ export class ClientEventHandlers {
 	private cursorEventHandler: CursorEventHandler;
 
 	constructor(
-		roomService: RoomService,
 		private client: Client,
+		serviceContainer: ServiceContainer,
 	) {
-		this.networkingEventHandler = new NetworkingEventHandler(roomService);
-		this.boardEventHandler = new BoardEventHandler(roomService);
-		this.cursorEventHandler = new CursorEventHandler(roomService);
+		this.networkingEventHandler = new NetworkingEventHandler(serviceContainer);
+		this.boardEventHandler = new BoardEventHandler(serviceContainer);
+		this.cursorEventHandler = new CursorEventHandler(serviceContainer);
 	}
 
 	private throttleMap: Map<(...args: any) => void, boolean> = new Map();

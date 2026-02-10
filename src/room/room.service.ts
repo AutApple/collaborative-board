@@ -1,13 +1,16 @@
 import { Board } from '../../shared/board/board.js';
 import type { AppContext } from '../app-context.js';
 import type { BoardRepository } from '../board/board.repository.js';
+import { BaseService } from '../common/base.service.js';
 import type { Room } from './room-registry.js';
 
-export class RoomService {
+export class RoomService extends BaseService {
 	constructor(
 		private boardRepository: BoardRepository,
 		private appContext: AppContext,
-	) {}
+	) {
+		super();
+	}
 
 	public async populateRegistryFromDb() {
 		const boardList = await this.boardRepository.getAll(); // TODO: do db load into board somewhere else
