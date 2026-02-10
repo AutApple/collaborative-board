@@ -2,7 +2,7 @@ import { Board } from '../../shared/board/board.js';
 import { type Board as BoardModel } from '../generated/prisma/client.js';
 import { type BoardElement as BoardElementModel } from '../generated/prisma/client.js';
 import { serverConfiguraion } from '../config/server.config.js';
-import { BaseRepository } from './base.repository.js';
+import { BaseRepository } from '../common/base.repository.js';
 import { BoardElementFactory } from '../../shared/board-elements/board-element-factory.js';
 import type { BaseBoardElement } from '../../shared/board-elements/index.js';
 
@@ -32,7 +32,6 @@ export class BoardRepository extends BaseRepository<Board> {
 		return { id, data, boardId };
 	}
 
-
 	public async getAll(): Promise<Board[]> {
 		const boardModels = await this.client.board.findMany({
 			include: { elements: true },
@@ -40,8 +39,6 @@ export class BoardRepository extends BaseRepository<Board> {
 		const boards = boardModels.map((b) => this.boardModelToInstance(b));
 		return boards;
 	}
-
-
 
 	private async insert(board: Board): Promise<Board> {
 		const boardModel = await this.client.board.create({

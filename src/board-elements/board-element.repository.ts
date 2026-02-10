@@ -1,6 +1,6 @@
 import { BoardElementFactory } from '../../shared/board-elements/board-element-factory.js';
 import type { BaseBoardElement } from '../../shared/board-elements/index.js';
-import { BaseRepository } from './base.repository.js';
+import { BaseRepository } from '../common/base.repository.js';
 
 export class BoardElementRepository extends BaseRepository<BaseBoardElement> {
 	public async getAll(): Promise<BaseBoardElement[]> {

@@ -1,18 +1,10 @@
-import { type BoardMutationList } from '../../shared/board/board-mutation.js';
 import {
 	ClientBoardEvents,
 	type BoardServerSocket,
 } from '../../shared/socket-events/board.socket-events.js';
-import type { XY } from '../../shared/utils/vec2.utils.js';
-import type { AppContext } from '../app-context.js';
-import type { ClientRegistry } from './client-registry.js';
 import { serverConfiguraion } from '../config/server.config.js';
-import { BoardEventHandler } from '../event-handlers/board.event-handler.js';
-import { CursorEventHandler } from '../event-handlers/cursor.event-handler.js';
-import { NetworkingEventHandler } from '../event-handlers/networking.event-handler.js';
-import type { RepositoryManager } from '../repos/repository-manager.js';
-import type { BaseEventHandler } from '../event-handlers/base.event-handler.js';
-import type { RoomService } from '../room/room.service.js';
+import type { ClientRegistry } from './client-registry.js';
+import type { ClientEventHandlers } from './client.event-handlers.js';
 
 export class Client {
 	private connected = true;
@@ -20,82 +12,30 @@ export class Client {
 	private passedHandshake = false;
 	private boardId: string | undefined;
 
-	private networkingEventHandler: NetworkingEventHandler;
-	private boardEventHandler: BoardEventHandler;
-	private cursorEventHandler: CursorEventHandler;
+	private handshakeTimer: NodeJS.Timeout | undefined;
 
-	private throttleMap: Map<(...args: any) => void, boolean> = new Map();
-
-	private handshakeTimer: NodeJS.Timeout;
-
-	private boundHandlers = {
-		onHandshake: (boardId: string, coords: XY) => {
-			this.networkingEventHandler.onHandshake(boardId, coords);
-		},
-		onDisconnect: () => {
-			this.networkingEventHandler.onDisconnect();
-		},
-		onLocalCursorMove: (pos: XY) => {
-			this.callAndThrottle(
-				serverConfiguraion.cursorMoveThrottlingTimeoutMs,
-				this.cursorEventHandler.onLocalCursorMove,
-				this.cursorEventHandler,
-				pos,
-			);
-		},
-		onBoardMutations: (mutations: BoardMutationList) => {
-			this.callAndThrottle(
-				serverConfiguraion.boardMutationsThrottlingTimeoutMs,
-				this.boardEventHandler.onBoardMutations,
-				this.boardEventHandler,
-				mutations,
-			);
-		},
-		onRequestRefresh: () => {
-			this.callAndThrottle(
-				serverConfiguraion.requestRefreshThrottlingTimeoutMs,
-				this.boardEventHandler.onRequestRefresh,
-				this.boardEventHandler,
-			);
-		},
-	};
+	private clientEventHandlers: ClientEventHandlers | undefined;
 
 	constructor(
 		private socket: BoardServerSocket,
-		private appContext: AppContext,
 		private clientRegistry: ClientRegistry,
-		private roomService: RoomService,
-	) {
-		this.networkingEventHandler = new NetworkingEventHandler(appContext, this, roomService);
-		this.boardEventHandler = new BoardEventHandler(appContext, this);
-		this.cursorEventHandler = new CursorEventHandler(appContext, this);
+	) {}
+
+	public bindHandlers(clientEventHandlers: ClientEventHandlers) {
+		if (this.clientEventHandlers) throw new Error('Client handlers already bound');
+		this.clientEventHandlers = clientEventHandlers;
+		const boundHandlers = clientEventHandlers.getBoundHandlers();
+
+		this.socket.on(ClientBoardEvents.Handshake, boundHandlers.onHandshake);
+		this.socket.on('disconnect', boundHandlers.onDisconnect);
+		this.socket.on(ClientBoardEvents.LocalCursorMove, boundHandlers.onLocalCursorMove);
+		this.socket.on(ClientBoardEvents.BoardMutations, boundHandlers.onBoardMutations);
+		this.socket.on(ClientBoardEvents.RequestRefresh, boundHandlers.onRequestRefresh);
 
 		this.handshakeTimer = setTimeout(
 			this._handshakePassCheck.bind(this),
 			serverConfiguraion.handshakeTimeoutMs,
 		);
-
-		socket.on(ClientBoardEvents.Handshake, this.boundHandlers.onHandshake);
-		socket.on('disconnect', this.boundHandlers.onDisconnect);
-		socket.on(ClientBoardEvents.LocalCursorMove, this.boundHandlers.onLocalCursorMove);
-		socket.on(ClientBoardEvents.BoardMutations, this.boundHandlers.onBoardMutations);
-		socket.on(ClientBoardEvents.RequestRefresh, this.boundHandlers.onRequestRefresh);
-	}
-
-	private callAndThrottle(
-		timeout: number,
-		callback: (...args: any) => void,
-		handler: BaseEventHandler,
-		...args: any
-	) {
-		const canCall: boolean = this.throttleMap.get(callback) ?? true;
-		if (canCall === false) return;
-
-		callback.apply(handler, args);
-		this.throttleMap.set(callback, false);
-		setTimeout(() => {
-			this.throttleMap.set(callback, true);
-		}, timeout);
 	}
 
 	public getClientId() {
@@ -118,24 +58,25 @@ export class Client {
 	}
 
 	public async disconnect() {
-		if (!this.connected) return;
+		if (!this.connected || !this.clientEventHandlers) return;
 		this.connected = false;
 
 		this.clientRegistry.unregister(this.socket.id);
 
-		this.socket.off(ClientBoardEvents.Handshake, this.boundHandlers.onHandshake);
-		this.socket.off('disconnect', this.boundHandlers.onDisconnect);
-		this.socket.off(ClientBoardEvents.LocalCursorMove, this.boundHandlers.onLocalCursorMove);
-		this.socket.off(ClientBoardEvents.BoardMutations, this.boundHandlers.onBoardMutations);
-		this.socket.off(ClientBoardEvents.RequestRefresh, this.boundHandlers.onRequestRefresh);
+		const boundHandlers = this.clientEventHandlers.getBoundHandlers();
+		this.socket.off(ClientBoardEvents.Handshake, boundHandlers.onHandshake);
+		this.socket.off('disconnect', boundHandlers.onDisconnect);
+		this.socket.off(ClientBoardEvents.LocalCursorMove, boundHandlers.onLocalCursorMove);
+		this.socket.off(ClientBoardEvents.BoardMutations, boundHandlers.onBoardMutations);
+		this.socket.off(ClientBoardEvents.RequestRefresh, boundHandlers.onRequestRefresh);
 
 		this.socket.disconnect();
 
-		const room = this.appContext.roomRegistry.get(this.boardId!); // safely to assume that there is some boardId assigned on disconnect
-		if (!room) return;
-		room.cursorMap.removeCursor(this.socket.id);
+		// const room = this.appContext.roomRegistry.get(this.boardId!); // safely to assume that there is some boardId assigned on disconnect
+		// if (!room) return;
+		// room.cursorMap.removeCursor(this.socket.id);
 
-		await this.roomService.saveState(this.boardId!); // TODO: redefine save board behaviour somewhere else, do architecture cleaning
+		// await this.roomService.saveState(this.boardId!); // TODO: redefine save board behaviour somewhere else, do architecture cleaning
 	}
 
 	public didPassHandshake(): boolean {

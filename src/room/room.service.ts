@@ -1,5 +1,5 @@
 import { Board } from '../../shared/board/board.js';
-import type { BoardRepository } from '../repos/board.repository.js';
+import type { BoardRepository } from '../board/board.repository.js';
 import type { Room, RoomRegistry } from './room-registry.js';
 
 export class RoomService {
@@ -15,7 +15,7 @@ export class RoomService {
 	}
 	public async saveState(boardId: string): Promise<void> {
 		const room = this.roomRegistry.get(boardId);
-		if (!room) throw new Error('saveStae: no board with igven id');
+		if (!room) throw new Error('@RoomService.saveState: no board with given id');
 		const { board } = room;
 		await this.boardRepository.save(board);
 	}

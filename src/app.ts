@@ -8,12 +8,13 @@ import { Server } from 'socket.io';
 import { AppContext } from './app-context.js';
 import { ClientRegistry } from './client/client-registry.js';
 import { Client } from './client/client.js';
-import { BoardElementRepository } from './repos/board-element.repository.js';
-import { RepositoryManager } from './repos/repository-manager.js';
+import { BoardElementRepository } from './board-elements/board-element.repository.js';
+import { RepositoryManager } from './common/repository-manager.js';
 import { Board } from '../shared/board/board.js';
 import { serverConfiguraion } from './config/server.config.js';
-import { BoardRepository } from './repos/board.repository.js';
+import { BoardRepository } from './board/board.repository.js';
 import { RoomService } from './room/room.service.js';
+import { ClientEventHandlers } from './client/client.event-handlers.js';
 
 export class BoardServer {
 	private io: Server<ClientBoardEventPayloads, ServerBoardEventPayloads>;
@@ -41,9 +42,11 @@ export class BoardServer {
 		const roomService = new RoomService(boardRepo, this.appContext.roomRegistry);
 
 		this.io.on('connection', (socket: BoardServerSocket) => {
-			this.clientRegistry.register(
-				new Client(socket, this.appContext, this.clientRegistry, roomService),
-			);
+			const client = new Client(socket, this.clientRegistry);
+			const clientEventHandlers = new ClientEventHandlers(this.appContext, roomService, client);
+			client.bindHandlers(clientEventHandlers);
+
+			this.clientRegistry.register(client);
 		});
 	}
 }

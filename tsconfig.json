@@ -10,6 +10,6 @@
       "@shared/*": ["./shared/*"]
     }
   },
-  "include": ["src/**/*.ts",  "shared/**/*.ts", "src/event-handlers"],
+  "include": ["src/**/*.ts",  "shared/**/*.ts", "src/client/event-handlers"],
   "exclude": ["public-dist", "dist", "node_modules"]
 }

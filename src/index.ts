@@ -13,10 +13,8 @@ const httpServer = createServer(app);
 const boardApp = new BoardServer(httpServer);
 boardApp.run();
 
-console.log(path.join(__rootdir, 'public-dist', 'index.html'));
 app.use(express.static(path.join(__rootdir, 'public-dist')));
 app.get('/:id', (_, res) => {
-	console.log(path.join(__rootdir, 'public-dist', 'index.html'));
 	res.sendFile(path.join(__rootdir, 'public-dist', 'index.html'));
 });
 
