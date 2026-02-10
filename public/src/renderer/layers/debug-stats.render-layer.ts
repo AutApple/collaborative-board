@@ -7,7 +7,7 @@ export class DebugStatsRenderLayer extends BaseRenderLayer {
 		overallElementsAmount: 0,
 		overallPointsAmount: 0,
 		boardId: 'undefined',
-		boardName: 'undefined'
+		boardName: 'undefined',
 	};
 	constructor() {
 		super();

@@ -15,9 +15,9 @@ export class StrokeRenderer {
 		const scale = camera.getScale();
 		const { color, size: worldSize } = element.getStrokeData();
 		const size = worldSize * scale;
-		
+
 		ctx.lineWidth = size;
-		ctx.lineCap = 'round'
+		ctx.lineCap = 'round';
 		ctx.lineJoin = 'round';
 		ctx.strokeStyle = color;
 

@@ -147,7 +147,7 @@ export class Board implements ReadonlyBoard {
 			overallElementsAmount: this.elements.length,
 
 			boardId: this.id ?? 'undefined',
-			boardName: this.name ?? 'undefined'
+			boardName: this.name ?? 'undefined',
 		};
 		for (const element of this.elements) {
 			if (element.type !== BoardElementType.Stroke) continue;
