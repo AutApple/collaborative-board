@@ -1,17 +1,16 @@
-import { Board } from '../../shared/board/board.js';
+import { Board } from '../../../shared/board/board.js';
 import { type Board as BoardModel } from '../generated/prisma/client.js';
 import { type BoardElement as BoardElementModel } from '../generated/prisma/client.js';
 import { serverConfiguraion } from '../config/server.config.js';
 import { BaseRepository } from '../common/base.repository.js';
-import { BoardElementFactory } from '../../shared/board-elements/board-element-factory.js';
-import type { BaseBoardElement } from '../../shared/board-elements/index.js';
+import { BoardElementFactory } from '../../../shared/board-elements/board-element-factory.js';
+import type { BaseBoardElement } from '../../../shared/board-elements/index.js';
 
 export class BoardRepository extends BaseRepository<Board> {
-	// TODO:
-	// 1) converging method (db board model to board entity)
-	// 2)
-	private boardModelToInstance(model: BoardModel & { elements: BoardElementModel[] }) {
+	private boardModelToInstance(model: BoardModel & { elements?: BoardElementModel[] }) {
 		const board = new Board(model.id, model.name);
+		if (!model.elements) return board;
+		
 		for (const element of model.elements) {
 			const elementId = element.id;
 			const data = element.data;
@@ -30,6 +29,13 @@ export class BoardRepository extends BaseRepository<Board> {
 		const data = Buffer.from(encoded);
 		const id = element.id;
 		return { id, data, boardId };
+	}
+
+	public async get(id: string): Promise<Board | null> {
+		const boardModel = await this.client.board.findUnique({where: { id }});
+		if (!boardModel) return null;
+		const board = this.boardModelToInstance(boardModel);
+		return board;
 	}
 
 	public async getAll(): Promise<Board[]> {

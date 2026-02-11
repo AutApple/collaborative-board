@@ -1,5 +1,5 @@
-import { ServerBoardEvents } from '../../../shared/socket-events/board.socket-events.js';
-import type { XY } from '../../../shared/utils/vec2.utils.js';
+import { ServerBoardEvents } from '../../../../shared/socket-events/board.socket-events.js';
+import type { XY } from '../../../../shared/utils/vec2.utils.js';
 import type { AppContext } from '../../app-context.js';
 import type { ServiceContainer } from '../../common/instance-container.js';
 import { RoomService } from '../../room/room.service.js';
@@ -18,7 +18,12 @@ export class NetworkingEventHandler extends BaseEventHandler {
 
 		const socket = client.getSocket();
 
-		const room = await this.roomService.getOrCreate(boardId);
+		const room = await this.roomService.get(boardId);
+		if (room === undefined) {
+			// TODO: somehow redirect to 404 or something
+			client.disconnect();
+			return;
+		}
 
 		boardId = room.board.getId()!;
 		const boardName = room.board.getName()!;

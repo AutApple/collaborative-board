@@ -17,7 +17,7 @@ import {
 	type ServiceContainer,
 } from './common/instance-container.js';
 import { RoomService } from './room/room.service.js';
-import dbClient from './common/db.js';
+import dbClient from '../db.js';
 
 export class BoardServer {
 	private io: Server<ClientBoardEventPayloads, ServerBoardEventPayloads>;

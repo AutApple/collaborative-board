@@ -1,5 +1,5 @@
-import { ServerBoardEvents } from '../../../shared/socket-events/board.socket-events.js';
-import type { XY } from '../../../shared/utils/vec2.utils.js';
+import { ServerBoardEvents } from '../../../../shared/socket-events/board.socket-events.js';
+import type { XY } from '../../../../shared/utils/vec2.utils.js';
 import type { AppContext } from '../../app-context.js';
 import type { ServiceContainer } from '../../common/instance-container.js';
 import { RoomService } from '../../room/room.service.js';
