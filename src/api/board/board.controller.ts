@@ -1,8 +1,7 @@
 import type { Request, Response } from 'express';
 import { APIBaseController } from '../common/base.controller.js';
 import type { APIBoardService } from './board.service.js';
-import z from 'zod';
-import { CreateBoardDTO } from './dtos/create-board.dto.js';
+import { CreateBoardDTO, type CreateBoardDTOType } from './dtos/create-board.dto.js';
 import { OutputBoardDTO } from './dtos/output-board.dto.js';
 
 export class APIBoardController extends APIBaseController {
@@ -15,14 +14,9 @@ export class APIBoardController extends APIBaseController {
 	public get(req: Request, res: Response): void {
 		throw new Error('Method not implemented.');
 	}
-	public async post(req: Request, res: Response): Promise<void> {
-		const result = CreateBoardDTO.safeParse(req.body);
-		if (!result.success) {
-			res.status(400).json({ errors: result.error });
-			return;
-		}
-		const data = result.data;
-		const createdBoard = await this.service.create(data);
+	public async post(req: Request, res: Response<any, { dto: CreateBoardDTOType }>): Promise<void> {
+		const dto = res.locals.dto;
+		const createdBoard = await this.service.create(dto);
 		res.status(201).json(OutputBoardDTO.fromModel(createdBoard));
 	}
 	public patch(req: Request, res: Response): void {
