@@ -46,7 +46,7 @@ export class BoardClient {
 		const toolboxUiAdapter = new ToolboxUiAdapter(this.document, semanticEventBus);
 		const remoteCursorUiAdapter = new RemoteCursorUIAdapter(this.document);
 		const rendererUiAdapter = new RendererUiAdapter(this.document, semanticEventBus);
-		const networkUiAdapter = new NetworkUiAdapter(this.document);
+		const networkUiAdapter = new NetworkUiAdapter(this.document, window);
 		networkUiAdapter.hideDisconnectOverlay();
 
 		const networkService = new NetworkService(socket);

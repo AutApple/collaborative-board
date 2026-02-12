@@ -11,10 +11,17 @@ export default defineConfig({
 	build: {
 		outDir: path.resolve(ROOT, 'public-dist'),
 		emptyOutDir: true,
+		rollupOptions: {
+			input: {
+				main: path.resolve(ROOT, 'public/index.html'),
+				notFound: path.resolve(__dirname, 'public/404.html'),
+			}
+		}
 	},
 	resolve: {
 		alias: {
 			'@shared': path.resolve(ROOT, 'shared'),
 		},
 	},
+	
 });

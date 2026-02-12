@@ -26,6 +26,7 @@ export class NetworkController {
 		socket.on(ServerBoardEvents.ClientConnected, this.onClientConnected.bind(this));
 		socket.on(ServerBoardEvents.ClientDisconnected, this.onClientDisconnected.bind(this));
 		socket.on(ServerBoardEvents.RemoteCursorMove, this.onRemoteCursorMove.bind(this));
+		socket.on(ServerBoardEvents.BoardNotFound, this.onBoardNotFound.bind(this));
 		socket.on('disconnect', this.onDisconnect.bind(this));
 	}
 
@@ -51,6 +52,10 @@ export class NetworkController {
 	public onBoardMutations(mutations: BoardMutationList) {
 		this.bus.emit(SemanticEvents.BoardMutations, { mutations });
 	}
+	public onBoardNotFound() {
+		this.networkUiAdapter.redirectTo404();
+	}
+
 	public onHandshake(
 		boardId: string,
 		boardName: string,

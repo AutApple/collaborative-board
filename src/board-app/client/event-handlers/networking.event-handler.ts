@@ -20,7 +20,7 @@ export class NetworkingEventHandler extends BaseEventHandler {
 
 		const room = await this.roomService.get(boardId);
 		if (room === undefined) {
-			// TODO: somehow redirect to 404 or something
+			socket.emit(ServerBoardEvents.BoardNotFound);
 			client.disconnect();
 			return;
 		}

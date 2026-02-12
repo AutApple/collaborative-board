@@ -3,6 +3,7 @@ export class NetworkUiAdapter {
 	private disconnectTextElement: HTMLHeadingElement;
 	constructor(
 		document: Document,
+		private window: Window, // for redirecting
 		disconnectOverlayId: string = 'disconnect-overlay',
 		disconnectTextId = 'disconnect-text',
 	) {
@@ -18,5 +19,8 @@ export class NetworkUiAdapter {
 	hideDisconnectOverlay() {
 		this.disconnectOverlayElement.classList.add('disabled');
 		this.disconnectTextElement.classList.add('disabled');
+	}
+	redirectTo404() {
+		this.window.location.href = '/404';
 	}
 }

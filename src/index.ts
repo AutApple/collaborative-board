@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { type NextFunction } from 'express';
 import { type Request, type Response } from 'express';
 
 import { createServer } from 'node:http';
@@ -24,6 +24,10 @@ createAndMapApiModules(app);
 // TODO: put page serving into separate file
 app.get('/board', (_, res) => {
 	res.sendFile(path.join(__rootdir, 'public-dist', 'index.html'));
+});
+
+app.use((_: Request, res: Response, next: NextFunction) => {
+  res.status(404).sendFile(path.join(__rootdir, 'public-dist', '404.html'));
 });
 
 httpServer.listen(process.env.APP_PORT || 3000, () => {

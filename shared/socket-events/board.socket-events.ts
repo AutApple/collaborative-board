@@ -13,6 +13,7 @@ export enum ServerBoardEvents {
 	RemoteCursorMove = 'remoteCursorMove',
 	BoardMutations = 'boardMutations',
 	RefreshBoard = 'refreshBoard',
+	BoardNotFound = 'boardNotFound'
 }
 
 export enum ClientBoardEvents {
@@ -34,6 +35,7 @@ export interface ServerBoardEventPayloads {
 	[ServerBoardEvents.BoardMutations]: (mutations: BoardMutationList) => void;
 	[ServerBoardEvents.RefreshBoard]: (raw: AnyRawBoardElement[]) => void;
 	[ServerBoardEvents.RemoteCursorMove]: (cursor: Cursor) => void;
+	[ServerBoardEvents.BoardNotFound]: () => void;
 }
 
 export interface ClientBoardEventPayloads {
