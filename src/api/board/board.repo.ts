@@ -15,4 +15,17 @@ export class APIBoardRepository {
 	public async insert(dto: CreateBoardDTOType): Promise<Board> {
 		return await this.dbClient.board.create({ data: dto });
 	}
+
+	public async update(id: string, dto: CreateBoardDTOType): Promise<Board | null> {
+		console.log(dto);
+		const board = await this.find(id);
+		if (!board) return null;
+		return await this.dbClient.board.update({ where: { id }, data: dto });
+	}
+
+	public async delete(id: string): Promise<Board | null> {
+		const board = await this.find(id);
+		if (!board) return null;
+		return await this.dbClient.board.delete({ where: { id } });
+	}
 }
