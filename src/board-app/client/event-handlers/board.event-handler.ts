@@ -16,13 +16,13 @@ export class BoardEventHandler extends BaseEventHandler {
 		this.roomService = serviceContainer.getInstance(RoomService);
 	}
 
-	public onBoardMutations(client: Client, mutations: BoardMutationList) {
+	public async onBoardMutations(client: Client, mutations: BoardMutationList) {
 		const boardId = client.getBoardId();
 		const socket = client.getSocket();
 
 		if (!boardId) return;
 
-		const room = this.roomService.get(boardId);
+		const room = await this.roomService.get(boardId);
 
 		if (!room) return;
 
@@ -35,12 +35,12 @@ export class BoardEventHandler extends BaseEventHandler {
 		socket.to(boardId).emit(ServerBoardEvents.BoardMutations, mutations);
 	}
 
-	public onRequestRefresh(client: Client) {
+	public async onRequestRefresh(client: Client) {
 		const socket = client.getSocket();
 		const boardId = client.getBoardId();
 
 		if (!boardId) return;
-		const room = this.roomService.get(boardId);
+		const room = await this.roomService.get(boardId);
 
 		if (!room) return;
 

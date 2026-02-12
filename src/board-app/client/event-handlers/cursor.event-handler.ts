@@ -13,13 +13,13 @@ export class CursorEventHandler extends BaseEventHandler {
 		this.roomService = serviceContainer.getInstance(RoomService);
 	}
 
-	public onLocalCursorMove(client: Client, pos: XY) {
+	public async onLocalCursorMove(client: Client, pos: XY) {
 		const boardId = client.getBoardId();
 		const socket = client.getSocket();
 
 		if (!boardId) return;
 
-		const room = this.roomService.get(boardId);
+		const room = await this.roomService.get(boardId);
 		if (!room) return;
 
 		socket.to(boardId).emit(ServerBoardEvents.RemoteCursorMove, {
