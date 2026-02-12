@@ -24,6 +24,14 @@ export class BoardClient {
 		if (!(el instanceof HTMLCanvasElement)) throw new Error(`Element #${id} is not a canvas`);
 		return el;
 	}
+
+	private getQueryBoardId(): string {
+		const queryString = window.location.search;
+		const params = new URLSearchParams(queryString);
+		const id = params.get('id');
+		return id ?? '';
+	}
+
 	private init(socket: BoardClientSocket) {
 		const canvas = this.getCanvas('canvas');
 
@@ -69,7 +77,7 @@ export class BoardClient {
 		cursorController.subscribe(semanticEventBus);
 		rendererController.subscribe(semanticEventBus);
 
-		networkService.sendHandshake(appContext.localCursorWorldCoords);
+		networkService.sendHandshake(this.getQueryBoardId(), appContext.localCursorWorldCoords);
 	}
 	run() {
 		const socket: BoardClientSocket = io();

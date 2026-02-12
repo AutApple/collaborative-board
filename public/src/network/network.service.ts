@@ -14,12 +14,8 @@ export class NetworkService {
 	sendBoardMutationList(mutations: BoardMutationList) {
 		this.socket.emit(ClientBoardEvents.BoardMutations, mutations);
 	}
-	sendHandshake(mousePos: XY) {
-		// TODO: remove this shit, its for testing rooms only!
-		const path = window.location.pathname;
-		const segment = path.split('/').filter(Boolean)[0];
-
-		this.socket.emit(ClientBoardEvents.Handshake, segment ?? 'placeholderId', mousePos);
+	sendHandshake(boardId: string, mousePos: XY) {
+		this.socket.emit(ClientBoardEvents.Handshake, boardId, mousePos);
 	}
 	sendLocalCursorMove(mousePos: XY) {
 		this.socket.emit(ClientBoardEvents.LocalCursorMove, mousePos);

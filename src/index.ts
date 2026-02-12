@@ -21,8 +21,8 @@ app.use(express.static(path.join(__rootdir, 'public-dist')));
 
 createAndMapApiModules(app);
 
-// TODO: put client serving into separate file
-app.get('/:id', (_, res) => {
+// TODO: put page serving into separate file
+app.get('/board', (_, res) => {
 	res.sendFile(path.join(__rootdir, 'public-dist', 'index.html'));
 });
 
