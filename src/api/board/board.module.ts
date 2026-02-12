@@ -7,10 +7,10 @@ import dbClient from '../../db.js';
 import { APIBoardRouter } from './board.router.js';
 
 export default function createBoardApiModule(): Router {
-    const repository = new APIBoardRepository(dbClient);
-    const service = new APIBoardService(repository);
-    const controller  = new APIBoardController(service);
-    const router = new APIBoardRouter(controller);
+	const repository = new APIBoardRepository(dbClient);
+	const service = new APIBoardService(repository);
+	const controller = new APIBoardController(service);
+	const router = new APIBoardRouter(controller);
 
-    return router.getRouter();
+	return router.getRouter();
 }

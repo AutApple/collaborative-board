@@ -4,12 +4,12 @@ import type { APIBoardController } from './board.controller.js';
 import { CreateBoardDTO } from './dtos/create-board.dto.js';
 
 export class APIBoardRouter extends APIBaseRouter {
-    constructor (controller: APIBoardController) {
-        super(controller);
-        this.bindRoutes();
-    }
-    
-    private bindRoutes() {
+	constructor(controller: APIBoardController) {
+		super(controller);
+		this.bindRoutes();
+	}
+
+	private bindRoutes() {
 		this.router.get('/', this.controller.get.bind(this.controller));
 		this.router.get('/:param', this.controller.getParam.bind(this.controller));
 		this.router.patch('/:param', this.controller.patch.bind(this.controller));
