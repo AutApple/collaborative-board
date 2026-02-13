@@ -1,4 +1,7 @@
-import { optimizeMutations, type BoardMutationList } from '../../../../shared/board/board-mutation.js';
+import {
+	optimizeMutations,
+	type BoardMutationList,
+} from '../../../../shared/board/board-mutation.js';
 import type { Board } from '../../../../shared/board/board.js';
 import type { BaseBoardElement } from '../../../../shared/board-elements/base/base.board-element.js';
 import type { AppContext } from '../app-context.js';

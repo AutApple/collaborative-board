@@ -13,7 +13,7 @@ export enum ServerBoardEvents {
 	RemoteCursorMove = 'remoteCursorMove',
 	BoardMutations = 'boardMutations',
 	RefreshBoard = 'refreshBoard',
-	BoardNotFound = 'boardNotFound'
+	BoardNotFound = 'boardNotFound',
 }
 
 export enum ClientBoardEvents {

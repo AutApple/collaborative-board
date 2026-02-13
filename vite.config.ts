@@ -17,13 +17,12 @@ export default defineConfig({
 				createBoard: path.resolve(ROOT, 'public/create-board.html'),
 				app: path.resolve(ROOT, 'public/app.html'),
 				notFound: path.resolve(__dirname, 'public/404.html'),
-			}
-		}
+			},
+		},
 	},
 	resolve: {
 		alias: {
 			'@shared': path.resolve(ROOT, 'shared'),
 		},
 	},
-	
 });
