@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Collaborative board</title>
+		<script src="/socket.io/socket.io.js"></script>
+		<link rel="stylesheet" href="style.css" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+		/>
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+	</head>
+
+	<body>
+		<div id="disconnect-overlay"></div>
+		<h1 id="disconnect-text">Disconnected from server</h1>
+		<div id="top-panel">
+			<button id="top-panel-save-button"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+		</div>
+		<canvas id="canvas"></canvas>
+		<div id="cursors-layer"></div>
+		<div id="toolbox">
+			<div id="toolbox-button-pen" class="toolbox-button">
+				<i class="fa-solid fa-pen"></i>
+			</div>
+			<div id="toolbox-button-line" class="toolbox-button">
+				<i class="fa-solid fa-bacon"></i>
+			</div>
+			<div id="toolbox-button-eraser" class="toolbox-button">
+				<i class="fa-solid fa-eraser"></i>
+			</div>
+			<div id="toolbox-button-eye-dropper" class="toolbox-button">
+				<i class="fa-solid fa-eye-dropper"></i>
+			</div>
+			<div id="toolbox-button-rectangle" class="toolbox-button">
+				<i class="fa-solid fa-square"></i>
+			</div>
+			<div id="toolbox-button-oval" class="toolbox-button">
+				<i class="fa-solid fa-circle"></i>
+			</div>
+		</div>
+		<div id="toolbox-settings">
+			<input type="color" id="toolbox-setting-color" value="#000000" />
+			<input type="range" id="toolbox-setting-stroke" name="Stroke Size" />
+		</div>
+		<script type="module" src="src/index.js"></script>
+	</body>
+</html>

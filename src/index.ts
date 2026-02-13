@@ -22,8 +22,14 @@ app.use(express.static(path.join(__rootdir, 'public-dist')));
 createAndMapApiModules(app);
 
 // TODO: put page serving into separate file
+app.get('/', (_, res) => {
+	res.sendFile(path.join(__rootdir, 'public-dist', 'index.html'));	
+})
+app.get('/create-board', (_, res) => {
+	res.sendFile(path.join(__rootdir, 'public-dist', 'create-board.html'));	
+})
 app.get('/board', (_, res) => {
-	res.sendFile(path.join(__rootdir, 'public-dist', 'index.html'));
+	res.sendFile(path.join(__rootdir, 'public-dist', 'app.html'));
 });
 
 app.use((_: Request, res: Response, next: NextFunction) => {

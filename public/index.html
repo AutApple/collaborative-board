@@ -1,50 +1,71 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Collaborative board</title>
-		<script src="/socket.io/socket.io.js"></script>
-		<link rel="stylesheet" href="style.css" />
-		<link
-			rel="stylesheet"
-			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-		/>
-		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-	</head>
 
-	<body>
-		<div id="disconnect-overlay"></div>
-		<h1 id="disconnect-text">Disconnected from server</h1>
-		<div id="top-panel">
-			<button id="top-panel-save-button"><i class="fa-solid fa-floppy-disk"></i> Save</button>
-		</div>
-		<canvas id="canvas"></canvas>
-		<div id="cursors-layer"></div>
-		<div id="toolbox">
-			<div id="toolbox-button-pen" class="toolbox-button">
-				<i class="fa-solid fa-pen"></i>
-			</div>
-			<div id="toolbox-button-line" class="toolbox-button">
-				<i class="fa-solid fa-bacon"></i>
-			</div>
-			<div id="toolbox-button-eraser" class="toolbox-button">
-				<i class="fa-solid fa-eraser"></i>
-			</div>
-			<div id="toolbox-button-eye-dropper" class="toolbox-button">
-				<i class="fa-solid fa-eye-dropper"></i>
-			</div>
-			<div id="toolbox-button-rectangle" class="toolbox-button">
-				<i class="fa-solid fa-square"></i>
-			</div>
-			<div id="toolbox-button-oval" class="toolbox-button">
-				<i class="fa-solid fa-circle"></i>
-			</div>
-		</div>
-		<div id="toolbox-settings">
-			<input type="color" id="toolbox-setting-color" value="#000000" />
-			<input type="range" id="toolbox-setting-stroke" name="Stroke Size" />
-		</div>
-		<script type="module" src="src/index.js"></script>
-	</body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Public Boards</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="flex-row ml-default">
+        <h1>Public boards</h1>
+        <a href="create-board" style="color: #58aa67; font-size: 1.3rem; text-decoration: none;">
+            <i class="fa-solid fa-plus"></i>
+        </a>
+    </div>
+
+    <div class="flex-column align-items-center">
+        <div id = "board-card-container" class="board-card-container">
+        </div>
+    </div>
+
+    <template id = "board-card-template">
+            <div class="board-card">
+                <div class="board-card-thumbnail"></div>
+                <p class="board-name">Board of wisdom</p>
+            </div>
+    </template>
+
+    <script>
+        const boardContainer = document.getElementById('board-card-container');
+        const boardCardTemplate = document.getElementById('board-card-template'); 
+
+        function addBoardCard(boardName, boardId) {
+            const clone = boardCardTemplate.content.cloneNode(true);
+            const card = clone.querySelector('.board-card');
+         
+            
+            clone.querySelector('.board-name').textContent = boardName;
+            boardContainer.appendChild(card);
+            card.addEventListener('click', (_) => {
+                window.location = `/board?id=${boardId}`
+            });
+        }
+
+        async function fetchBoards() {
+            response = await fetch('/api/boards');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const boards = await response.json();
+            return boards;
+        }
+        async function addCards() {
+            const boards = await fetchBoards();
+            for (const board of boards)
+                addBoardCard(board.name, board.id);
+        }
+
+        addCards();
+
+    </script>
+</body>
+
 </html>

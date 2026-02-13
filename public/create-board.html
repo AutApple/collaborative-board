@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Board</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="flex-row ml-default">
+        <h1>Create board</h1>
+        <a href="/" style="text-decoration: none; color: #58aa67; font-weight: 600;">
+            Back to board list
+        </a>
+    </div>
+
+    <div class="flex-column ml-default gap-small" style="max-width: 600px;">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <label for="board-name-input" style="white-space: nowrap;">
+                Board name:
+            </label>
+
+            <input id="board-name-input" style="flex: 1; min-width: 0;">
+
+            <div id="board-name-input-errors" class="invisible"
+                style="color: #eb4848; display: flex; align-items: center; gap: 0.4rem;">
+                <i class="fa-solid fa-exclamation-triangle"></i>
+                <span id="board-name-input-error-content"></span>
+            </div>
+        </div>
+
+        <button id="board-create-input">Create board</button>
+    </div>
+
+    <script>
+        const createButton = document.getElementById('board-create-input');
+        const createInput = document.getElementById('board-name-input');
+
+        const createInputErrorBox = document.getElementById('board-name-input-errors');
+        const createInputErrorBoxText = document.getElementById('board-name-input-error-content');
+
+        createButton.addEventListener('click', async () => {
+            const boardName = createInput.value;
+
+            if (!boardName || boardName.trim() === '') {
+                createInputErrorBox.classList.remove('invisible');
+                createInputErrorBoxText.textContent = "Board name can't be empty!";
+                return;
+            }
+
+            createInputErrorBox.classList.add('invisible');
+            try {
+                const response = await fetch('/api/boards', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name: boardName.trim() })
+                });
+
+                if (!response.ok) {
+                    const error = await response.text();
+                    throw new Error(error || 'Failed to create board');
+                }
+
+                const data = await response.json();
+                console.log('Board created:', data);
+
+                window.location = `/board?id=${data.id}`;
+
+            } catch (err) {
+                createInputErrorBox.classList.remove('invisible');
+                createInputErrorBoxText.textContent = err.message;
+            }
+        });
+    </script>
+</body>
+
+</html>
