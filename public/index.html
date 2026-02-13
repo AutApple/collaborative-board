@@ -1,39 +1,42 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Public Boards</title>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Public Boards</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+		/>
+		<link rel="stylesheet" href="style.css" />
+	</head>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    <link rel="stylesheet" href="style.css">
-</head>
+	<body>
+		<div class="flex-row ml-default">
+			<h1>Public boards</h1>
+			<a href="create-board" style="color: #58aa67; font-size: 1.3rem; text-decoration: none">
+				<i class="fa-solid fa-plus"></i>
+			</a>
+		</div>
 
-<body>
-    <div class="flex-row ml-default">
-        <h1>Public boards</h1>
-        <a href="create-board" style="color: #58aa67; font-size: 1.3rem; text-decoration: none;">
-            <i class="fa-solid fa-plus"></i>
-        </a>
-    </div>
+		<div class="flex-column align-items-center">
+			<div id="board-card-container" class="board-card-container"></div>
+		</div>
 
-    <div class="flex-column align-items-center">
-        <div id = "board-card-container" class="board-card-container">
-        </div>
-    </div>
+		<template id="board-card-template">
+			<div class="board-card">
+				<div class="board-card-thumbnail"></div>
+				<p class="board-name">Board of wisdom</p>
+			</div>
+		</template>
 
-    <template id = "board-card-template">
-            <div class="board-card">
-                <div class="board-card-thumbnail"></div>
-                <p class="board-name">Board of wisdom</p>
-            </div>
-    </template>
-
-    <script type="module" src="src/pages/index.js"></script>
-</body>
-
+		<script type="module" src="src/pages/index.js"></script>
+	</body>
 </html>
