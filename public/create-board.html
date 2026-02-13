@@ -38,49 +38,7 @@
 
         <button id="board-create-input">Create board</button>
     </div>
-
-    <script>
-        const createButton = document.getElementById('board-create-input');
-        const createInput = document.getElementById('board-name-input');
-
-        const createInputErrorBox = document.getElementById('board-name-input-errors');
-        const createInputErrorBoxText = document.getElementById('board-name-input-error-content');
-
-        createButton.addEventListener('click', async () => {
-            const boardName = createInput.value;
-
-            if (!boardName || boardName.trim() === '') {
-                createInputErrorBox.classList.remove('invisible');
-                createInputErrorBoxText.textContent = "Board name can't be empty!";
-                return;
-            }
-
-            createInputErrorBox.classList.add('invisible');
-            try {
-                const response = await fetch('/api/boards', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ name: boardName.trim() })
-                });
-
-                if (!response.ok) {
-                    const error = await response.text();
-                    throw new Error(error || 'Failed to create board');
-                }
-
-                const data = await response.json();
-                console.log('Board created:', data);
-
-                window.location = `/board?id=${data.id}`;
-
-            } catch (err) {
-                createInputErrorBox.classList.remove('invisible');
-                createInputErrorBoxText.textContent = err.message;
-            }
-        });
-    </script>
+    <script type="module" src="src/pages/create-board.js"></script>
 </body>
 
 </html>

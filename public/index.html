@@ -33,39 +33,7 @@
             </div>
     </template>
 
-    <script>
-        const boardContainer = document.getElementById('board-card-container');
-        const boardCardTemplate = document.getElementById('board-card-template'); 
-
-        function addBoardCard(boardName, boardId) {
-            const clone = boardCardTemplate.content.cloneNode(true);
-            const card = clone.querySelector('.board-card');
-         
-            
-            clone.querySelector('.board-name').textContent = boardName;
-            boardContainer.appendChild(card);
-            card.addEventListener('click', (_) => {
-                window.location = `/board?id=${boardId}`
-            });
-        }
-
-        async function fetchBoards() {
-            response = await fetch('/api/boards');
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const boards = await response.json();
-            return boards;
-        }
-        async function addCards() {
-            const boards = await fetchBoards();
-            for (const board of boards)
-                addBoardCard(board.name, board.id);
-        }
-
-        addCards();
-
-    </script>
+    <script type="module" src="src/pages/index.js"></script>
 </body>
 
 </html>
