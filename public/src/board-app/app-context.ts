@@ -5,6 +5,7 @@ import { BoardHistory } from './board-history/board-history.js';
 import { Camera } from './camera/camera.js';
 import { Renderer } from './renderer/renderer.js';
 import { Toolbox } from './toolbox/toolbox.js';
+import { clientConfiguration } from './config/client.config.js';
 
 export class AppContext {
 	public board: Board;
@@ -17,9 +18,9 @@ export class AppContext {
 
 	constructor(canvas: HTMLCanvasElement) {
 		this.board = new Board();
-		this.renderer = new Renderer(canvas);
-		this.camera = new Camera(new Vec2(0, 0), 1);
-		this.toolbox = new Toolbox(this.board);
+		this.renderer = new Renderer(canvas, clientConfiguration.boardBackgroundColor, clientConfiguration.debugOverlay);
+		this.camera = new Camera(new Vec2(0, 0), 1, clientConfiguration.minCameraScale, clientConfiguration.maxCameraScale);
+		this.toolbox = new Toolbox(this.board, clientConfiguration.defaultStrokeData, clientConfiguration.defaultTool);
 		this.boardHistory = new BoardHistory();
 		this.localCursorWorldCoords = { x: 0, y: 0 };
 	}

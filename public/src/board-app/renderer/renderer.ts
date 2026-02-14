@@ -7,7 +7,6 @@ import { RenderLayerType } from './types/render-layer.type.js';
 import { BoardElementsRenderLayer } from './layers/board-elements.render-layer.js';
 import { DebugStatsRenderLayer } from './layers/debug-stats.render-layer.js';
 import { StrokePreviewRenderLayer } from './layers/stroke-preview.render-layer.js';
-import { clientConfiguration } from '../config/client.config.js';
 
 export class Renderer {
 	private ctx: CanvasRenderingContext2D;
@@ -19,7 +18,7 @@ export class Renderer {
 		],
 	);
 
-	constructor(private canvas: HTMLCanvasElement) {
+	constructor(private canvas: HTMLCanvasElement, private boardBackgroundColor = 'white', private debugMode: boolean = false) {
 		const _ctx = canvas.getContext('2d');
 		if (!_ctx) throw Error("Can't get 2D context of a canvas");
 		this.ctx = _ctx;
@@ -36,7 +35,7 @@ export class Renderer {
 		const ctx = canvas.getContext('2d');
 		if (!ctx) throw new Error('Unable to make a canvas instance');
 
-		ctx.fillStyle = clientConfiguration.boardBackgroundColor;
+		ctx.fillStyle = this.boardBackgroundColor;
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 		this.layers.get(RenderLayerType.Elements)!.render(ctx, camera);
@@ -71,14 +70,14 @@ export class Renderer {
 	public renderAll(camera: Camera) {
 		this.clear();
 		for (const layerType of this.layers.keys()) {
-			if (layerType === RenderLayerType.DebugStats && !clientConfiguration.debugOverlay) continue; // TODO: layer.hide() and layer.show()
+			if (layerType === RenderLayerType.DebugStats && !this.debugMode) continue; // TODO: layer.hide() and layer.show()
 			const layer = this.layers.get(layerType);
 			layer?.render(this.ctx, camera);
 		}
 	}
 
 	public clear() {
-		this.ctx.fillStyle = clientConfiguration.boardBackgroundColor;
+		this.ctx.fillStyle = this.boardBackgroundColor;
 		this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 	}
 }

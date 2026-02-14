@@ -17,8 +17,8 @@ export class Toolbox {
 	private currentStrokeData: StrokeData;
 	public toolInstances: Record<Tools, BaseTool>;
 
-	constructor(private board: Board) {
-		this.currentStrokeData = { ...clientConfiguration.defaultStrokeData };
+	constructor(private board: Board, private defaultStrokeData: StrokeData, private defaultTool: Tools) {
+		this.currentStrokeData = { ...this.defaultStrokeData };
 
 		// make instances of a tools
 		this.toolInstances = {
@@ -29,7 +29,7 @@ export class Toolbox {
 			[Tools.Rectangle]: new RectangleTool(board),
 			[Tools.Oval]: new OvalTool(board),
 		};
-		this.currentTool = this.toolInstances[clientConfiguration.defaultTool];
+		this.currentTool = this.toolInstances[this.defaultTool];
 	}
 
 	changeColor(color: string) {
