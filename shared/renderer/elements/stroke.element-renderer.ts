@@ -1,9 +1,10 @@
-import type { StrokeBoardElement } from '../../../../../shared/board-elements/stroke.board-element.js';
+import type { StrokeBoardElement } from '../../board-elements/stroke.board-element.js';
 import type { Camera } from '../../camera/camera.js';
+import type { SharedRenderingContext } from '../shared-rendering-context.js';
 
 export class StrokeRenderer {
 	static render(
-		ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
+		ctx: SharedRenderingContext,
 		element: StrokeBoardElement,
 		camera: Camera,
 	) {

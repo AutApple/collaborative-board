@@ -1,10 +1,11 @@
-import type { RectangleBoardElement } from '../../../../../shared/board-elements/rectangle.board-element.js';
-import { Vec2 } from '../../../../../shared/utils/vec2.utils.js';
+import type { RectangleBoardElement } from '../../board-elements/rectangle.board-element.js';
+import { Vec2 } from '../../utils/vec2.utils.js';
 import type { Camera } from '../../camera/camera.js';
+import type { SharedRenderingContext } from '../shared-rendering-context.js';
 
 export class RectangleRenderer {
 	static render(
-		ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
+		ctx: SharedRenderingContext,
 		element: RectangleBoardElement,
 		camera: Camera,
 	) {

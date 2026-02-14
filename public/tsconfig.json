@@ -18,5 +18,5 @@
     "../shared/board/board.ts",
     "src/board-app/toolbox/enums/tools.enum.ts",
     "../shared/board/board-mutation.ts"
-  ]
+, "../shared/camera/camera.ts", "../shared/renderer/shared-rendering-context.ts"  ]
 }

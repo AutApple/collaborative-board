@@ -1,6 +1,7 @@
-import type { StrokeData } from '../../../../../shared/board-elements/types/stroke-data.type.js';
-import type { XY } from '../../../../../shared/utils/vec2.utils.js';
+import type { StrokeData } from '../../board-elements/types/stroke-data.type.js';
+import type { XY } from '../../utils/vec2.utils.js';
 import type { Camera } from '../../camera/camera.js';
+import type { SharedRenderingContext } from '../shared-rendering-context.js';
 import { BaseRenderLayer } from './base.render-layer.js';
 
 export class StrokePreviewRenderLayer extends BaseRenderLayer {
@@ -15,7 +16,7 @@ export class StrokePreviewRenderLayer extends BaseRenderLayer {
 		this.screenMouseCoords = screenMouseCoords;
 	}
 	public override render(
-		ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
+		ctx: SharedRenderingContext,
 		_: Camera,
 	): void {
 		const { x, y } = this.screenMouseCoords;

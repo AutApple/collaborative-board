@@ -6,6 +6,7 @@ export class RemoteCursorMap {
 
 	constructor(...remoteCursors: Cursor[]) {
 		for (const cursor of remoteCursors) this.map.set(cursor.clientId, cursor);
+		
 	}
 
 	public setPosition(clientId: string, position: XY) {

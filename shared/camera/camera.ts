@@ -1,4 +1,4 @@
-import { Vec2 } from '@shared/utils/vec2.utils.js';
+import { Vec2 } from '../utils/vec2.utils.js';
 
 export class Camera {
 	private initialPos: Vec2 = new Vec2(0, 0);

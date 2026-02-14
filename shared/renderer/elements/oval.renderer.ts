@@ -1,10 +1,11 @@
-import type { OvalBoardElement } from '../../../../../shared/board-elements/oval.board-element.js';
-import { Vec2 } from '../../../../../shared/utils/vec2.utils.js';
+import type { OvalBoardElement } from '../../board-elements/oval.board-element.js';
+import { Vec2 } from '../../utils/vec2.utils.js';
 import type { Camera } from '../../camera/camera.js';
+import type { SharedRenderingContext } from '../shared-rendering-context.js';
 
 export class OvalRenderer {
 	static render(
-		ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
+		ctx: SharedRenderingContext,
 		element: OvalBoardElement,
 		camera: Camera,
 	) {

@@ -2,7 +2,7 @@ import { Board } from '@shared/board/board.js';
 import { RemoteCursorMap } from '@shared/remote-cursor/remote-cursor-map.js';
 import { Vec2, type XY } from '@shared/utils/vec2.utils.js';
 import { BoardHistory } from './board-history/board-history.js';
-import { Camera } from './camera/camera.js';
+import { Camera } from '../../../shared/camera/camera.js';
 import { Renderer } from './renderer/renderer.js';
 import { Toolbox } from './toolbox/toolbox.js';
 import { clientConfiguration } from './config/client.config.js';

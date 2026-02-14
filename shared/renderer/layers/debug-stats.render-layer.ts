@@ -1,6 +1,7 @@
 import type { BoardDebugStats } from '@shared/board/board.js';
 import type { Camera } from '../../camera/camera.js';
 import { BaseRenderLayer } from './base.render-layer.js';
+import type { SharedRenderingContext } from '../shared-rendering-context.js';
 
 export class DebugStatsRenderLayer extends BaseRenderLayer {
 	private debugStats: BoardDebugStats = {
@@ -16,7 +17,7 @@ export class DebugStatsRenderLayer extends BaseRenderLayer {
 		this.debugStats = debugStats;
 	}
 	public render(
-		ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
+		ctx: SharedRenderingContext,
 		_: Camera,
 	): void {
 		ctx.fillStyle = 'black';
