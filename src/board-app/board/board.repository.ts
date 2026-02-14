@@ -6,6 +6,8 @@ import { BaseRepository } from '../common/base.repository.js';
 import { BoardElementFactory } from '../../../shared/board-elements/board-element-factory.js';
 import type { BaseBoardElement } from '../../../shared/board-elements/index.js';
 import { validate as isUuid } from 'uuid';
+import { ServerRenderer } from '../renderer/renderer.js';
+
 export class BoardRepository extends BaseRepository<Board> {
 	private boardModelToInstance(model: BoardModel & { elements?: BoardElementModel[] }) {
 		const board = new Board(model.id, model.name);
@@ -48,8 +50,12 @@ export class BoardRepository extends BaseRepository<Board> {
 	}
 
 	private async insert(board: Board): Promise<Board> {
+		// Make a thumbnail
+		const boardPng = ServerRenderer.renderBoardToBinary(board);
+		const bytes = new Uint8Array(boardPng);
+
 		const boardModel = await this.client.board.create({
-			data: { name: board.getName() ?? serverConfiguraion.generateCoolBoardNamePls() },
+			data: { name: board.getName() ?? serverConfiguraion.generateCoolBoardNamePls(), pngThumbnail: bytes },
 		});
 
 		const elementInstances = board.getElements();
@@ -72,6 +78,11 @@ export class BoardRepository extends BaseRepository<Board> {
 			where: { id: boardId },
 		});
 		if (!boardModel) throw new Error('Unknown board id on board update');
+		
+		// Update thumbnail
+		const boardPng = ServerRenderer.renderBoardToBinary(board);
+		const bytes = new Uint8Array(boardPng);
+		await this.client.board.update({where: {id: boardId}, data: {pngThumbnail: bytes}});
 
 		const elementInstances = board.getElements();
 		const elementModels: BoardElementModel[] = elementInstances.map((e) =>
