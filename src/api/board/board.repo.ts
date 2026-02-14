@@ -1,3 +1,4 @@
+import { Canvas } from 'canvas';
 import type { Board, PrismaClient } from '../../board-app/generated/prisma/client.js';
 import type { CreateBoardDTOType } from './dtos/create-board.dto.js';
 
@@ -13,7 +14,14 @@ export class APIBoardRepository {
 		return boards;
 	}
 	public async insert(dto: CreateBoardDTOType): Promise<Board> {
-		return await this.dbClient.board.create({ data: dto });
+		// TODO: remove rendering logic from board repository, it's the last place where it should be. maybe make rendering service or something
+		const canvas = new Canvas(300, 300); 
+		const ctx = canvas.getContext('2d');
+		ctx.fillStyle = 'white';
+		ctx.fillRect(0, 0, 300, 300);
+		const pngBytes = new Uint8Array(canvas.toBuffer('image/png'));
+
+		return await this.dbClient.board.create({ data: {...dto, pngThumbnail: pngBytes} });
 	}
 
 	public async update(id: string, dto: CreateBoardDTOType): Promise<Board | null> {

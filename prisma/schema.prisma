@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  output   = "../src/board-app/generated/prisma"
 }
 
 datasource db {
@@ -27,6 +27,7 @@ model Board {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name String
   createdAt DateTime @default(now())
+  pngThumbnail Bytes
   elements BoardElement[]
 }
 

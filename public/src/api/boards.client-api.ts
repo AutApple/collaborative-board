@@ -2,6 +2,7 @@ export interface ClientAPIBoard {
 	id: string;
 	name: string;
 	createdAt: Date;
+	pngBase64: string;
 }
 class ClientBoardsAPI {
 	constructor(private url: string) {}
