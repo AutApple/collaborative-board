@@ -3,13 +3,13 @@ import { RemoteCursorMap } from '@shared/remote-cursor/remote-cursor-map.js';
 import { Vec2, type XY } from '@shared/utils/vec2.utils.js';
 import { BoardHistory } from './board-history/board-history.js';
 import { Camera } from '../../../shared/camera/camera.js';
-import { Renderer } from './renderer/renderer.js';
+import { ClientRenderer } from './renderer/renderer.js';
 import { Toolbox } from './toolbox/toolbox.js';
 import { clientConfiguration } from './config/client.config.js';
 
 export class AppContext {
 	public board: Board;
-	public renderer: Renderer;
+	public renderer: ClientRenderer;
 	public camera: Camera;
 	public toolbox: Toolbox;
 	public boardHistory: BoardHistory;
@@ -18,7 +18,7 @@ export class AppContext {
 
 	constructor(canvas: HTMLCanvasElement) {
 		this.board = new Board();
-		this.renderer = new Renderer(canvas, clientConfiguration.boardBackgroundColor, clientConfiguration.debugOverlay);
+		this.renderer = new ClientRenderer(canvas, clientConfiguration.boardBackgroundColor, clientConfiguration.debugOverlay);
 		this.camera = new Camera(new Vec2(0, 0), 1, clientConfiguration.minCameraScale, clientConfiguration.maxCameraScale);
 		this.toolbox = new Toolbox(this.board, clientConfiguration.defaultStrokeData, clientConfiguration.defaultTool);
 		this.boardHistory = new BoardHistory();

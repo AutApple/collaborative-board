@@ -8,7 +8,7 @@ import { BoardElementsRenderLayer } from '../../../../shared/renderer/layers/boa
 import { DebugStatsRenderLayer } from '../../../../shared/renderer/layers/debug-stats.render-layer.js';
 import { StrokePreviewRenderLayer } from '../../../../shared/renderer/layers/stroke-preview.render-layer.js';
 
-export class Renderer {
+export class ClientRenderer {
 	private ctx: CanvasRenderingContext2D;
 	private layers: Map<RenderLayerType, BaseRenderLayer> = new Map<RenderLayerType, BaseRenderLayer>(
 		[
