@@ -18,6 +18,7 @@ import {
 } from './common/instance-container.js';
 import { RoomService } from './room/room.service.js';
 import dbClient from '../db.js';
+import { ServerRendererService } from './renderer/renderer.service.js';
 
 export class BoardServer {
 	private io: Server<ClientBoardEventPayloads, ServerBoardEventPayloads>;
@@ -35,8 +36,13 @@ export class BoardServer {
 			new BoardElementRepository(dbClient),
 			new BoardRepository(dbClient),
 		]);
+
+		const rendererService = new ServerRendererService();
+		const roomService = new RoomService(this.repositoryContainer.getInstance(BoardRepository), rendererService, this.appContext);
+
 		this.serviceContainer = new InstanceContainer([
-			new RoomService(this.repositoryContainer.getInstance(BoardRepository), this.appContext),
+			rendererService,
+			roomService
 		]);
 	}
 

@@ -6,7 +6,7 @@ import { BaseRepository } from '../common/base.repository.js';
 import { BoardElementFactory } from '../../../shared/board-elements/board-element-factory.js';
 import type { BaseBoardElement } from '../../../shared/board-elements/index.js';
 import { validate as isUuid } from 'uuid';
-import { ServerRenderer } from '../renderer/renderer.js';
+import { ServerRendererService } from '../renderer/renderer.service.js';
 
 export class BoardRepository extends BaseRepository<Board> {
 	private boardModelToInstance(model: BoardModel & { elements?: BoardElementModel[] }) {

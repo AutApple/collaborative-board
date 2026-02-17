@@ -4,19 +4,18 @@ import { BoardElementsRenderLayer } from '../../../shared/renderer/layers/board-
 import { Camera } from '../../../shared/camera/camera.js';
 import { Vec2 } from '../../../shared/utils/vec2.utils.js';
 
-export class ServerRenderer {
-    constructor() {}
+export class ServerRendererService {
+    constructor(private canvasWidth:number = 1920, private canvasHeight:number = 1080) {}
     
-    // don't see any reason to make this as full-blown service + make rendering board method non-static yet
-    public static renderBoardToBytes(board: Board, canvasWidth:number = 1920, canvasHeight:number = 1080): Uint8Array<ArrayBuffer> {
+    public renderBoardToBytes(board: Board): Uint8Array<ArrayBuffer> {
         const elementsLayer = new BoardElementsRenderLayer();
-        const canvas = new Canvas(canvasWidth, canvasHeight); 
+        const canvas = new Canvas(this.canvasWidth, this.canvasHeight); 
                 
         const ctx = canvas.getContext('2d');
         const camera = new Camera(new Vec2(0, 0), 1.0, 1.0, 1.0);
         
         ctx.fillStyle = 'white';
-        ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+        ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
         
         elementsLayer.updateData(board.getElements());
         elementsLayer.render(ctx, camera);
