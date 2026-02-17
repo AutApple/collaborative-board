@@ -51,7 +51,7 @@ export class BoardRepository extends BaseRepository<Board> {
 
 	private async insert(board: Board, thumbnailBytes: Uint8Array<ArrayBuffer>): Promise<Board> {
 		const boardModel = await this.client.board.create({
-			data: { name: board.getName() ?? serverConfiguraion.generateCoolBoardNamePls(), pngThumbnail: thumbnailBytes },
+			data: { name: board.getName() ?? 'Undefined', pngThumbnail: thumbnailBytes },
 		});
 
 		const elementInstances = board.getElements();
