@@ -49,13 +49,9 @@ export class BoardRepository extends BaseRepository<Board> {
 		return boards;
 	}
 
-	private async insert(board: Board): Promise<Board> {
-		// Make a thumbnail
-		const boardPng = ServerRenderer.renderBoardToBinary(board);
-		const bytes = new Uint8Array(boardPng);
-
+	private async insert(board: Board, thumbnailBytes: Uint8Array<ArrayBuffer>): Promise<Board> {
 		const boardModel = await this.client.board.create({
-			data: { name: board.getName() ?? serverConfiguraion.generateCoolBoardNamePls(), pngThumbnail: bytes },
+			data: { name: board.getName() ?? serverConfiguraion.generateCoolBoardNamePls(), pngThumbnail: thumbnailBytes },
 		});
 
 		const elementInstances = board.getElements();
@@ -70,7 +66,7 @@ export class BoardRepository extends BaseRepository<Board> {
 		return board;
 	}
 
-	private async update(board: Board): Promise<Board> {
+	private async update(board: Board, thumbnailBytes: Uint8Array<ArrayBuffer>): Promise<Board> {
 		const boardId = board.getId();
 		if (!boardId) throw new Error('Undefined board id on board update');
 
@@ -79,10 +75,7 @@ export class BoardRepository extends BaseRepository<Board> {
 		});
 		if (!boardModel) throw new Error('Unknown board id on board update');
 		
-		// Update thumbnail
-		const boardPng = ServerRenderer.renderBoardToBinary(board);
-		const bytes = new Uint8Array(boardPng);
-		await this.client.board.update({where: {id: boardId}, data: {pngThumbnail: bytes}});
+		await this.client.board.update({where: {id: boardId}, data: {pngThumbnail: thumbnailBytes}});
 
 		const elementInstances = board.getElements();
 		const elementModels: BoardElementModel[] = elementInstances.map((e) =>
@@ -102,14 +95,14 @@ export class BoardRepository extends BaseRepository<Board> {
 		return board;
 	}
 
-	public async save(board: Board): Promise<Board> {
+	public async save(board: Board, thumbnailBytes: Uint8Array<ArrayBuffer>): Promise<Board> {
 		const boardId = board.getId();
-		if (boardId === undefined) return this.insert(board);
+		if (boardId === undefined) return this.insert(board, thumbnailBytes);
 
 		const boardModel = await this.client.board.findUnique({
 			where: { id: boardId },
 		});
-		if (!boardModel) return this.insert(board);
-		return this.update(board);
+		if (!boardModel) return this.insert(board, thumbnailBytes);
+		return this.update(board, thumbnailBytes);
 	}
 }

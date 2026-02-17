@@ -8,7 +8,7 @@ export class ServerRenderer {
     constructor() {}
     
     // don't see any reason to make this as full-blown service + make rendering board method non-static yet
-    public static renderBoardToBinary(board: Board): Buffer {
+    public static renderBoardToBytes(board: Board): Uint8Array<ArrayBuffer> {
         const elementsLayer = new BoardElementsRenderLayer();
         const canvas = new Canvas(800, 800); 
                 
@@ -22,6 +22,6 @@ export class ServerRenderer {
         elementsLayer.render(ctx, camera);
 
         const buffer = canvas.toBuffer('image/png');
-        return buffer; 
+        return new Uint8Array(buffer); 
     }
 }

@@ -1,7 +1,9 @@
+import { Server } from 'node:http';
 import { Board } from '../../../shared/board/board.js';
 import type { AppContext } from '../app-context.js';
 import type { BoardRepository } from '../board/board.repository.js';
 import { BaseService } from '../common/base.service.js';
+import { ServerRenderer } from '../renderer/renderer.js';
 import type { Room } from './room-registry.js';
 
 export class RoomService extends BaseService {
@@ -32,7 +34,8 @@ export class RoomService extends BaseService {
 	}
 
 	public async createRoom(name?: string): Promise<Room> {
-		const board = await this.boardRepository.save(new Board(undefined, name));
+		const boardInstance = new Board(undefined, name);
+		const board = await this.boardRepository.save(boardInstance, ServerRenderer.renderBoardToBytes(boardInstance));
 		const room = this.appContext.roomRegistry.register(board);
 		return room;
 	}
@@ -41,6 +44,6 @@ export class RoomService extends BaseService {
 		const room = this.appContext.roomRegistry.get(boardId);
 		if (!room) throw new Error('@RoomService.saveState: no board with given id');
 		const { board } = room;
-		await this.boardRepository.save(board);
+		await this.boardRepository.save(board, ServerRenderer.renderBoardToBytes(board));
 	}
 }
