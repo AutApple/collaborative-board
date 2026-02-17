@@ -5,6 +5,9 @@ export interface ServerConfiguration {
 
 	handshakeTimeoutMs: number;
 	// generateCoolBoardNamePls: () => string;
+
+	thumbnailViewportWidth: 1920,
+	thumbnailViewportHeight: 1080
 }
 
 export const serverConfiguraion: ServerConfiguration = {
@@ -13,6 +16,9 @@ export const serverConfiguraion: ServerConfiguration = {
 	requestRefreshThrottlingTimeoutMs: 1000,
 
 	handshakeTimeoutMs: 5000,
+
+	thumbnailViewportWidth: 1920,
+	thumbnailViewportHeight: 1080
 	// generateCoolBoardNamePls: () => {
 	// 	const intensities = ['Aggressively', 'Mildly', 'Suspiciously', 'Majestically'];
 	// 	const textures = ['Damp', 'Crusty', 'Velvety', 'Greasy'];
