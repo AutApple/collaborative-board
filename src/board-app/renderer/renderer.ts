@@ -8,15 +8,15 @@ export class ServerRenderer {
     constructor() {}
     
     // don't see any reason to make this as full-blown service + make rendering board method non-static yet
-    public static renderBoardToBytes(board: Board): Uint8Array<ArrayBuffer> {
+    public static renderBoardToBytes(board: Board, canvasWidth:number = 1920, canvasHeight:number = 1080): Uint8Array<ArrayBuffer> {
         const elementsLayer = new BoardElementsRenderLayer();
-        const canvas = new Canvas(800, 800); 
+        const canvas = new Canvas(canvasWidth, canvasHeight); 
                 
         const ctx = canvas.getContext('2d');
         const camera = new Camera(new Vec2(0, 0), 1.0, 1.0, 1.0);
         
         ctx.fillStyle = 'white';
-        ctx.fillRect(0, 0, 800, 800);
+        ctx.fillRect(0, 0, canvasWidth, canvasHeight);
         
         elementsLayer.updateData(board.getElements());
         elementsLayer.render(ctx, camera);
