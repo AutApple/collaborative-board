@@ -3,9 +3,10 @@ import type { Board } from '../../../shared/board/board.js';
 import { BoardElementsRenderLayer } from '../../../shared/renderer/layers/board-elements.render-layer.js';
 import { Camera } from '../../../shared/camera/camera.js';
 import { Vec2 } from '../../../shared/utils/vec2.utils.js';
+import { BaseService } from '../common/base.service.js';
 
-export class ServerRendererService {
-    constructor(private canvasWidth:number = 1920, private canvasHeight:number = 1080) {}
+export class ServerRendererService extends BaseService {
+    constructor(private canvasWidth:number = 1920, private canvasHeight:number = 1080) { super(); }
     
     public renderBoardToBytes(board: Board): Uint8Array<ArrayBuffer> {
         const elementsLayer = new BoardElementsRenderLayer();
