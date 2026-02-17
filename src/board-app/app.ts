@@ -18,8 +18,8 @@ import {
 } from './common/instance-container.js';
 import { RoomService } from './room/room.service.js';
 import dbClient from '../db.js';
-import { ServerRendererService } from './renderer/renderer.service.js';
-import { serverConfiguraion } from './config/server.config.js';
+import { ServerRendererService } from '../shared/renderer/renderer.service.js';
+import { serverConfiguraion } from '../config/server.config.js';
 
 export class BoardServer {
 	private io: Server<ClientBoardEventPayloads, ServerBoardEventPayloads>;

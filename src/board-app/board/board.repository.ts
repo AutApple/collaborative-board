@@ -1,12 +1,10 @@
 import { Board } from '../../../shared/board/board.js';
 import { type Board as BoardModel } from '../generated/prisma/client.js';
 import { type BoardElement as BoardElementModel } from '../generated/prisma/client.js';
-import { serverConfiguraion } from '../config/server.config.js';
 import { BaseRepository } from '../common/base.repository.js';
 import { BoardElementFactory } from '../../../shared/board-elements/board-element-factory.js';
 import type { BaseBoardElement } from '../../../shared/board-elements/index.js';
 import { validate as isUuid } from 'uuid';
-import { ServerRendererService } from '../renderer/renderer.service.js';
 
 export class BoardRepository extends BaseRepository<Board> {
 	private boardModelToInstance(model: BoardModel & { elements?: BoardElementModel[] }) {

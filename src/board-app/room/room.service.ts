@@ -3,7 +3,7 @@ import { Board } from '../../../shared/board/board.js';
 import type { AppContext } from '../app-context.js';
 import type { BoardRepository } from '../board/board.repository.js';
 import { BaseService } from '../common/base.service.js';
-import { ServerRendererService } from '../renderer/renderer.service.js';
+import { ServerRendererService } from '../../shared/renderer/renderer.service.js';
 import type { Room } from './room-registry.js';
 
 export class RoomService extends BaseService {

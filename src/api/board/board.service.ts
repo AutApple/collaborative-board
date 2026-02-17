@@ -1,9 +1,10 @@
+import type { ServerRendererService } from '../../shared/renderer/renderer.service.js';
 import { APIBaseService } from '../common/base.service.js';
 import type { APIBoardRepository } from './board.repo.js';
 import type { CreateBoardDTOType } from './dtos/create-board.dto.js';
 
 export class APIBoardService extends APIBaseService {
-	constructor(private boardRepo: APIBoardRepository) {
+	constructor(private boardRepo: APIBoardRepository, private rendererService: ServerRendererService) {
 		super();
 	}
 
@@ -14,7 +15,8 @@ export class APIBoardService extends APIBaseService {
 		return await this.boardRepo.find(id);
 	}
 	public async create(dto: CreateBoardDTOType) {
-		return await this.boardRepo.insert(dto);
+		const thumbnailBytes = this.rendererService.renderBlankToBytes();
+		return await this.boardRepo.insert({...dto, pngThumbnail: thumbnailBytes});
 	}
 	public async update(id: string, dto: CreateBoardDTOType) {
 		const board = await this.boardRepo.update(id, dto);
