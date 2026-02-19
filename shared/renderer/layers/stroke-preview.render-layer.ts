@@ -17,13 +17,13 @@ export class StrokePreviewRenderLayer extends BaseRenderLayer {
 	}
 	public override render(
 		ctx: SharedRenderingContext,
-		_: Camera,
+		camera: Camera,
 	): void {
 		const { x, y } = this.screenMouseCoords;
 		const { color, size } = this.strokeData;
 
 		ctx.beginPath();
-		ctx.arc(x, y, size * 0.5, 0, Math.PI * 2); // multiply by hardcoded value to match circle radius with the stroke
+		ctx.arc(x, y, size * 0.5 * camera.getScale(), 0, Math.PI * 2); // multiply by hardcoded value to match circle radius with the stroke
 		ctx.fillStyle = color;
 		ctx.fill();
 	}
