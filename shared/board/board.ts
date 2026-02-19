@@ -1,4 +1,4 @@
-import { validate, version } from 'uuid';
+import { validate as isUuid } from 'uuid';
 import { Vec2 } from '../utils/vec2.utils.js';
 import {
 	BoardMutationType,
@@ -20,7 +20,6 @@ export interface BoardDebugStats {
 	overallElementsAmount: number;
 
 	boardId: string;
-	boardName: string;
 }
 
 export interface ReadonlyBoard {
@@ -33,19 +32,16 @@ export interface ReadonlyBoard {
 export class Board implements ReadonlyBoard {
 	constructor(
 		private id?: string,
-		private name?: string,
 	) {}
 
-	getName(): string | undefined {
-		return this.name;
-	}
+
 	getId(): string | undefined {
 		return this.id;
 	}
 
-	public setMetadata(metadata: { id?: string; name?: string }) {
-		if (metadata.id !== undefined) this.id = metadata.id;
-		if (metadata.name !== undefined) this.name = metadata.name;
+	public setId(id: string): void {
+		if (!this.validateId(id)) return;
+		this.id = id;
 	}
 
 	private elements: BaseBoardElement[] = [];
@@ -55,7 +51,7 @@ export class Board implements ReadonlyBoard {
 	}
 
 	private validateId(id: string) {
-		return validate(id) && version(id) === 4;
+		return isUuid(id);
 	}
 
 	getElements() {
@@ -147,7 +143,6 @@ export class Board implements ReadonlyBoard {
 			overallElementsAmount: this.elements.length,
 
 			boardId: this.id ?? 'undefined',
-			boardName: this.name ?? 'undefined',
 		};
 		for (const element of this.elements) {
 			if (element.type !== BoardElementType.Stroke) continue;

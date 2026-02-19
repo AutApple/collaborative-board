@@ -1,4 +1,4 @@
-import { ServerBoardEvents } from '../../../../shared/socket-events/board.socket-events.js';
+import { ServerBoardEvents } from '../../../../shared/socket-events/socket-events.js';
 import type { XY } from '../../../../shared/utils/vec2.utils.js';
 import type { AppContext } from '../../app-context.js';
 import type { ServiceContainer } from '../../common/instance-container.js';
@@ -14,19 +14,20 @@ export class CursorEventHandler extends BaseEventHandler {
 	}
 
 	public async onLocalCursorMove(client: Client, pos: XY) {
-		const boardId = client.getBoardId();
+		const roomId = client.getRoomId();
 		const socket = client.getSocket();
+		if (!roomId) return;
 
-		if (!boardId) return;
-
-		const room = await this.roomService.get(boardId);
+		const room = await this.roomService.get(roomId);
 		if (!room) return;
 
-		socket.to(boardId).emit(ServerBoardEvents.RemoteCursorMove, {
+		socket.to(roomId).emit(ServerBoardEvents.RemoteCursorMove, {
 			clientId: socket.id,
 			worldCoords: pos,
+			local: false
 		});
-
-		room.cursorMap.setPosition(socket.id, pos);
+		
+		const cursorMap = room.getCursorMap();
+		cursorMap.setPosition(socket.id, pos);
 	}
 }

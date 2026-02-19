@@ -29,31 +29,33 @@ export class BoardController {
 
 	private onBoardMutations(e: BoardMutationsEvent) {
 		// console.log(`Got mutations!: ${e.mutations}`);
-		for (const mutation of e.mutations) this.appContext.board.applyMutation(mutation);
+		const board = this.appContext.room.getBoard();
+		for (const mutation of e.mutations) board.applyMutation(mutation);
 
 		this.appContext.renderer.setLayerData(
 			RenderLayerType.DebugStats,
-			this.appContext.board.getDebugStats(),
+			this.appContext.room.getDebugStats(),
 		);
 		this.appContext.renderer.setLayerDataAndRender(
 			this.appContext.camera,
 			RenderLayerType.Elements,
-			this.appContext.board.getElements(),
+			board.getElements(),
 		);
 	}
 
 	private onBoardRefresh(e: BoardRefreshEvent) {
+		const board = this.appContext.room.getBoard();
 		const data = e.rawData.map((raw) => BoardElementFactory.fromRaw(raw));
-		this.appContext.board.refresh(data);
+		board.refresh(data);
 
 		this.appContext.renderer.setLayerData(
 			RenderLayerType.DebugStats,
-			this.appContext.board.getDebugStats(),
+			this.appContext.room.getDebugStats(),
 		);
 		this.appContext.renderer.setLayerDataAndRender(
 			this.appContext.camera,
 			RenderLayerType.Elements,
-			this.appContext.board.getElements(),
+			board.getElements(),
 		);
 	}
 
@@ -63,17 +65,19 @@ export class BoardController {
 	}
 
 	private onBoardHistoryMutaitons(e: BoardHistoryMutationsEvent) {
+		const board = this.appContext.room.getBoard();
+
 		const { mutations } = e;
-		for (const mutation of mutations) this.appContext.board.applyMutation(mutation);
+		for (const mutation of mutations) board.applyMutation(mutation);
 		this.networkService.sendBoardMutationList(mutations);
 		this.appContext.renderer.setLayerData(
 			RenderLayerType.DebugStats,
-			this.appContext.board.getDebugStats(),
+			this.appContext.room.getDebugStats(),
 		);
 		this.appContext.renderer.setLayerDataAndRender(
 			this.appContext.camera,
 			RenderLayerType.Elements,
-			this.appContext.board.getElements(),
+			board.getElements(),
 		);
 	}
 }

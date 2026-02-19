@@ -28,7 +28,8 @@ export class CursorController {
 	}
 
 	public onRemoteCursorConnect({ cursor }: RemoteCursorConnectEvent) {
-		this.appContext.remoteCursorList.addCursor(cursor);
+		const cursorMap = this.appContext.room.getCursorMap();
+		cursorMap.addCursor(cursor);
 		this.uiAdapter.addCursor(
 			cursor.clientId,
 			this.appContext.camera.worldToScreen(Vec2.fromXY(cursor.worldCoords)),
@@ -36,7 +37,8 @@ export class CursorController {
 	}
 
 	public onRemoteCursorDisconnect({ clientId }: RemoteCursorDisconnectEvent) {
-		this.appContext.remoteCursorList.removeCursor(clientId);
+		const cursorMap = this.appContext.room.getCursorMap();
+		cursorMap.removeCursor(clientId);
 		this.uiAdapter.removeCursor(clientId);
 	}
 
@@ -49,13 +51,16 @@ export class CursorController {
 	}
 
 	public onLocalCursorMove({ screenCoords }: LocalCursorMoveEvent) {
+		const localCursor = this.appContext.room.getLocalCursor();
+		if (!localCursor) throw new Error('No local cursor in cursor map. Is it initialized properly?');
+
 		this.appContext.renderer.setLayerDataAndRender(
 			this.appContext.camera,
 			RenderLayerType.StrokePreview,
 			this.appContext.toolbox.getCurrentStrokeData(),
-			this.appContext.camera.worldToScreen(Vec2.fromXY(this.appContext.localCursorWorldCoords)),
+			this.appContext.camera.worldToScreen(Vec2.fromXY(localCursor.worldCoords)),
 		);
-		this.appContext.localCursorWorldCoords = this.appContext.camera.screenToWorld(screenCoords);
-		this.networkService.sendLocalCursorMove(this.appContext.localCursorWorldCoords);
+		localCursor.worldCoords = this.appContext.camera.screenToWorld(screenCoords);
+		this.networkService.sendLocalCursorMove(localCursor.worldCoords);
 	}
 }

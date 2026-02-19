@@ -25,9 +25,20 @@ model BoardElement {
 
 model Board {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name String
+  
   createdAt DateTime @default(now())
-  pngThumbnail Bytes
   elements BoardElement[]
+  
+  room Room?
 }
 
+model Room {
+  id   String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+ 
+  name String  
+  createdAt DateTime @default(now())
+  thumbnailPngBytes Bytes
+
+  boardId String @db.Uuid @unique
+  board Board  @relation(fields: [boardId], references: [id], onDelete: Cascade)
+}

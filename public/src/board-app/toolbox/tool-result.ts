@@ -72,14 +72,16 @@ export class ToolResult {
 			appContext.boardHistory.registerMutations(optimizedMutations);
 		}
 
-		for (const boardAction of this.boardActions) boardAction(appContext.board);
+		const board = appContext.room.getBoard();
+
+		for (const boardAction of this.boardActions) boardAction(board);
 		for (const eventEmit of this.emitActions) eventEmit(bus);
 		for (const templateAction of this.templateActions) {
 			switch (templateAction) {
 				case TemplateAction.RerenderBoard:
 					bus.emit(SemanticEvents.RendererRedrawBoard, {
-						elements: appContext.board.getElements(),
-						debugStats: appContext.board.getDebugStats(),
+						elements: board.getElements(),
+						debugStats: appContext.room.getDebugStats(),
 					});
 					break;
 			}

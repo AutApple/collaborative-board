@@ -1,4 +1,4 @@
-import clientBoardsApi from '../api/boards.client-api.js';
+import clientRoomsApi from '../api/rooms.client-api.js';
 
 const createButton = document.getElementById('board-create-input');
 const createInput = document.getElementById('board-name-input') as HTMLInputElement;
@@ -20,7 +20,7 @@ createButton.addEventListener('click', async () => {
 
 	createInputErrorBox.classList.add('invisible');
 	try {
-		const newBoard = await clientBoardsApi.addBoard(boardName);
+		const newBoard = await clientRoomsApi.addRoom(boardName);
 		window.location.href = `/board?id=${newBoard.id}`;
 	} catch (err: any) {
 		createInputErrorBox.classList.remove('invisible');

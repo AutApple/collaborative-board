@@ -1,7 +1,7 @@
 import { type Express } from 'express';
-import createBoardApiModule from './board/board.module.js';
+import createRoomApiModule from './room/room.module.js';
 
 export function createAndMapApiModules(app: Express) {
-	const apiBoardModule = createBoardApiModule();
-	app.use('/api/boards', apiBoardModule);
+	const apiRoomModule = createRoomApiModule();
+	app.use('/api/rooms', apiRoomModule);
 }

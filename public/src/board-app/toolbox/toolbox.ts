@@ -13,11 +13,13 @@ import { OvalTool } from './tools/oval.tool.js';
 import { clientConfiguration } from '../config/client.config.js';
 
 export class Toolbox {
-	private currentTool: BaseTool;
-	private currentStrokeData: StrokeData;
-	public toolInstances: Record<Tools, BaseTool>;
+	private currentTool: BaseTool | undefined;
+	private currentStrokeData: StrokeData | undefined;
+	public toolInstances: Record<Tools, BaseTool> | undefined;
 
-	constructor(private board: Board, private defaultStrokeData: StrokeData, private defaultTool: Tools) {
+	constructor(private defaultStrokeData: StrokeData, private defaultTool: Tools) {}
+
+	initialize(board: Board) {
 		this.currentStrokeData = { ...this.defaultStrokeData };
 
 		// make instances of a tools
@@ -33,32 +35,40 @@ export class Toolbox {
 	}
 
 	changeColor(color: string) {
+		if (!this.currentStrokeData) throw new Error('Calling change color on unitialized toolbox');
 		this.currentStrokeData.color = color;
 	}
 	changeSize(size: number) {
+		if (!this.currentStrokeData) throw new Error('Calling change size on unitialized toolbox');
 		this.currentStrokeData.size = size;
 	}
 
 	changeTool(tool: Tools) {
+		if (!this.toolInstances) throw new Error('Calling change tool on unitialized toolbox');
 		this.currentTool = this.toolInstances[tool];
 	}
 	getCurrentStrokeData(): StrokeData {
+		if (!this.currentStrokeData) throw new Error('Calling get stroke data on unitialized toolbox');
 		return this.currentStrokeData;
 	}
 
 	public isConstructing(): boolean {
+		if (!this.currentTool) throw new Error('Calling is constructing on unitialized toolbox');
 		return this.currentTool.isConstructing();
 	}
 
 	startConstructing(worldCoords: Vec2): ToolResult | null {
+		if (!this.currentTool || !this.currentStrokeData) throw new Error('Calling construction on unitialized toolbox');
 		if (this.isConstructing()) return null;
 		return this.currentTool.startConstructing(worldCoords, this.currentStrokeData);
 	}
 	stepConstructing(worldCoords: Vec2): ToolResult | null {
+		if (!this.currentTool) throw new Error('Calling construction on unitialized toolbox');
 		if (!this.isConstructing()) return null;
 		return this.currentTool.stepConstructing(worldCoords);
 	}
 	endConstructing(): ToolResult | null {
+		if (!this.currentTool) throw new Error('Calling construction on unitialized toolbox');
 		if (!this.isConstructing()) return null;
 		return this.currentTool.endConstructing();
 	}

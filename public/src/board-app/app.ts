@@ -1,4 +1,4 @@
-import type { BoardClientSocket } from '@shared/socket-events/board.socket-events.js';
+import type { BoardClientSocket } from '@shared/socket-events/socket-events.js';
 import { io } from 'socket.io-client';
 import { AppContext } from './app-context.js';
 import { BoardHistoryController } from './board-history/board-history.controller.js';
@@ -25,7 +25,7 @@ export class BoardClient {
 		return el;
 	}
 
-	private getQueryBoardId(): string {
+	private getQueryRoommId(): string {
 		const queryString = window.location.search;
 		const params = new URLSearchParams(queryString);
 		const id = params.get('id');
@@ -77,7 +77,7 @@ export class BoardClient {
 		cursorController.subscribe(semanticEventBus);
 		rendererController.subscribe(semanticEventBus);
 
-		networkService.sendHandshake(this.getQueryBoardId(), appContext.localCursorWorldCoords);
+		networkService.sendHandshake(this.getQueryRoommId(), appContext.room.getLocalCursor()!.worldCoords);
 	}
 	run() {
 		const socket: BoardClientSocket = io();

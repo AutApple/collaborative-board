@@ -1,7 +1,7 @@
 import {
 	ServerBoardEvents,
 	type BoardClientSocket,
-} from '@shared/socket-events/board.socket-events.js';
+} from '@shared/socket-events/socket-events.js';
 import type { AnyRawBoardElement } from '../../../../shared/board-elements/index.js';
 import type { BoardMutationList } from '../../../../shared/board/board-mutation.js';
 import type { Cursor } from '../../../../shared/remote-cursor/types/cursor.js';
@@ -10,6 +10,8 @@ import type { EventBus } from '../event-bus/event-bus.js';
 import { SemanticEvents, type SemanticEventMap } from '../event-bus/index.js';
 import type { NetworkService } from './network.service.js';
 import type { NetworkUiAdapter } from './network.ui-adapter.js';
+import { Board } from '../../../../shared/board/board.js';
+import { RenderLayerType } from '../../../../shared/renderer/enums/render-layer.enum.js';
 
 export class NetworkController {
 	constructor(
@@ -57,13 +59,25 @@ export class NetworkController {
 	}
 
 	public onHandshake(
-		boardId: string,
-		boardName: string,
+		roomId: string,
+		roomName: string,
+		boardId: string, 
 		raw: AnyRawBoardElement[],
 		cursors: Cursor[],
 	) {
+		// Initialize room 
+		this.appContext.room.initialize(roomId, roomName, new Board(boardId));
+		// Initialize toolbox
+		this.appContext.toolbox.initialize(this.appContext.room.getBoard());
+
+		// TODO: put instead of these semantic events just past elements into room constructor (as an optional argument)
+		// and same goes for the cursors - pass them into the room constructor and let room to pass merging logic to cursor map
 		for (const cursor of cursors) this.bus.emit(SemanticEvents.RemoteCursorConnect, { cursor });
-		this.appContext.board.setMetadata({ id: boardId, name: boardName });
 		this.bus.emit(SemanticEvents.BoardRefresh, { rawData: raw });
+
+		this.appContext.renderer.setLayerData(
+			RenderLayerType.DebugStats,
+			this.appContext.room.getDebugStats(),
+		);
 	}
 }

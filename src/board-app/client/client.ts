@@ -1,7 +1,7 @@
 import {
 	ClientBoardEvents,
 	type BoardServerSocket,
-} from '../../../shared/socket-events/board.socket-events.js';
+} from '../../../shared/socket-events/socket-events.js';
 import { serverConfiguraion } from '../../config/server.config.js';
 import type { ClientRegistry } from './client-registry.js';
 import type { ClientEventHandlers } from './client-event-handlers.js';
@@ -10,7 +10,7 @@ export class Client {
 	private connected = true;
 
 	private passedHandshake = false;
-	private boardId: string | undefined;
+	private roomId: string | undefined;
 
 	private handshakeTimer: NodeJS.Timeout | undefined;
 
@@ -46,15 +46,15 @@ export class Client {
 		return this.socket;
 	}
 
-	public setBoardId(id: string) {
-		this.boardId = id;
-		this.socket.join(this.boardId);
+	public setRoomId(id: string) {
+		this.roomId = id;
+		this.socket.join(this.roomId);
 
-		console.log(`Socket with id ${this.socket.id} joined ${this.boardId}`);
+		console.log(`Socket with id ${this.socket.id} joined ${this.roomId}`);
 	}
 
-	public getBoardId() {
-		return this.boardId;
+	public getRoomId() {
+		return this.roomId;
 	}
 
 	public async disconnect() {

@@ -1,4 +1,4 @@
-import { ServerBoardEvents } from '../../../../shared/socket-events/board.socket-events.js';
+import { ServerBoardEvents } from '../../../../shared/socket-events/socket-events.js';
 import type { XY } from '../../../../shared/utils/vec2.utils.js';
 import type { AppContext } from '../../app-context.js';
 import type { ServiceContainer } from '../../common/instance-container.js';
@@ -13,45 +13,50 @@ export class NetworkingEventHandler extends BaseEventHandler {
 		this.roomService = serviceContainer.getInstance(RoomService);
 	}
 
-	public async onHandshake(client: Client, boardId: string, cursorWorldCoords: XY) {
+	public async onHandshake(client: Client, roomId: string, cursorWorldCoords: XY) {
 		if (client.didPassHandshake() === true) return;
 
 		const socket = client.getSocket();
 
-		const room = await this.roomService.get(boardId);
+		const room = await this.roomService.get(roomId);
+
 		if (room === undefined) {
 			socket.emit(ServerBoardEvents.BoardNotFound);
 			client.disconnect();
 			return;
 		}
 
-		boardId = room.board.getId()!;
-		const boardName = room.board.getName()!;
+		const cursorMap = room.getCursorMap();
+		const roomName = room.getName();
+		const board = room.getBoard();
 
-		client.setBoardId(boardId);
+		client.setRoomId(roomId);
 
 		const cursor = {
 			clientId: client.getClientId(),
 			worldCoords: cursorWorldCoords,
+			local: false
 		};
 
-		room.cursorMap.addCursor(cursor);
+		cursorMap.addCursor(cursor);
+		
 		socket.emit(
 			ServerBoardEvents.Handshake,
-			boardId,
-			boardName,
-			room.board.getElements().map((e) => e.toRaw()),
-			room.cursorMap.toList(),
+			roomId,
+			roomName,
+			board.getId()!,
+			board.getElements().map((e) => e.toRaw()),
+			cursorMap.foreignToList(),
 		);
-		socket.to(boardId).emit(ServerBoardEvents.ClientConnected, client.getClientId(), cursor);
+		socket.to(roomId).emit(ServerBoardEvents.ClientConnected, client.getClientId(), cursor);
 
 		client.markHandshakePass();
 	}
 
 	public async onDisconnect(client: Client) {
-		const boardId = client.getBoardId();
-		if (!boardId) return;
-		await this.roomService.saveState(boardId);
+		const roomId = client.getRoomId();
+		if (!roomId) return;
+		await this.roomService.saveState(roomId);
 
 		client.disconnect();
 	}

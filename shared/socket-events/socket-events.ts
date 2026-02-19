@@ -25,8 +25,9 @@ export enum ClientBoardEvents {
 
 export interface ServerBoardEventPayloads {
 	[ServerBoardEvents.Handshake]: (
+		roomId: string,
+		roomName: string,
 		boardId: string,
-		boardName: string,
 		raw: AnyRawBoardElement[],
 		cursors: Cursor[],
 	) => void;
@@ -39,7 +40,7 @@ export interface ServerBoardEventPayloads {
 }
 
 export interface ClientBoardEventPayloads {
-	[ClientBoardEvents.Handshake]: (boardId: string, cursorWorldCoords: XY) => void;
+	[ClientBoardEvents.Handshake]: (roomId: string, cursorWorldCoords: XY) => void;
 	[ClientBoardEvents.BoardMutations]: (mutations: BoardMutationList) => void;
 	[ClientBoardEvents.RequestRefresh]: () => void;
 	[ClientBoardEvents.LocalCursorMove]: (worldCoords: XY) => void;

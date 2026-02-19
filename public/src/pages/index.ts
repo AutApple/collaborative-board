@@ -1,4 +1,4 @@
-import clientBoardsApi from '../api/boards.client-api.js';
+import clientRoomsApi from '../api/rooms.client-api.js';
 
 function addBoardCard(
 	template: HTMLTemplateElement,
@@ -28,7 +28,7 @@ function addBoardCard(
 }
 
 async function addCards(template: HTMLTemplateElement, container: HTMLDivElement) {
-	const boards = await clientBoardsApi.getBoards();
+	const boards = await clientRoomsApi.getRooms();
 	for (const board of boards) addBoardCard(template, container, board.name, board.id, board.pngBase64);
 }
 

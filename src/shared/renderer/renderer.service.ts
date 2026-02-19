@@ -24,6 +24,7 @@ export class ServerRendererService extends BaseService {
         const buffer = canvas.toBuffer('image/png');
         return new Uint8Array(buffer); 
     }
+    
     public renderBlankToBytes(): Uint8Array<ArrayBuffer> {
         const canvas = new Canvas(300, 300); 
 		const ctx = canvas.getContext('2d');

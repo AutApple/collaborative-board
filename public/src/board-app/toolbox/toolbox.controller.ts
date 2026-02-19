@@ -51,23 +51,28 @@ export class ToolboxController {
 	public onToolboxChangeStrokeColor(e: ToolboxChangeStrokeColorEvent) {
 		this.appContext.toolbox.changeColor(e.value);
 		this.uiAdapter.setStrokeColor(e.value);
+
+		const localCursor = this.appContext.room.getLocalCursor();
+		
 		this.appContext.renderer.setLayerDataAndRender(
 			this.appContext.camera,
 			RenderLayerType.StrokePreview,
 			this.appContext.toolbox.getCurrentStrokeData(),
-			this.appContext.camera.worldToScreen(Vec2.fromXY(this.appContext.localCursorWorldCoords)),
+			this.appContext.camera.worldToScreen(Vec2.fromXY(localCursor.worldCoords)),
 		);
 	}
 	public onToolboxChangeStrokeSize(e: ToolboxChangeStrokeSizeEvent) {
 		this.appContext.toolbox.changeSize(e.value);
 		this.uiAdapter.setStrokeSize(e.value);
+		const localCursor = this.appContext.room.getLocalCursor();
 		this.appContext.renderer.setLayerDataAndRender(
 			this.appContext.camera,
 			RenderLayerType.StrokePreview,
 			this.appContext.toolbox.getCurrentStrokeData(),
-			this.appContext.camera.worldToScreen(Vec2.fromXY(this.appContext.localCursorWorldCoords)),
+			this.appContext.camera.worldToScreen(Vec2.fromXY(localCursor.worldCoords)),
 		);
 	}
+	
 	private onToolStartUsing(e: ToolStartUsingEvent, bus: EventBus<SemanticEventMap>) {
 		const toolResult = this.appContext.toolbox.startConstructing(
 			this.appContext.camera.screenToWorld(e.screenCoords),
