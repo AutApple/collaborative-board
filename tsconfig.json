@@ -10,6 +10,6 @@
       "@shared/*": ["./shared/*"]
     }
   },
-  "include": ["src/**/*.ts",  "shared/**/*.ts", "src/board-app/client/event-handlers"],
+  "include": ["src/**/*.ts",  "shared/**/*.ts", "src/board-app/client/event-handlers", "public/src/board-app/renderer/layers/debug-stats.render-layer.ts", "public/src/board-app/renderer/layers/stroke-preview.render-layer.ts"],
   "exclude": ["public-dist", "dist", "node_modules"]
 }

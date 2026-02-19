@@ -1,7 +1,7 @@
-import type { Camera } from '../../camera/camera.js';
-import { BaseRenderLayer } from './base.render-layer.js';
-import type { SharedRenderingContext } from '../shared-rendering-context.js';
-import type { RoomDebugStats } from '../../room/room.js';
+import type { Camera } from '@shared/camera/camera.js';
+import { BaseRenderLayer } from '@shared/renderer/layers/base.render-layer.js';
+import type { SharedRenderingContext } from '@shared/renderer/shared-rendering-context.js';
+import type { RoomDebugStats } from '@shared/room/room.js';
 
 export class DebugStatsRenderLayer extends BaseRenderLayer {
 	private debugStats: RoomDebugStats = {

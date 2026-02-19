@@ -1,8 +1,8 @@
-import type { StrokeData } from '../../board-elements/types/stroke-data.type.js';
-import type { XY } from '../../utils/vec2.utils.js';
-import type { Camera } from '../../camera/camera.js';
-import type { SharedRenderingContext } from '../shared-rendering-context.js';
-import { BaseRenderLayer } from './base.render-layer.js';
+import type { StrokeData } from '../../../../../shared/board-elements/types/stroke-data.type.js';
+import type { XY } from '../../../../../shared/utils/vec2.utils.js';
+import type { Camera } from '../../../../../shared/camera/camera.js';
+import type { SharedRenderingContext } from '../../../../../shared/renderer/shared-rendering-context.js';
+import { BaseRenderLayer } from '../../../../../shared/renderer/layers/base.render-layer.js';
 
 export class StrokePreviewRenderLayer extends BaseRenderLayer {
 	private strokeData: StrokeData = { color: 'black', size: 6 };

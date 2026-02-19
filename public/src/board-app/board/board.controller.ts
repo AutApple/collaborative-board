@@ -12,7 +12,7 @@ import {
 	type BoardResizeEvent,
 } from '../event-bus/events/index.js';
 import type { NetworkService } from '../network/network.service.js';
-import { RenderLayerType } from '../../../../shared/renderer/enums/render-layer.enum.js';
+import { RenderLayerType } from '../renderer/enums/render-layer.enum.js';
 
 export class BoardController {
 	constructor(

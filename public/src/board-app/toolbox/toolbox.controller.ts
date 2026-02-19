@@ -12,7 +12,7 @@ import {
 	type ToolStartUsingEvent,
 } from '../event-bus/index.js';
 import type { NetworkService } from '../network/network.service.js';
-import { RenderLayerType } from '../../../../shared/renderer/enums/render-layer.enum.js';
+import { RenderLayerType } from '../renderer/enums/render-layer.enum.js';
 import { Tools } from './enums/tools.enum.js';
 import type { ToolboxUiAdapter } from './toolbox.ui-adapter.js';
 

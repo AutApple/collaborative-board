@@ -10,7 +10,7 @@ import {
 	type SemanticEventMap,
 } from '../event-bus/index.js';
 import type { NetworkService } from '../network/network.service.js';
-import { RenderLayerType } from '../../../../shared/renderer/enums/render-layer.enum.js';
+import { RenderLayerType } from '../renderer/enums/render-layer.enum.js';
 import type { RemoteCursorUIAdapter } from './remote-cursor.ui-adapter.js';
 
 export class CursorController {

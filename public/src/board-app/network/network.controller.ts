@@ -11,7 +11,7 @@ import { SemanticEvents, type SemanticEventMap } from '../event-bus/index.js';
 import type { NetworkService } from './network.service.js';
 import type { NetworkUiAdapter } from './network.ui-adapter.js';
 import { Board } from '../../../../shared/board/board.js';
-import { RenderLayerType } from '../../../../shared/renderer/enums/render-layer.enum.js';
+import { RenderLayerType } from '../renderer/enums/render-layer.enum.js';
 
 export class NetworkController {
 	constructor(

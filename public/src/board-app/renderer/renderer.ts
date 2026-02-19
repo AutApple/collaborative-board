@@ -2,10 +2,10 @@ import { type XY } from '@shared/utils/vec2.utils.js';
 import { BaseBoardElement } from '@shared/board-elements/';
 import { Camera } from '../../../../shared/camera/camera.js';
 import type { BaseRenderLayer } from '../../../../shared/renderer/layers/base.render-layer.js';
-import { RenderLayerType } from '../../../../shared/renderer/enums/render-layer.enum.js';
+import { RenderLayerType } from './enums/render-layer.enum.js';
 import { BoardElementsRenderLayer } from '../../../../shared/renderer/layers/board-elements.render-layer.js';
-import { DebugStatsRenderLayer } from '../../../../shared/renderer/layers/debug-stats.render-layer.js';
-import { StrokePreviewRenderLayer } from '../../../../shared/renderer/layers/stroke-preview.render-layer.js';
+import { DebugStatsRenderLayer } from './layers/debug-stats.render-layer.js';
+import { StrokePreviewRenderLayer } from './layers/stroke-preview.render-layer.js';
 import type { RoomDebugStats } from '../../../../shared/room/room.js';
 
 export class ClientRenderer {
