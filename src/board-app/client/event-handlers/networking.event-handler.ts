@@ -57,6 +57,15 @@ export class NetworkingEventHandler extends BaseEventHandler {
 		const roomId = client.getRoomId();
 		if (!roomId) return;
 		await this.roomService.saveState(roomId);
+		
+		const clientId = client.getClientId();
+		const room = (await this.roomService.get(roomId))!;
+		const cursorMap = room.getCursorMap();
+		cursorMap.removeCursor(clientId);
+		
+		const socket = client.getSocket();
+		socket.to(roomId).emit(ServerBoardEvents.ClientDisconnected, clientId);
+
 
 		client.disconnect();
 	}
