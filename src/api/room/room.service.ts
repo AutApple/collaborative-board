@@ -1,12 +1,10 @@
 import type { ServerRendererService } from '../../shared/renderer/renderer.service.js';
-import { APIBaseService } from '../common/base.service.js';
 import type { APIRoomRepository } from './room.repo.js';
 import type { CreateRoomDTOType } from './dtos/create-room.dto.js';
 import type { APIBoardRepository } from '../board/board.repo.js';
 
-export class APIRoomService extends APIBaseService {
+export class APIRoomService {
 	constructor(private roomRepo: APIRoomRepository, private boardRepo: APIBoardRepository, private rendererService: ServerRendererService) {
-		super();
 	}
 
 	public async getAll() {

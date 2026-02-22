@@ -1,13 +1,11 @@
 import type { Request, Response } from 'express';
-import { APIBaseController } from '../common/base.controller.js';
 import type { APIRoomService } from './room.service.js';
 import { type CreateRoomDTOType } from './dtos/create-room.dto.js';
 import { OutputRoomDTO } from './dtos/output-room.dto.js';
 import type { Room } from '../../board-app/generated/prisma/client.js';
 
-export class APIRoomController extends APIBaseController {
+export class APIRoomController {
 	constructor(public readonly roomService: APIRoomService) {
-		super();
 	}
 
 	public async getParam(req: Request, res: Response<any, { room: Room }>): Promise<void> {

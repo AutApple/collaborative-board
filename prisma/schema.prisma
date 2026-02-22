@@ -41,4 +41,35 @@ model Room {
 
   boardId String @db.Uuid @unique
   board Board  @relation(fields: [boardId], references: [id], onDelete: Cascade)
+
+  authorId String? @db.Uuid
+  author User? @relation(fields: [authorId], references: [id], onDelete: SetNull)
+}
+
+
+model User {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  username String @unique @db.VarChar(30)
+  email String @unique @db.VarChar(255)
+  
+  hashedPassword String
+  refreshTokens RefreshToken[]
+
+  createdAt      DateTime @default(now())
+
+  rooms Room[]
+}
+
+// use refresh token as seperate model for future multi-device support
+model RefreshToken {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tokenHash String   
+  userId    String   @db.Uuid
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  revoked   Boolean  @default(false)
+
+  @@index([userId])
 }

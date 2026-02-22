@@ -7,7 +7,7 @@ import { checkRoomExists } from './middleware/checkRoomExists.middleware.js';
 
 export class APIRoomRouter extends APIBaseRouter {
 	constructor(protected controller: APIRoomController) {
-		super(controller);
+		super();
 		this.bindRoutes();
 	}
 
