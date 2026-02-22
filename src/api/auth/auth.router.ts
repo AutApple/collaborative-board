@@ -4,7 +4,7 @@ import type { APIAuthController } from './auth.controller.js';
 import { LoginDTO } from './dto/login.dto.js';
 import { RegisterDTO } from './dto/register.dto.js';
 import { RefreshTokenDTO } from './dto/refresh-token.dto.js';
-import { validateAccessToken } from './middleware/validateAccessToken.js';
+import { validateAndSetAccessToken } from './middleware/validateAccessToken.js';
 
 export class APIAuthRouter extends APIBaseRouter {
 	constructor(protected controller: APIAuthController) {

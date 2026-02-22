@@ -4,7 +4,7 @@ import { env } from '../../../../shared/config/env.config.js';
 import type { AccessTokenDTOType } from '../dto/access-token.dto.js';
 import type { AccessTokenPayload } from '../interfaces/access-token-payload.interface.js';
 
-export const validateAccessToken = async (
+export const validateAndSetAccessToken = async (
 	_: Request,
 	res: Response<
 		any,
