@@ -16,7 +16,7 @@ export default function createAuthApiModule(): Router {
 	const refreshTokenService = new APIRefreshTokenService(refreshTokenRepo);
 
 	const authService = new APIAuthService(refreshTokenService, userService);
-	
+
 	const controller = new APIAuthController(authService);
 	const router = new APIAuthRouter(controller);
 

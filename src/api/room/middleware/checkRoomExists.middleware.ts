@@ -6,9 +6,7 @@ export const checkRoomExists = (roomService: APIRoomService) => {
 		const { param: id } = req.params;
 		const room = await roomService.get(id);
 
-		if (!room)
-			return res.status(404).json({ message: 'Room not found' });
-		
+		if (!room) return res.status(404).json({ message: 'Room not found' });
 
 		res.locals.room = room; // passing board to the controller
 		next();

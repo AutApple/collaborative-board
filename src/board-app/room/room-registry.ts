@@ -11,7 +11,9 @@ export class RoomRegistry {
 		this.roomMap.set(roomId, room);
 	}
 	public registerMany(roomList: Room[]): void {
-		roomList.map((r) => { this.register(r); });
+		roomList.map((r) => {
+			this.register(r);
+		});
 	}
 
 	public get(boardId: string): Room | undefined {

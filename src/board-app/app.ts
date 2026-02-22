@@ -32,17 +32,19 @@ export class BoardServer {
 	constructor(httpServer: HTTPServer) {
 		this.io = new Server<ClientBoardEventPayloads, ServerBoardEventPayloads>(httpServer);
 
-		this.repositoryContainer = new InstanceContainer([
-			new RoomRepository(dbClient),
-		]);
+		this.repositoryContainer = new InstanceContainer([new RoomRepository(dbClient)]);
 
-		const rendererService = new ServerRendererService(serverConfiguraion.thumbnailViewportWidth, serverConfiguraion.thumbnailViewportHeight);
-		const roomService = new RoomService(this.repositoryContainer.getInstance(RoomRepository), rendererService, this.appContext);
-
-		this.serviceContainer = new InstanceContainer([
+		const rendererService = new ServerRendererService(
+			serverConfiguraion.thumbnailViewportWidth,
+			serverConfiguraion.thumbnailViewportHeight,
+		);
+		const roomService = new RoomService(
+			this.repositoryContainer.getInstance(RoomRepository),
 			rendererService,
-			roomService
-		]);
+			this.appContext,
+		);
+
+		this.serviceContainer = new InstanceContainer([rendererService, roomService]);
 	}
 
 	public async run() {

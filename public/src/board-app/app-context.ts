@@ -17,9 +17,21 @@ export class AppContext {
 
 	constructor(canvas: HTMLCanvasElement) {
 		this.room = new Room(true);
-		this.renderer = new ClientRenderer(canvas, clientConfiguration.boardBackgroundColor, clientConfiguration.debugOverlay);
-		this.camera = new Camera(new Vec2(0, 0), 1, clientConfiguration.minCameraScale, clientConfiguration.maxCameraScale);
-		this.toolbox = new Toolbox(clientConfiguration.defaultStrokeData, clientConfiguration.defaultTool);
+		this.renderer = new ClientRenderer(
+			canvas,
+			clientConfiguration.boardBackgroundColor,
+			clientConfiguration.debugOverlay,
+		);
+		this.camera = new Camera(
+			new Vec2(0, 0),
+			1,
+			clientConfiguration.minCameraScale,
+			clientConfiguration.maxCameraScale,
+		);
+		this.toolbox = new Toolbox(
+			clientConfiguration.defaultStrokeData,
+			clientConfiguration.defaultTool,
+		);
 		this.boardHistory = new BoardHistory();
 	}
 }

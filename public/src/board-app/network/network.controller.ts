@@ -1,7 +1,4 @@
-import {
-	ServerBoardEvents,
-	type BoardClientSocket,
-} from '@shared/socket-events/socket-events.js';
+import { ServerBoardEvents, type BoardClientSocket } from '@shared/socket-events/socket-events.js';
 import type { AnyRawBoardElement } from '../../../../shared/board-elements/index.js';
 import type { BoardMutationList } from '../../../../shared/board/board-mutation.js';
 import type { Cursor } from '../../../../shared/remote-cursor/types/cursor.js';
@@ -61,11 +58,11 @@ export class NetworkController {
 	public onHandshake(
 		roomId: string,
 		roomName: string,
-		boardId: string, 
+		boardId: string,
 		raw: AnyRawBoardElement[],
 		cursors: Cursor[],
 	) {
-		// Initialize room 
+		// Initialize room
 		this.appContext.room.initialize(roomId, roomName, new Board(boardId));
 		// Initialize toolbox
 		this.appContext.toolbox.initialize(this.appContext.room.getBoard());

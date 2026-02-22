@@ -5,8 +5,5 @@ export abstract class BaseRenderLayer {
 	constructor() {}
 
 	public abstract updateData(...data: any): void;
-	public abstract render(
-		ctx: SharedRenderingContext,
-		camera: Camera,
-	): void;
+	public abstract render(ctx: SharedRenderingContext, camera: Camera): void;
 }

@@ -17,7 +17,10 @@ export class Toolbox {
 	private currentStrokeData: StrokeData | undefined;
 	public toolInstances: Record<Tools, BaseTool> | undefined;
 
-	constructor(private defaultStrokeData: StrokeData, private defaultTool: Tools) {}
+	constructor(
+		private defaultStrokeData: StrokeData,
+		private defaultTool: Tools,
+	) {}
 
 	initialize(board: Board) {
 		this.currentStrokeData = { ...this.defaultStrokeData };
@@ -58,7 +61,8 @@ export class Toolbox {
 	}
 
 	startConstructing(worldCoords: Vec2): ToolResult | null {
-		if (!this.currentTool || !this.currentStrokeData) throw new Error('Calling construction on unitialized toolbox');
+		if (!this.currentTool || !this.currentStrokeData)
+			throw new Error('Calling construction on unitialized toolbox');
 		if (this.isConstructing()) return null;
 		return this.currentTool.startConstructing(worldCoords, this.currentStrokeData);
 	}

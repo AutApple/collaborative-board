@@ -11,8 +11,11 @@ import { APIBoardRepository } from '../board/board.repo.js';
 export default function createRoomApiModule(): Router {
 	const roomRepo = new APIRoomRepository(dbClient);
 	const boardRepo = new APIBoardRepository(dbClient);
-	
-	const rendererService = new ServerRendererService(serverConfiguraion.thumbnailViewportWidth, serverConfiguraion.thumbnailViewportHeight);
+
+	const rendererService = new ServerRendererService(
+		serverConfiguraion.thumbnailViewportWidth,
+		serverConfiguraion.thumbnailViewportHeight,
+	);
 	const service = new APIRoomService(roomRepo, boardRepo, rendererService);
 	const controller = new APIRoomController(service);
 	const router = new APIRoomRouter(controller);

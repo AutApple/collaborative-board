@@ -77,7 +77,10 @@ export class BoardClient {
 		cursorController.subscribe(semanticEventBus);
 		rendererController.subscribe(semanticEventBus);
 
-		networkService.sendHandshake(this.getQueryRoommId(), appContext.room.getLocalCursor()!.worldCoords);
+		networkService.sendHandshake(
+			this.getQueryRoommId(),
+			appContext.room.getLocalCursor()!.worldCoords,
+		);
 	}
 	run() {
 		const socket: BoardClientSocket = io();

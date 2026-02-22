@@ -13,7 +13,7 @@ export class Camera {
 		private pos: Vec2 = new Vec2(0, 0),
 		private scale = 1,
 		private minCameraScale: number,
-		private maxCameraScale: number
+		private maxCameraScale: number,
 	) {
 		this.initialPos.set(pos.getXY());
 		this.initialScale = scale;
@@ -40,10 +40,7 @@ export class Camera {
 		const zoomFactor = factor < 0 ? 1.1 : 0.9;
 
 		this.scale *= zoomFactor;
-		this.scale = Math.min(
-			Math.max(this.scale, this.minCameraScale),
-			this.maxCameraScale,
-		);
+		this.scale = Math.min(Math.max(this.scale, this.minCameraScale), this.maxCameraScale);
 
 		this.pos = Vec2.fromXY(p.sub(mouse.mulScalar(this.scale)));
 	}

@@ -16,11 +16,7 @@ export class BoardElementsRenderLayer extends BaseRenderLayer {
 		super();
 	}
 
-	private renderElement(
-		ctx: SharedRenderingContext,
-		element: BaseBoardElement,
-		camera: Camera,
-	) {
+	private renderElement(ctx: SharedRenderingContext, element: BaseBoardElement, camera: Camera) {
 		switch (element.type) {
 			case BoardElementType.Stroke:
 				StrokeRenderer.render(ctx, element as StrokeBoardElement, camera);

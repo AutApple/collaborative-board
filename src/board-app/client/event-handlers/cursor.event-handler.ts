@@ -24,9 +24,9 @@ export class CursorEventHandler extends BaseEventHandler {
 		socket.to(roomId).emit(ServerBoardEvents.RemoteCursorMove, {
 			clientId: socket.id,
 			worldCoords: pos,
-			local: false
+			local: false,
 		});
-		
+
 		const cursorMap = room.getCursorMap();
 		cursorMap.setPosition(socket.id, pos);
 	}

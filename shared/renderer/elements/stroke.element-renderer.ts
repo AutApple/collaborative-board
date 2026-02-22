@@ -3,11 +3,7 @@ import type { Camera } from '../../camera/camera.js';
 import type { SharedRenderingContext } from '../shared-rendering-context.js';
 
 export class StrokeRenderer {
-	static render(
-		ctx: SharedRenderingContext,
-		element: StrokeBoardElement,
-		camera: Camera,
-	) {
+	static render(ctx: SharedRenderingContext, element: StrokeBoardElement, camera: Camera) {
 		const verts = element.getVertices();
 		if (verts.length === 0) return;
 

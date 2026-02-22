@@ -10,10 +10,7 @@ export class EventHandler {
 	private cameraInputHandler: CameraEventHandler;
 	private cursorEventHandler: CursorEventHandler;
 
-	constructor(
-		appContext: AppContext,
-		semanticEventBus: EventBus<SemanticEventMap>,
-	) {
+	constructor(appContext: AppContext, semanticEventBus: EventBus<SemanticEventMap>) {
 		this.boardInputHandler = new BoardEventHandler(appContext, semanticEventBus);
 		this.cameraInputHandler = new CameraEventHandler(appContext, semanticEventBus);
 		this.cursorEventHandler = new CursorEventHandler(semanticEventBus);

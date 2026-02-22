@@ -53,7 +53,7 @@ export class ToolboxController {
 		this.uiAdapter.setStrokeColor(e.value);
 
 		const localCursor = this.appContext.room.getLocalCursor();
-		
+
 		this.appContext.renderer.setLayerDataAndRender(
 			this.appContext.camera,
 			RenderLayerType.StrokePreview,
@@ -72,7 +72,7 @@ export class ToolboxController {
 			this.appContext.camera.worldToScreen(Vec2.fromXY(localCursor.worldCoords)),
 		);
 	}
-	
+
 	private onToolStartUsing(e: ToolStartUsingEvent, bus: EventBus<SemanticEventMap>) {
 		const toolResult = this.appContext.toolbox.startConstructing(
 			this.appContext.camera.screenToWorld(e.screenCoords),

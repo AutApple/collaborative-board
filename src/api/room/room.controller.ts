@@ -5,8 +5,7 @@ import { OutputRoomDTO } from './dtos/output-room.dto.js';
 import type { Room } from '../../board-app/generated/prisma/client.js';
 
 export class APIRoomController {
-	constructor(public readonly roomService: APIRoomService) {
-	}
+	constructor(public readonly roomService: APIRoomService) {}
 
 	public async getParam(req: Request, res: Response<any, { room: Room }>): Promise<void> {
 		res.status(200).json(OutputRoomDTO.fromModel(res.locals.room));

@@ -4,11 +4,7 @@ import type { Camera } from '../../camera/camera.js';
 import type { SharedRenderingContext } from '../shared-rendering-context.js';
 
 export class RectangleRenderer {
-	static render(
-		ctx: SharedRenderingContext,
-		element: RectangleBoardElement,
-		camera: Camera,
-	) {
+	static render(ctx: SharedRenderingContext, element: RectangleBoardElement, camera: Camera) {
 		const rect = element.getRectPoints();
 
 		const a = camera.worldToScreen(Vec2.fromXY(rect.topLeft));

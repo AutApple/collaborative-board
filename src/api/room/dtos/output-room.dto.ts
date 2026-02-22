@@ -4,7 +4,7 @@ export interface OutputBoardDTOType {
 	id: string;
 	name: string;
 	createdAt: Date;
-	pngBase64: string; 
+	pngBase64: string;
 }
 
 export class OutputRoomDTO {
@@ -13,7 +13,7 @@ export class OutputRoomDTO {
 			id: model.id,
 			name: model.name,
 			createdAt: model.createdAt,
-			pngBase64: Buffer.from(model.thumbnailPngBytes).toString('base64')
+			pngBase64: Buffer.from(model.thumbnailPngBytes).toString('base64'),
 		};
 	}
 }

@@ -3,9 +3,9 @@ import type { CreateRoomDTOType } from './dtos/create-room.dto.js';
 
 export class APIRoomRepository {
 	constructor(private dbClient: PrismaClient) {}
-	
+
 	public async find(id: string): Promise<Room | null> {
-		const room = await this.dbClient.room.findUnique({where: {id}});
+		const room = await this.dbClient.room.findUnique({ where: { id } });
 		return room;
 	}
 
@@ -13,7 +13,9 @@ export class APIRoomRepository {
 		const boards = await this.dbClient.room.findMany();
 		return boards;
 	}
-	public async insert(dto: CreateRoomDTOType & { thumbnailPngBytes: Uint8Array<ArrayBuffer>, boardId: string }): Promise<Room> {
+	public async insert(
+		dto: CreateRoomDTOType & { thumbnailPngBytes: Uint8Array<ArrayBuffer>; boardId: string },
+	): Promise<Room> {
 		return await this.dbClient.room.create({ data: dto });
 	}
 

@@ -1,8 +1,5 @@
 import type { BoardMutationList } from '@shared/board/board-mutation.js';
-import {
-	ClientBoardEvents,
-	type BoardClientSocket,
-} from '@shared/socket-events/socket-events.js';
+import { ClientBoardEvents, type BoardClientSocket } from '@shared/socket-events/socket-events.js';
 import type { XY } from '../../../../shared/utils/vec2.utils.js';
 
 export class NetworkService {

@@ -10,8 +10,8 @@ export class DebugStatsRenderLayer extends BaseRenderLayer {
 		boardDebugStats: {
 			boardId: 'Undefined',
 			overallElementsAmount: 0,
-			overallPointsAmount: 0
-		}
+			overallPointsAmount: 0,
+		},
 	};
 
 	constructor() {
@@ -20,13 +20,14 @@ export class DebugStatsRenderLayer extends BaseRenderLayer {
 	public updateData(debugStats: RoomDebugStats): void {
 		this.debugStats = debugStats;
 	}
-	public render(
-		ctx: SharedRenderingContext,
-		_: Camera,
-	): void {
+	public render(ctx: SharedRenderingContext, _: Camera): void {
 		ctx.save();
 		ctx.fillStyle = 'black';
-		ctx.fillText(`Overall elements: ${this.debugStats.boardDebugStats.overallElementsAmount}`, 16, 16);
+		ctx.fillText(
+			`Overall elements: ${this.debugStats.boardDebugStats.overallElementsAmount}`,
+			16,
+			16,
+		);
 		ctx.fillText(`Overall points: ${this.debugStats.boardDebugStats.overallPointsAmount}`, 16, 32);
 		ctx.fillText(`Board ID: ${this.debugStats.boardDebugStats.boardId}`, 16, 48);
 		ctx.fillText(`Room ID: ${this.debugStats.roomId}`, 16, 64);

@@ -4,11 +4,7 @@ import type { Camera } from '../../camera/camera.js';
 import type { SharedRenderingContext } from '../shared-rendering-context.js';
 
 export class OvalRenderer {
-	static render(
-		ctx: SharedRenderingContext,
-		element: OvalBoardElement,
-		camera: Camera,
-	) {
+	static render(ctx: SharedRenderingContext, element: OvalBoardElement, camera: Camera) {
 		// center + radii
 		const c = camera.worldToScreen(Vec2.fromXY(element.getCenter()));
 		const worldR = element.getRadius();

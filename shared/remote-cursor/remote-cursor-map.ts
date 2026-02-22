@@ -5,11 +5,11 @@ export class RemoteCursorMap {
 	private map: Map<string, Cursor> = new Map();
 
 	constructor(...remoteCursors: Cursor[]) {
-		for (const cursor of remoteCursors) this.map.set(cursor.clientId, cursor);		
+		for (const cursor of remoteCursors) this.map.set(cursor.clientId, cursor);
 	}
 
-	public addLocal(): void{
-		this.map.set('0', {clientId: '0', local: true, worldCoords: {x: 0, y: 0}});
+	public addLocal(): void {
+		this.map.set('0', { clientId: '0', local: true, worldCoords: { x: 0, y: 0 } });
 	}
 
 	public getLocal(): Cursor | undefined {

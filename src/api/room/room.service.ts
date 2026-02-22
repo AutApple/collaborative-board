@@ -4,8 +4,11 @@ import type { CreateRoomDTOType } from './dtos/create-room.dto.js';
 import type { APIBoardRepository } from '../board/board.repo.js';
 
 export class APIRoomService {
-	constructor(private roomRepo: APIRoomRepository, private boardRepo: APIBoardRepository, private rendererService: ServerRendererService) {
-	}
+	constructor(
+		private roomRepo: APIRoomRepository,
+		private boardRepo: APIBoardRepository,
+		private rendererService: ServerRendererService,
+	) {}
 
 	public async getAll() {
 		return await this.roomRepo.findMany();
@@ -13,14 +16,14 @@ export class APIRoomService {
 	public async get(id: string) {
 		return await this.roomRepo.find(id);
 	}
-	
+
 	public async create(dto: CreateRoomDTOType) {
 		const thumbnailPngBytes = this.rendererService.renderBlankToBytes();
 
 		// create board
 		const board = await this.boardRepo.insert({});
-		
-		return await this.roomRepo.insert({...dto, thumbnailPngBytes, boardId: board.id });
+
+		return await this.roomRepo.insert({ ...dto, thumbnailPngBytes, boardId: board.id });
 	}
 
 	public async update(id: string, dto: CreateRoomDTOType) {

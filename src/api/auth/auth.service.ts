@@ -10,7 +10,10 @@ import type { APIRefreshTokenService } from './refresh-token.service.js';
 import type { AccessTokenPayload } from './interfaces/access-token-payload.interface.js';
 
 export class APIAuthService {
-	constructor(private refreshTokenService: APIRefreshTokenService, private userService: APIUserService) {}
+	constructor(
+		private refreshTokenService: APIRefreshTokenService,
+		private userService: APIUserService,
+	) {}
 
 	private async generateAndStoreRefreshToken(userId: string): Promise<string> {
 		const token = crypto.randomBytes(32).toString('base64url');
@@ -20,7 +23,7 @@ export class APIAuthService {
 
 	private generateAccessToken(payload: AccessTokenPayload): string {
 		return jwt.sign(payload, env.JWT_ACCESS_SECRET, {
-			expiresIn: env.JWT_ACCESS_EXPIRATION_SECONDS
+			expiresIn: env.JWT_ACCESS_EXPIRATION_SECONDS,
 		});
 	}
 
@@ -30,18 +33,17 @@ export class APIAuthService {
 		const accessToken = this.generateAccessToken(payload);
 
 		return {
-			refreshToken, accessToken
+			refreshToken,
+			accessToken,
 		};
 	}
 
 	public async login(dto: LoginDTOType): Promise<AuthTokens | null> {
 		const { email } = dto;
 		const user = await this.userService.getUser(email);
-		if (!user) 
-			return null; 
+		if (!user) return null;
 
-		if (!await bcrypt.compare(dto.password, user.hashedPassword))
-			return null;
+		if (!(await bcrypt.compare(dto.password, user.hashedPassword))) return null;
 		return await this.makeTokens({ userId: user.id, email });
 	}
 
@@ -57,7 +59,7 @@ export class APIAuthService {
 	public async logout(rawRefreshToken: string): Promise<boolean> {
 		const result = await this.refreshTokenService.consumeRefreshToken(rawRefreshToken);
 		console.log(result);
-		return (result === null) ? false: true;
+		return result === null ? false : true;
 	}
 
 	public async refresh(rawRefreshToken: string): Promise<AuthTokens | null> {

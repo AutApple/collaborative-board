@@ -18,7 +18,11 @@ export class ClientRenderer {
 		],
 	);
 
-	constructor(private canvas: HTMLCanvasElement, private boardBackgroundColor = 'white', private debugMode: boolean = false) {
+	constructor(
+		private canvas: HTMLCanvasElement,
+		private boardBackgroundColor = 'white',
+		private debugMode: boolean = false,
+	) {
 		const _ctx = canvas.getContext('2d');
 		if (!_ctx) throw Error("Can't get 2D context of a canvas");
 		this.ctx = _ctx;

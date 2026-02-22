@@ -40,7 +40,7 @@ export class BoardEventHandler extends BaseEventHandler {
 		if (!roomId) return;
 
 		const room = await this.roomService.get(roomId);
-		if (!room) return;	
+		if (!room) return;
 
 		const board = room.getBoard();
 

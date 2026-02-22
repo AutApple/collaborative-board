@@ -30,10 +30,7 @@ export interface ReadonlyBoard {
 }
 
 export class Board implements ReadonlyBoard {
-	constructor(
-		private id?: string,
-	) {}
-
+	constructor(private id?: string) {}
 
 	getId(): string | undefined {
 		return this.id;
