@@ -3,8 +3,6 @@ import { validateDTO } from '../common/middleware/validate-dto.middleware.js';
 import type { APIAuthController } from './auth.controller.js';
 import { LoginDTO } from './dto/login.dto.js';
 import { RegisterDTO } from './dto/register.dto.js';
-import { RefreshTokenDTO } from './dto/refresh-token.dto.js';
-import { validateAndSetAccessToken } from './middleware/validateAccessToken.js';
 
 export class APIAuthRouter extends APIBaseRouter {
 	constructor(protected controller: APIAuthController) {
@@ -23,13 +21,11 @@ export class APIAuthRouter extends APIBaseRouter {
 
 		this.router.post(
 			'/logout',
-			validateDTO(RefreshTokenDTO),
 			this.controller.logout.bind(this.controller),
 		);
 
 		this.router.post(
 			'/refresh',
-			validateDTO(RefreshTokenDTO),
 			this.controller.refresh.bind(this.controller),
 		);
 	}

@@ -1,12 +1,21 @@
 import type { Request, Response } from 'express';
 import { Prisma } from '../../board-app/generated/prisma/client.js';
 import type { APIAuthService } from './auth.service.js';
-import type { RefreshTokenDTOType } from './dto/refresh-token.dto.js';
 import type { LoginDTOType } from './dto/login.dto.js';
 import type { RegisterDTOType } from './dto/register.dto.js';
+import { env } from '../../../shared/config/env.config.js';
 
 export class APIAuthController {
 	constructor(public readonly authService: APIAuthService) {}
+	
+	private setRefreshTokenCookie(res: Response, token: string) {
+		res.cookie("refresh_token", token, {
+			httpOnly: true,
+			secure: true,
+			sameSite: "strict",
+			maxAge: 1000 * 60 * 60 * 24 * env.JWT_REFRESH_EXPIRATION_DAYS,
+		});	
+	}
 
 	public async login(_: Request, res: Response<any, { dto: LoginDTOType }>) {
 		const tokens = await this.authService.login(res.locals.dto);
@@ -14,13 +23,17 @@ export class APIAuthController {
 			res.status(401).json({ message: 'Invalid credentials' });
 			return;
 		}
-		res.status(200).json(tokens);
+
+		this.setRefreshTokenCookie(res, tokens.refreshToken);
+		res.status(200).json({ accessToken: tokens.accessToken });
 	}
 
 	public async register(_: Request, res: Response<any, { dto: RegisterDTOType }>) {
 		try {
 			const tokens = await this.authService.register(res.locals.dto);
-			res.status(201).json(tokens);
+			this.setRefreshTokenCookie(res, tokens.refreshToken);
+			res.status(201).json({ accessToken: tokens.accessToken });
+
 		} catch (err) {
 			// uniqueness check
 			if (err instanceof Prisma.PrismaClientKnownRequestError)
@@ -29,16 +42,32 @@ export class APIAuthController {
 		}
 	}
 
-	public async logout(_: Request, res: Response<any, { dto: RefreshTokenDTOType }>) {
-		const success = await this.authService.logout(res.locals.dto.refreshToken);
+	public async logout(req: Request, res: Response<any>) {
+		const refreshToken = req.cookies.refresh_token; 
+
+		if (!refreshToken) {
+			res.status(401).json({ success: false }); 
+			return;
+		}
+
+		const success = await this.authService.logout(refreshToken);
 		res.status(200).json({ success });
 	}
-	public async refresh(_: Request, res: Response<any, { dto: RefreshTokenDTOType }>) {
-		const result = await this.authService.refresh(res.locals.dto.refreshToken);
-		if (!result) {
+	public async refresh(req: Request, res: Response) {
+		
+		const refreshToken = req.cookies.refresh_token; 
+		if (!refreshToken) {
+			res.status(401).json({ message: 'Invalid credentials' }); 
+			return;
+		}
+
+		const tokens = await this.authService.refresh(refreshToken);
+		if (!tokens) {
 			res.status(401).json({ message: 'Invalid credentials' });
 			return;
 		}
-		res.status(200).json(result);
+		
+		this.setRefreshTokenCookie(res, tokens.refreshToken);
+		res.status(200).json({ accessToken: tokens.accessToken });
 	}
 }
