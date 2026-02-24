@@ -9,13 +9,24 @@ export class APIAuthController {
 	constructor(public readonly authService: APIAuthService) {}
 	
 	private setRefreshTokenCookie(res: Response, token: string) {
-		res.cookie("refresh_token", token, {
+		res.cookie('refresh_token', token, {
 			httpOnly: true,
-			secure: true,
-			sameSite: "strict",
+			secure: env.NODE_ENV === 'PROD' ? true : false,
+			sameSite: 'strict',
+			// path: '/api/auth/refresh',
 			maxAge: 1000 * 60 * 60 * 24 * env.JWT_REFRESH_EXPIRATION_DAYS,
 		});	
 	}
+	private resetRefreshTokenCookie(res: Response) {
+		res.cookie('refresh_token', '', {
+			httpOnly: true,
+			secure: env.NODE_ENV === 'PROD' ? true : false,
+			sameSite: 'strict',
+			// path: '/api/auth/refresh',
+			maxAge: 0,
+		});	
+	}
+
 
 	public async login(_: Request, res: Response<any, { dto: LoginDTOType }>) {
 		const tokens = await this.authService.login(res.locals.dto);
@@ -51,6 +62,7 @@ export class APIAuthController {
 		}
 
 		const success = await this.authService.logout(refreshToken);
+		if (success) this.resetRefreshTokenCookie(res);
 		res.status(200).json({ success });
 	}
 	public async refresh(req: Request, res: Response) {

@@ -32,7 +32,7 @@
 			<h2 style="padding: 0; margin: 0">Log in into your account:</h2>
 			<div style="display: flex; align-items: center; gap: 1rem">
 				<label for="email-input" style="white-space: nowrap"> Email: </label>
-				<input id="email-input" style="flex: 1; min-width: 0" />
+				<input id="email-input" type="email"  style="flex: 1; min-width: 0" />
 
 				<div
 					id="email-input-errors"
@@ -58,14 +58,14 @@
 				</div>
 			</div>
 
-			<button id="sign-up-input">Log in</button>
+			<button id="log-in-input">Log in</button>
 		</div>
 
 		<div class="flex-column ml-default gap-small" style="max-width: 600px">
-			<h2 style="padding: 0; margin: 0">Or sign up if you are new:</h2>
+			<h2 style="padding: 0; margin: 0">Or sign up if you don't have an account yet:</h2>
 			<div style="display: flex; align-items: center; gap: 1rem">
 				<label for="su-email-input" style="white-space: nowrap"> Email: </label>
-				<input id="su-email-input" style="flex: 1; min-width: 0" />
+				<input id="su-email-input" type="email" style="flex: 1; min-width: 0" />
 
 				<div
 					id="su-email-input-errors"
@@ -80,7 +80,7 @@
 				style="display: flex; align-items: center; gap: 1rem; margin-top: 1rem; margin-bottom: 1rem"
 			>
 				<label for="username-input" style="white-space: nowrap"> Username: </label>
-				<input id="username-input" style="flex: 1; min-width: 0" />
+				<input id="username-input" type="text" style="flex: 1; min-width: 0" />
 
 				<div
 					id="username-input-errors"
@@ -120,5 +120,6 @@
 
 			<button id="sign-up-input">Sign up</button>
 		</div>
+		<script type="module" src="src/pages/sign-up.js"></script>
 	</body>
 </html>
