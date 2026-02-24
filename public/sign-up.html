@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Create Board</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+		/>
+		<link rel="stylesheet" href="style.css" />
+	</head>
+
+	<body>
+		<div class="flex-row ml-default">
+			<h1>Sign Up</h1>
+			<a
+				href="/"
+				style="text-decoration: none; color: #586aaa; font-size: 1.3rem; font-weight: 600"
+			>
+				Back to board list
+			</a>
+		</div>
+		<div class="flex-column ml-default gap-small" style="max-width: 600px">
+			<h2 style="padding: 0; margin: 0">Log in into your account:</h2>
+			<div style="display: flex; align-items: center; gap: 1rem">
+				<label for="email-input" style="white-space: nowrap"> Email: </label>
+				<input id="email-input" style="flex: 1; min-width: 0" />
+
+				<div
+					id="email-input-errors"
+					class="invisible"
+					style="color: #eb4848; align-items: center; gap: 0.4rem"
+				>
+					<i class="fa-solid fa-exclamation-triangle"></i>
+					<span id="email-input-error-content"></span>
+				</div>
+			</div>
+
+			<div style="display: flex; align-items: center; gap: 1rem">
+				<label for="password-input" style="white-space: nowrap"> Password: </label>
+				<input id="password-input" type="password" style="flex: 1; min-width: 0" />
+
+				<div
+					id="password-input-errors"
+					class="invisible"
+					style="color: #eb4848; align-items: center; gap: 0.4rem"
+				>
+					<i class="fa-solid fa-exclamation-triangle"></i>
+					<span id="password-input-error-content"></span>
+				</div>
+			</div>
+
+			<button id="sign-up-input">Log in</button>
+		</div>
+
+		<div class="flex-column ml-default gap-small" style="max-width: 600px">
+			<h2 style="padding: 0; margin: 0">Or sign up if you are new:</h2>
+			<div style="display: flex; align-items: center; gap: 1rem">
+				<label for="su-email-input" style="white-space: nowrap"> Email: </label>
+				<input id="su-email-input" style="flex: 1; min-width: 0" />
+
+				<div
+					id="su-email-input-errors"
+					class="invisible"
+					style="color: #eb4848; align-items: center; gap: 0.4rem"
+				>
+					<i class="fa-solid fa-exclamation-triangle"></i>
+					<span id="su-email-input-error-content"></span>
+				</div>
+			</div>
+			<div
+				style="display: flex; align-items: center; gap: 1rem; margin-top: 1rem; margin-bottom: 1rem"
+			>
+				<label for="username-input" style="white-space: nowrap"> Username: </label>
+				<input id="username-input" style="flex: 1; min-width: 0" />
+
+				<div
+					id="username-input-errors"
+					class="invisible"
+					style="color: #eb4848; align-items: center; gap: 0.4rem"
+				>
+					<i class="fa-solid fa-exclamation-triangle"></i>
+					<span id="username-input-error-content"></span>
+				</div>
+			</div>
+			<div style="display: flex; align-items: center; gap: 1rem">
+				<label for="su-password-input" style="white-space: nowrap"> Password: </label>
+				<input id="su-password-input" type="password" style="flex: 1; min-width: 0" />
+
+				<div
+					id="password-input-errors"
+					class="invisible"
+					style="color: #eb4848; align-items: center; gap: 0.4rem"
+				>
+					<i class="fa-solid fa-exclamation-triangle"></i>
+					<span id="su-password-input-error-content"></span>
+				</div>
+			</div>
+			<div style="display: flex; align-items: center; gap: 1rem">
+				<label for="confirm-password-input" style="white-space: nowrap"> Confirm password: </label>
+				<input id="confirm-password-input" type="password" style="flex: 1; min-width: 0" />
+
+				<div
+					id="confirm-password-input-errors"
+					class="invisible"
+					style="color: #eb4848; align-items: center; gap: 0.4rem"
+				>
+					<i class="fa-solid fa-exclamation-triangle"></i>
+					<span id="confirm-password-input-error-content"></span>
+				</div>
+			</div>
+
+			<button id="sign-up-input">Sign up</button>
+		</div>
+	</body>
+</html>

@@ -8,6 +8,7 @@ import { createAndMapApiModules } from './api/index.js';
 import { initPageRoutes } from './pages.js';
 
 import { env } from '@shared/config/env.config.js';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 const httpServer = createServer(app);
@@ -16,6 +17,7 @@ const boardApp = new BoardServer(httpServer);
 boardApp.run();
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.static(path.join(__rootdir, 'public-dist')));
 
 createAndMapApiModules(app);

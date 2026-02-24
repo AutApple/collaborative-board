@@ -9,6 +9,9 @@ export function initPageRoutes(app: Application) {
 	app.get('/create-board', (_, res) => {
 		res.sendFile(path.join(__rootdir, 'public-dist', 'create-board.html'));
 	});
+	app.get('/sign-up', (_, res) => {
+		res.sendFile(path.join(__rootdir, 'public-dist', 'sign-up.html'));
+	});
 	app.get('/board', (_, res) => {
 		res.sendFile(path.join(__rootdir, 'public-dist', 'app.html'));
 	});
