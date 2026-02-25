@@ -58,7 +58,6 @@ export class APIAuthService {
 
 	public async logout(rawRefreshToken: string): Promise<boolean> {
 		const result = await this.refreshTokenService.consumeRefreshToken(rawRefreshToken);
-		console.log(result);
 		return result === null ? false : true;
 	}
 

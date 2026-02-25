@@ -1,4 +1,4 @@
-import authApi from '../api/auth.client-api.js';
+import authApi from '../api/auth/auth.client-api.js';
 
 document.addEventListener('DOMContentLoaded', async (e) => {
     await authApi.logout();

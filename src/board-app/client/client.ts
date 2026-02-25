@@ -49,8 +49,6 @@ export class Client {
 	public setRoomId(id: string) {
 		this.roomId = id;
 		this.socket.join(this.roomId);
-
-		console.log(`Socket with id ${this.socket.id} joined ${this.roomId}`);
 	}
 
 	public getRoomId() {

@@ -1,7 +1,6 @@
-import { access } from 'node:fs';
-import authApi from '../api/auth.client-api.js';
-import clientRoomsApi from '../api/rooms.client-api.js';
-import usersApi from '../api/users.client-api.js';
+import authApi from '../api/auth/auth.client-api.js';
+import clientRoomsApi from '../api/rooms/rooms.client-api.js';
+import usersApi from '../api/users/users.client-api.js';
 
 function addBoardCard(
 	template: HTMLTemplateElement,
@@ -59,7 +58,7 @@ async function checkAuth(signUpTemplate: HTMLTemplateElement, userInfoTemplate: 
 
 	const user = await usersApi.getMe(accessToken);
 	const userInfoWelcome = document.getElementById('user-info-text');
-	if (!userInfoWelcome) console.log('can\'t find');
+	if (!userInfoWelcome) throw new Error('can\'t find user info element');
 	else userInfoWelcome.innerText = `Welcome, ${user?.username}`;
 	
 }
