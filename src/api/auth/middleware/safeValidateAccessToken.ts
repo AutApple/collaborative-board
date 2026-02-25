@@ -3,29 +3,29 @@ import jwt from 'jsonwebtoken';
 import { env } from '../../../../shared/config/env.config.js';
 import type { AccessTokenPayload } from '../interfaces/access-token-payload.interface.js';
 
-export const validateAndSetAccessToken = async (
+export const safeValidateAndSetAccessTokenn = async (
 	req: Request,
 	res: Response<
 		any,
-		{ jwtPayload: AccessTokenPayload }
+		{ jwtPayload: AccessTokenPayload | undefined }
 	>,
 	next: NextFunction,
 ) => {
 	const authHeader = req.headers.authorization;
-	if (!authHeader) return res.status(401).json({ message: 'Invalid credentials' });
+	if (!authHeader) return next();
 
 	const headerSegments = authHeader.split(' ');
 	if (headerSegments.length !== 2 || headerSegments[0] !== 'Bearer') return res.status(401).json({ message: 'Invalid credentials' });
 	
 	const accessToken = headerSegments[1];
-	if (!accessToken) return res.status(401).json({ message: 'Invalid credentials' });
+	if (!accessToken) return next();
 
 	const jwtPayload = jwt.verify(
 		accessToken,
 		env.JWT_ACCESS_SECRET,
 	) as AccessTokenPayload;
 
-	if (!jwtPayload) return res.status(401).json({ message: 'Invalid credentials' });
+	if (!jwtPayload) return next();
 
 	res.locals.jwtPayload = jwtPayload;
 	next();

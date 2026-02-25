@@ -18,6 +18,7 @@ export default defineConfig({
 				app: path.resolve(ROOT, 'public/app.html'),
 				notFound: path.resolve(__dirname, 'public/404.html'),
 				signUp: path.resolve(__dirname, 'public/sign-up.html'),
+				logout: path.resolve(__dirname, 'public/logout.html')
 			},
 		},
 	},

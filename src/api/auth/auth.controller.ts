@@ -66,13 +66,12 @@ export class APIAuthController {
 		res.status(200).json({ success });
 	}
 	public async refresh(req: Request, res: Response) {
-		
 		const refreshToken = req.cookies.refresh_token; 
 		if (!refreshToken) {
 			res.status(401).json({ message: 'Invalid credentials' }); 
 			return;
 		}
-
+		
 		const tokens = await this.authService.refresh(refreshToken);
 		if (!tokens) {
 			res.status(401).json({ message: 'Invalid credentials' });

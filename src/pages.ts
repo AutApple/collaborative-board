@@ -9,9 +9,24 @@ export function initPageRoutes(app: Application) {
 	app.get('/create-board', (_, res) => {
 		res.sendFile(path.join(__rootdir, 'public-dist', 'create-board.html'));
 	});
-	app.get('/sign-up', (_, res) => {
+	app.get('/sign-up', (req, res) => {
+		if (req.cookies.refresh_token) {
+			res.sendFile(path.join(__rootdir, 'public-dist', 'index.html'));
+			return;
+		}
+		 // Page only for unauthorized users
 		res.sendFile(path.join(__rootdir, 'public-dist', 'sign-up.html'));
 	});
+
+	app.get('/logout', (req, res) => {
+		if (!req.cookies.refresh_token) {
+			res.sendFile(path.join(__rootdir, 'public-dist', 'index.html'));
+			return;
+		}
+		 // Page only for authorized users
+		res.sendFile(path.join(__rootdir, 'public-dist', 'logout.html'));
+	});
+
 	app.get('/board', (_, res) => {
 		res.sendFile(path.join(__rootdir, 'public-dist', 'app.html'));
 	});

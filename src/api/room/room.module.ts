@@ -8,7 +8,7 @@ import { ServerRendererService } from '../../shared/renderer/renderer.service.js
 import { serverConfiguraion } from '../../config/server.config.js';
 import { APIBoardRepository } from '../board/board.repo.js';
 
-export default function createRoomApiModule(): Router {
+export default function createRoomApiModule() {
 	const roomRepo = new APIRoomRepository(dbClient);
 	const boardRepo = new APIBoardRepository(dbClient);
 
@@ -20,5 +20,8 @@ export default function createRoomApiModule(): Router {
 	const controller = new APIRoomController(service);
 	const router = new APIRoomRouter(controller);
 
-	return router.getRouter();
+	return {
+		router: router.getRouter(),
+		service
+	};
 }

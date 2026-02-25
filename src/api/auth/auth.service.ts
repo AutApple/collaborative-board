@@ -66,8 +66,10 @@ export class APIAuthService {
 		// revoke it and make a new one, make a new access token as well
 		const revokedToken = await this.refreshTokenService.consumeRefreshToken(rawRefreshToken);
 		if (!revokedToken) return null;
+	
 		const user = await this.userService.getUserById(revokedToken.userId);
 		if (!user) return null;
+	
 		return this.makeTokens({ userId: user.id, email: user.email });
 	}
 }

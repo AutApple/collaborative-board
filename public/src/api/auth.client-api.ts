@@ -49,6 +49,20 @@ class ClientAuthAPI {
         return data.accessToken;
     }
 
+        async logout(): Promise<boolean> {
+            const response = await fetch(`${this.url}/logout`, { method: 'POST', 
+                credentials: 'include', 
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error || 'Failed to logout');
+            }
+            const result = await response.json();
+            if (result.success === undefined)  throw new Error('Unexpected error on logout');
+            return result.success;
+        }
+
 }
 
 const authApi = new ClientAuthAPI('/api/auth');

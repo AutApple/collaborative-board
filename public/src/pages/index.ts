@@ -1,4 +1,7 @@
+import { access } from 'node:fs';
+import authApi from '../api/auth.client-api.js';
 import clientRoomsApi from '../api/rooms.client-api.js';
+import usersApi from '../api/users.client-api.js';
 
 function addBoardCard(
 	template: HTMLTemplateElement,
@@ -42,3 +45,28 @@ if (!boardContainer || !boardCardTemplate || boardContainer === null || boardCar
 	);
 
 addCards(boardCardTemplate, boardContainer);
+
+async function checkAuth(signUpTemplate: HTMLTemplateElement, userInfoTemplate: HTMLTemplateElement, container: HTMLDivElement) {
+	const accessToken = await authApi.getAccessToken();
+	
+	if (!accessToken) {
+		const clone = signUpTemplate.content.cloneNode(true)  as HTMLTemplateElement;
+		container.appendChild(clone);
+		return;
+	}
+	const clone = userInfoTemplate.content.cloneNode(true)  as HTMLTemplateElement;
+	container.appendChild(clone);
+
+	const user = await usersApi.getMe(accessToken);
+	const userInfoWelcome = document.getElementById('user-info-text');
+	if (!userInfoWelcome) console.log('can\'t find');
+	else userInfoWelcome.innerText = `Welcome, ${user?.username}`;
+	
+}
+
+
+const signUpTemplate = document.getElementById('sign-up-template') as HTMLTemplateElement;
+const userInfoTemplate = document.getElementById('user-info-template') as HTMLTemplateElement;
+const userContainer = document.getElementById('user-container') as HTMLDivElement;
+
+checkAuth(signUpTemplate, userInfoTemplate, userContainer);

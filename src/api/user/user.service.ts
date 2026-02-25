@@ -10,6 +10,13 @@ export class APIUserService {
 		const user = await this.userRepo.find(email);
 		return user;
 	}
+
+	public async getUserSafe(email: string): Promise<Partial<User> | null> {
+		const user = await this.userRepo.find(email);
+		if (!user) return null;
+		return { email: user.email, username: user.username, createdAt: user.createdAt };
+	}
+
 	public async getUserById(id: string): Promise<User | null> {
 		const user = await this.userRepo.findById(id);
 		return user;
