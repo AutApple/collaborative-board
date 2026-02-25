@@ -48,7 +48,7 @@ export class APIAuthController {
 		} catch (err) {
 			// uniqueness check
 			if (err instanceof Prisma.PrismaClientKnownRequestError)
-				if (err.code === 'P2002') return res.status(409).json({ message: 'User already exists' });
+				if (err.code === 'P2002') return res.status(409).json({ errors: [{ field: 'email', message: 'User with specified email already exists' }]});
 			throw err;
 		}
 	}

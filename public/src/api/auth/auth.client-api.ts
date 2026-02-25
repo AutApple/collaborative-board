@@ -1,3 +1,15 @@
+import { SignUpValidationErrorSchema } from './sign-up-error.schema.js';
+
+export class AuthValidationError extends Error {
+  public errors: { field: string; message: string }[];
+
+  constructor(errors: { field: string; message: string }[]) {
+    super("Validation error");
+    this.name = "ValidationError";
+    this.errors = errors;
+  }
+}
+
 class ClientAuthAPI {
     private accessToken: string | undefined;
 	constructor(private url: string) {}
@@ -22,10 +34,9 @@ class ClientAuthAPI {
             body: JSON.stringify({ email, password }),
          });
 
-        if (!response.ok) {
-			const error = await response.json();
-			throw new Error(error || 'Failed to login');
-		}
+        if (!response.ok)
+            throw new Error('Invalid credentials');
+		
         const data = await response.json();
         if (!data.accessToken) throw new Error('Did not recieve access token');
         return data.accessToken;
@@ -41,8 +52,16 @@ class ClientAuthAPI {
          });
 
         if (!response.ok) {
-			const error = await response.json();
-			throw new Error(error || 'Failed to register');
+			const raw = await response.json();
+
+            const parsed = SignUpValidationErrorSchema.safeParse(raw);
+
+            if (!parsed.success) {
+                throw new Error("Unexpected error");
+            }
+
+            const errorData = parsed.data;
+            throw new AuthValidationError(errorData.errors);
 		}
         const data = await response.json();
         if (!data.accessToken) throw new Error('Did not recieve access token');
@@ -56,7 +75,8 @@ class ClientAuthAPI {
 
             if (!response.ok) {
                 const error = await response.json();
-                throw new Error(error || 'Failed to logout');
+                const parsed = JSON.parse(error);
+                throw new Error(parsed || 'Failed to logout');
             }
             const result = await response.json();
             if (result.success === undefined)  throw new Error('Unexpected error on logout');

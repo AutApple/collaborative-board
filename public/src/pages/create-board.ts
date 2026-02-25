@@ -1,4 +1,4 @@
-import clientRoomsApi from '../api/rooms.client-api.js';
+import clientRoomsApi from '../api/rooms/rooms.client-api.js';
 
 const createButton = document.getElementById('board-create-input');
 const createInput = document.getElementById('board-name-input') as HTMLInputElement;

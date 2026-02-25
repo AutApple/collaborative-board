@@ -17,8 +17,7 @@ class ClientUsersAPI {
 		if (!response.ok) return null;
 
 		const result = await response.json();
-		console.log(result);
-        if (!result.email || !result.username || !result.createdAt) return null;
+		if (!result.email || !result.username || !result.createdAt) return null;
         return result;
 	}
 

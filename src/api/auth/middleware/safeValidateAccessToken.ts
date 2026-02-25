@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { env } from '../../../../shared/config/env.config.js';
 import type { AccessTokenPayload } from '../interfaces/access-token-payload.interface.js';
 
-export const safeValidateAndSetAccessTokenn = async (
+export const safeValidateAndSetAccessToken = async (
 	req: Request,
 	res: Response<
 		any,
