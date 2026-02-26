@@ -2,6 +2,8 @@ import type { ServerRendererService } from '../../shared/renderer/renderer.servi
 import type { APIRoomRepository } from './room.repo.js';
 import type { CreateRoomDTOType } from './dtos/create-room.dto.js';
 import type { APIBoardRepository } from '../board/board.repo.js';
+import type { APIUserService } from '../user/user.service.js';
+import type { AccessTokenPayload } from '../auth/interfaces/access-token-payload.interface.js';
 
 export class APIRoomService {
 	constructor(
@@ -10,20 +12,21 @@ export class APIRoomService {
 		private rendererService: ServerRendererService,
 	) {}
 
-	public async getAll() {
-		return await this.roomRepo.findMany();
+	public async getPublic() {
+		return await this.roomRepo.findPublic();
 	}
 	public async get(id: string) {
 		return await this.roomRepo.find(id);
 	}
 
-	public async create(dto: CreateRoomDTOType) {
+	public async create(dto: CreateRoomDTOType, jwtPayload: AccessTokenPayload | undefined) {
+		if (jwtPayload === undefined && dto.public === true) dto.public = false; // TODO: make this shitty code more elegant
 		const thumbnailPngBytes = this.rendererService.renderBlankToBytes();
 
 		// create board
 		const board = await this.boardRepo.insert({});
 
-		return await this.roomRepo.insert({ ...dto, thumbnailPngBytes, boardId: board.id });
+		return await this.roomRepo.insert({ ...dto, thumbnailPngBytes, boardId: board.id, authorId: jwtPayload?.userId ?? null });
 	}
 
 	public async update(id: string, dto: CreateRoomDTOType) {

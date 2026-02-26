@@ -6,7 +6,7 @@ export interface ClientAPIRoom {
 }
 class ClientRoomsAPI {
 	constructor(private url: string) {}
-	async getRooms(): Promise<Array<ClientAPIRoom>> {
+	async getPublicRooms(): Promise<Array<ClientAPIRoom>> {
 		const response = await fetch(this.url);
 		if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 		const boards = await response.json();
@@ -20,13 +20,14 @@ class ClientRoomsAPI {
 		return boards;
 	}
 
-	async addRoom(name: string): Promise<ClientAPIRoom> {
+	async addRoom(name: string, isPublic: boolean, accessToken?: string | undefined): Promise<ClientAPIRoom> {
 		const response = await fetch(this.url, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
+				'Authorization': `Bearer ${accessToken}`
 			},
-			body: JSON.stringify({ name: name.trim() }),
+			body: JSON.stringify({ name: name.trim(), public: isPublic }),
 		});
 
 		if (!response.ok) {

@@ -1,0 +1,1 @@
+export type AnyResponseLocals = Record<string, unknown>;

@@ -5,10 +5,7 @@ import type { AccessTokenPayload } from '../interfaces/access-token-payload.inte
 
 export const validateAndSetAccessToken = async (
 	req: Request,
-	res: Response<
-		any,
-		{ jwtPayload: AccessTokenPayload }
-	>,
+	res: Response,
 	next: NextFunction,
 ) => {
 	const authHeader = req.headers.authorization;
@@ -20,12 +17,17 @@ export const validateAndSetAccessToken = async (
 	const accessToken = headerSegments[1];
 	if (!accessToken) return res.status(401).json({ message: 'Invalid credentials' });
 
-	const jwtPayload = jwt.verify(
-		accessToken,
-		env.JWT_ACCESS_SECRET,
-	) as AccessTokenPayload;
-
-	if (!jwtPayload) return res.status(401).json({ message: 'Invalid credentials' });
+	let jwtPayload = undefined;
+	try {
+		jwtPayload = jwt.verify(
+			accessToken,
+			env.JWT_ACCESS_SECRET,
+		) as AccessTokenPayload;
+	} catch (err: any) {
+		return res.status(401).json({ message: 'Invalid credentials '});
+	}
+	
+	if (jwtPayload === undefined) return res.status(401).json({ message: 'Invalid credentials' });
 
 	res.locals.jwtPayload = jwtPayload;
 	next();

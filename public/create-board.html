@@ -31,9 +31,8 @@
 
 		<div class="flex-column ml-default gap-small" style="max-width: 600px">
 			<div style="display: flex; align-items: center; gap: 1rem">
-				<label for="board-name-input" style="white-space: nowrap"> Board name: </label>
-
-				<input id="board-name-input" style="flex: 1; min-width: 0" />
+				<label for="board-name-input" style="white-space: nowrap"> <b>Board name:</b> </label>
+				<input id="board-name-input" type="text" style="flex: 1; min-width: 0" />
 
 				<div
 					id="board-name-input-errors"
@@ -44,7 +43,14 @@
 					<span id="board-name-input-error-content"></span>
 				</div>
 			</div>
-
+			<div style="display: flex; align-items: center; gap: 1rem">
+				<b>Board visibility:</b>
+				<input id="board-public-input" name="board-visibility" type = "radio" disabled/>
+				<label for="board-public-input" style="white-space: nowrap"> Public </label>
+				<input id="board-private-input" name="board-visibility" type = "radio" checked disabled/>
+				<label for="board-private-input" style="white-space: nowrap"> Private </label>
+				<span id="board-visibility-warning" style="color: red">Sign up in order to create public boards</span>
+			</div>
 			<button id="board-create-input">Create board</button>
 		</div>
 		<script type="module" src="src/pages/create-board.js"></script>

@@ -9,12 +9,12 @@ export class APIRoomRepository {
 		return room;
 	}
 
-	public async findMany(): Promise<Room[]> {
-		const boards = await this.dbClient.room.findMany();
+	public async findPublic(): Promise<Room[]> {
+		const boards = await this.dbClient.room.findMany({where: {public: true}});
 		return boards;
 	}
 	public async insert(
-		dto: CreateRoomDTOType & { thumbnailPngBytes: Uint8Array<ArrayBuffer>; boardId: string },
+		dto: CreateRoomDTOType & { thumbnailPngBytes: Uint8Array<ArrayBuffer>; boardId: string; authorId: string | null },
 	): Promise<Room> {
 		return await this.dbClient.room.create({ data: dto });
 	}

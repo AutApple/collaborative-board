@@ -5,10 +5,7 @@ import type { AccessTokenPayload } from '../interfaces/access-token-payload.inte
 
 export const safeValidateAndSetAccessToken = async (
 	req: Request,
-	res: Response<
-		any,
-		{ jwtPayload: AccessTokenPayload | undefined }
-	>,
+	res: Response,
 	next: NextFunction,
 ) => {
 	const authHeader = req.headers.authorization;
@@ -20,12 +17,17 @@ export const safeValidateAndSetAccessToken = async (
 	const accessToken = headerSegments[1];
 	if (!accessToken) return next();
 
-	const jwtPayload = jwt.verify(
-		accessToken,
-		env.JWT_ACCESS_SECRET,
-	) as AccessTokenPayload;
+	let jwtPayload = undefined;
+	try {
+		jwtPayload = jwt.verify(
+			accessToken,
+			env.JWT_ACCESS_SECRET,
+		) as AccessTokenPayload;
+	} catch (err: any) {
+		return next();
+	}
 
-	if (!jwtPayload) return next();
+	if (jwtPayload === undefined) return next();
 
 	res.locals.jwtPayload = jwtPayload;
 	next();

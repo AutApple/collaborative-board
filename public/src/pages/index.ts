@@ -30,7 +30,7 @@ function addBoardCard(
 }
 
 async function addCards(template: HTMLTemplateElement, container: HTMLDivElement) {
-	const boards = await clientRoomsApi.getRooms();
+	const boards = await clientRoomsApi.getPublicRooms();
 	for (const board of boards)
 		addBoardCard(template, container, board.name, board.id, board.pngBase64);
 }

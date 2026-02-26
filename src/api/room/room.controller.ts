@@ -3,6 +3,7 @@ import type { APIRoomService } from './room.service.js';
 import { type CreateRoomDTOType } from './dtos/create-room.dto.js';
 import { OutputRoomDTO } from './dtos/output-room.dto.js';
 import type { Room } from '../../board-app/generated/prisma/client.js';
+import type { AccessTokenPayload } from '../auth/interfaces/access-token-payload.interface.js';
 
 export class APIRoomController {
 	constructor(public readonly roomService: APIRoomService) {}
@@ -12,13 +13,13 @@ export class APIRoomController {
 	}
 
 	public async get(_: Request, res: Response): Promise<void> {
-		const models = await this.roomService.getAll();
+		const models = await this.roomService.getPublic();
 		res.status(200).json(models.map((m) => OutputRoomDTO.fromModel(m)));
 	}
 
-	public async post(_: Request, res: Response<any, { dto: CreateRoomDTOType }>): Promise<void> {
+	public async post(_: Request, res: Response<any, { dto: CreateRoomDTOType, jwtPayload: AccessTokenPayload | undefined }>): Promise<void> {
 		const dto = res.locals.dto;
-		const createdRoom = await this.roomService.create(dto);
+		const createdRoom = await this.roomService.create(dto, res.locals.jwtPayload);
 		res.status(201).json(OutputRoomDTO.fromModel(createdRoom));
 	}
 
