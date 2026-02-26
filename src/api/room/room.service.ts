@@ -26,7 +26,12 @@ export class APIRoomService {
 		// create board
 		const board = await this.boardRepo.insert({});
 
-		return await this.roomRepo.insert({ ...dto, thumbnailPngBytes, boardId: board.id, authorId: jwtPayload?.userId ?? null });
+		return await this.roomRepo.insert({
+			...dto,
+			thumbnailPngBytes,
+			boardId: board.id,
+			authorId: jwtPayload?.userId ?? null,
+		});
 	}
 
 	public async update(id: string, dto: CreateRoomDTOType) {

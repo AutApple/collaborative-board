@@ -20,12 +20,16 @@ class ClientRoomsAPI {
 		return boards;
 	}
 
-	async addRoom(name: string, isPublic: boolean, accessToken?: string | undefined): Promise<ClientAPIRoom> {
+	async addRoom(
+		name: string,
+		isPublic: boolean,
+		accessToken?: string | undefined,
+	): Promise<ClientAPIRoom> {
 		const response = await fetch(this.url, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
-				'Authorization': `Bearer ${accessToken}`
+				Authorization: `Bearer ${accessToken}`,
 			},
 			body: JSON.stringify({ name: name.trim(), public: isPublic }),
 		});

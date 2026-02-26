@@ -12,21 +12,19 @@ export const validateAndSetAccessToken = async (
 	if (!authHeader) return res.status(401).json({ message: 'Invalid credentials' });
 
 	const headerSegments = authHeader.split(' ');
-	if (headerSegments.length !== 2 || headerSegments[0] !== 'Bearer') return res.status(401).json({ message: 'Invalid credentials' });
-	
+	if (headerSegments.length !== 2 || headerSegments[0] !== 'Bearer')
+		return res.status(401).json({ message: 'Invalid credentials' });
+
 	const accessToken = headerSegments[1];
 	if (!accessToken) return res.status(401).json({ message: 'Invalid credentials' });
 
 	let jwtPayload = undefined;
 	try {
-		jwtPayload = jwt.verify(
-			accessToken,
-			env.JWT_ACCESS_SECRET,
-		) as AccessTokenPayload;
+		jwtPayload = jwt.verify(accessToken, env.JWT_ACCESS_SECRET) as AccessTokenPayload;
 	} catch (err: any) {
-		return res.status(401).json({ message: 'Invalid credentials '});
+		return res.status(401).json({ message: 'Invalid credentials ' });
 	}
-	
+
 	if (jwtPayload === undefined) return res.status(401).json({ message: 'Invalid credentials' });
 
 	res.locals.jwtPayload = jwtPayload;

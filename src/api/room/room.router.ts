@@ -33,10 +33,12 @@ export class APIRoomRouter extends APIBaseRouter {
 			checkRoomExists(this.controller.roomService),
 			this.controller.put.bind(this.controller),
 		);
-		this.router.post('/', 
+		this.router.post(
+			'/',
 			validateDTO(CreateRoomDTO),
-			safeValidateAndSetAccessToken, 
-			this.controller.post.bind(this.controller));
+			safeValidateAndSetAccessToken,
+			this.controller.post.bind(this.controller),
+		);
 		this.router.delete(
 			'/:param',
 			validateUUIDParam,

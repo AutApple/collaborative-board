@@ -22,6 +22,6 @@ export default function createRoomApiModule() {
 
 	return {
 		router: router.getRouter(),
-		service
+		service,
 	};
 }

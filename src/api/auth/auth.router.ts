@@ -19,14 +19,8 @@ export class APIAuthRouter extends APIBaseRouter {
 			this.controller.register.bind(this.controller),
 		);
 
-		this.router.post(
-			'/logout',
-			this.controller.logout.bind(this.controller),
-		);
+		this.router.post('/logout', this.controller.logout.bind(this.controller));
 
-		this.router.post(
-			'/refresh',
-			this.controller.refresh.bind(this.controller),
-		);
+		this.router.post('/refresh', this.controller.refresh.bind(this.controller));
 	}
 }

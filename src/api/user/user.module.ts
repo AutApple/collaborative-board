@@ -6,12 +6,12 @@ import { APIUserService } from './user.service.js';
 
 export default function createUserApiModule() {
 	const userRepo = new APIUserRepository(dbClient);
-	const userService = new APIUserService(userRepo); 
+	const userService = new APIUserService(userRepo);
 	const controller = new APIUserController(userService);
 	const router = new APIUserRouter(controller);
 
 	return {
-		router: router.getRouter(), 
-		service: userService
+		router: router.getRouter(),
+		service: userService,
 	};
 }

@@ -7,8 +7,6 @@ import { APIUserService } from '../user/user.service.js';
 import { APIRefreshTokenRepository } from './refresh-token.repo.js';
 import { APIRefreshTokenService } from './refresh-token.service.js';
 
-
-
 export default function createAuthApiModule(userService: APIUserService) {
 	const refreshTokenRepo = new APIRefreshTokenRepository(dbClient);
 	const refreshTokenService = new APIRefreshTokenService(refreshTokenRepo);
@@ -19,7 +17,7 @@ export default function createAuthApiModule(userService: APIUserService) {
 	const router = new APIAuthRouter(controller);
 
 	return {
-		router: router.getRouter(), 
-		service: [authService, refreshTokenService]
+		router: router.getRouter(),
+		service: [authService, refreshTokenService],
 	};
 }

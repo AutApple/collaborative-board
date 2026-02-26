@@ -14,7 +14,7 @@ export function initPageRoutes(app: Application) {
 			res.sendFile(path.join(__rootdir, 'public-dist', 'index.html'));
 			return;
 		}
-		 // Page only for unauthorized users
+		// Page only for unauthorized users
 		res.sendFile(path.join(__rootdir, 'public-dist', 'sign-up.html'));
 	});
 
@@ -23,7 +23,7 @@ export function initPageRoutes(app: Application) {
 			res.sendFile(path.join(__rootdir, 'public-dist', 'index.html'));
 			return;
 		}
-		 // Page only for authorized users
+		// Page only for authorized users
 		res.sendFile(path.join(__rootdir, 'public-dist', 'logout.html'));
 	});
 

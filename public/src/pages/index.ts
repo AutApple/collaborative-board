@@ -45,24 +45,26 @@ if (!boardContainer || !boardCardTemplate || boardContainer === null || boardCar
 
 addCards(boardCardTemplate, boardContainer);
 
-async function checkAuth(signUpTemplate: HTMLTemplateElement, userInfoTemplate: HTMLTemplateElement, container: HTMLDivElement) {
+async function checkAuth(
+	signUpTemplate: HTMLTemplateElement,
+	userInfoTemplate: HTMLTemplateElement,
+	container: HTMLDivElement,
+) {
 	const accessToken = await authApi.getAccessToken();
-	
+
 	if (!accessToken) {
-		const clone = signUpTemplate.content.cloneNode(true)  as HTMLTemplateElement;
+		const clone = signUpTemplate.content.cloneNode(true) as HTMLTemplateElement;
 		container.appendChild(clone);
 		return;
 	}
-	const clone = userInfoTemplate.content.cloneNode(true)  as HTMLTemplateElement;
+	const clone = userInfoTemplate.content.cloneNode(true) as HTMLTemplateElement;
 	container.appendChild(clone);
 
 	const user = await usersApi.getMe(accessToken);
 	const userInfoWelcome = document.getElementById('user-info-text');
-	if (!userInfoWelcome) throw new Error('can\'t find user info element');
+	if (!userInfoWelcome) throw new Error("can't find user info element");
 	else userInfoWelcome.innerText = `Welcome, ${user?.username}`;
-	
 }
-
 
 const signUpTemplate = document.getElementById('sign-up-template') as HTMLTemplateElement;
 const userInfoTemplate = document.getElementById('user-info-template') as HTMLTemplateElement;
