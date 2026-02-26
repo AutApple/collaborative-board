@@ -3,7 +3,8 @@ import type { APIRoomService } from './room.service.js';
 import { type CreateRoomDTOType } from './dtos/create-room.dto.js';
 import { OutputRoomDTO } from './dtos/output-room.dto.js';
 import type { Room } from '../../board-app/generated/prisma/client.js';
-import type { AccessTokenPayload } from '../auth/interfaces/access-token-payload.interface.js';
+import type { DtoResponseLocals } from '../common/middleware/validate-dto.middleware.js';
+import type { OptionalAccessTokenResponseLocals } from '../auth/middleware/safe-validate-and-set-access-token.middleware.js';
 
 export class APIRoomController {
 	constructor(public readonly roomService: APIRoomService) {}
@@ -19,7 +20,7 @@ export class APIRoomController {
 
 	public async post(
 		_: Request,
-		res: Response<any, { dto: CreateRoomDTOType; jwtPayload: AccessTokenPayload | undefined }>,
+		res: Response<any, DtoResponseLocals<CreateRoomDTOType> & OptionalAccessTokenResponseLocals>,
 	): Promise<void> {
 		const dto = res.locals.dto;
 		const createdRoom = await this.roomService.create(dto, res.locals.jwtPayload);
@@ -28,7 +29,7 @@ export class APIRoomController {
 
 	public async patch(
 		req: Request<{ param: string }>,
-		res: Response<any, { dto: CreateRoomDTOType }>,
+		res: Response<any, DtoResponseLocals<CreateRoomDTOType>>, // TODO: make updateRoomDtoType
 	): Promise<void> {
 		// TODO: make UpdateBoardDTOType when board dto grows
 		const dto = res.locals.dto;

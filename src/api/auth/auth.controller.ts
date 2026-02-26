@@ -4,6 +4,7 @@ import type { APIAuthService } from './auth.service.js';
 import type { LoginDTOType } from './dto/login.dto.js';
 import type { RegisterDTOType } from './dto/register.dto.js';
 import { env } from '../../../shared/config/env.config.js';
+import type { DtoResponseLocals } from '../common/middleware/validate-dto.middleware.js';
 
 export class APIAuthController {
 	constructor(public readonly authService: APIAuthService) {}
@@ -27,7 +28,7 @@ export class APIAuthController {
 		});
 	}
 
-	public async login(_: Request, res: Response<any, { dto: LoginDTOType }>) {
+	public async login(_: Request, res: Response<any, DtoResponseLocals<LoginDTOType>>) {
 		const tokens = await this.authService.login(res.locals.dto);
 		if (!tokens) {
 			res.status(401).json({ message: 'Invalid credentials' });
@@ -38,7 +39,7 @@ export class APIAuthController {
 		res.status(200).json({ accessToken: tokens.accessToken });
 	}
 
-	public async register(_: Request, res: Response<any, { dto: RegisterDTOType }>) {
+	public async register(_: Request, res: Response<any, DtoResponseLocals<RegisterDTOType>>) {
 		try {
 			const tokens = await this.authService.register(res.locals.dto);
 			this.setRefreshTokenCookie(res, tokens.refreshToken);
@@ -56,7 +57,7 @@ export class APIAuthController {
 		}
 	}
 
-	public async logout(req: Request, res: Response<any>) {
+	public async logout(req: Request, res: Response) {
 		const refreshToken = req.cookies.refresh_token;
 
 		if (!refreshToken) {

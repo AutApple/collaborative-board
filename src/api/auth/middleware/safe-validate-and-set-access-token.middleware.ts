@@ -2,7 +2,11 @@ import type { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { env } from '../../../../shared/config/env.config.js';
 import type { AccessTokenPayload } from '../interfaces/access-token-payload.interface.js';
+import type { AnyResponseLocals } from '../../common/types/any-response-locals.type.js';
 
+export interface OptionalAccessTokenResponseLocals {
+	jwtPayload: AccessTokenPayload | undefined; 
+}
 export const safeValidateAndSetAccessToken = async (
 	req: Request,
 	res: Response,
@@ -26,7 +30,6 @@ export const safeValidateAndSetAccessToken = async (
 	}
 
 	if (jwtPayload === undefined) return next();
-
-	res.locals.jwtPayload = jwtPayload;
+	(res.locals as OptionalAccessTokenResponseLocals & AnyResponseLocals).jwtPayload = jwtPayload;
 	next();
 };
