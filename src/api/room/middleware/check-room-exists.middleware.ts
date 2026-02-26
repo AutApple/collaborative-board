@@ -3,8 +3,8 @@ import type { APIRoomService } from '../room.service.js';
 import type { Room } from '../../../board-app/generated/prisma/client.js';
 import type { AnyResponseLocals } from '../../common/types/any-response-locals.type.js';
 export interface RoomResponseLocals {
-	room: Room
-} 
+	room: Room;
+}
 
 export const checkRoomExists = (roomService: APIRoomService) => {
 	return async (req: Request<{ param: string }>, res: Response, next: NextFunction) => {

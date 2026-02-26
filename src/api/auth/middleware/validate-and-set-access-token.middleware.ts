@@ -5,9 +5,8 @@ import type { AccessTokenPayload } from '../interfaces/access-token-payload.inte
 import type { AnyResponseLocals } from '../../common/types/any-response-locals.type.js';
 
 export interface AccessTokenResponseLocals {
-	jwtPayload: AccessTokenPayload; 
+	jwtPayload: AccessTokenPayload;
 }
-
 
 export const validateAndSetAccessToken = async (
 	req: Request,

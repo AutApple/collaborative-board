@@ -5,7 +5,7 @@ import type { AccessTokenPayload } from '../interfaces/access-token-payload.inte
 import type { AnyResponseLocals } from '../../common/types/any-response-locals.type.js';
 
 export interface OptionalAccessTokenResponseLocals {
-	jwtPayload: AccessTokenPayload | undefined; 
+	jwtPayload: AccessTokenPayload | undefined;
 }
 export const safeValidateAndSetAccessToken = async (
 	req: Request,
