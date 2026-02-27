@@ -56,7 +56,7 @@ export class NetworkingEventHandler extends BaseEventHandler {
 	public async onDisconnect(client: Client) {
 		const roomId = client.getRoomId();
 		if (!roomId) return;
-		await this.roomService.saveState(roomId);
+		// await this.roomService.saveState(roomId);
 
 		const clientId = client.getClientId();
 		const room = (await this.roomService.get(roomId))!;

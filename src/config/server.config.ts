@@ -6,8 +6,11 @@ export interface ServerConfiguration {
 	handshakeTimeoutMs: number;
 	// generateCoolBoardNamePls: () => string;
 
-	thumbnailViewportWidth: 1920;
-	thumbnailViewportHeight: 1080;
+	thumbnailViewportWidth: number;
+	thumbnailViewportHeight: number;
+
+	cleanupRegistryAfterRoomInactiveSec: number;
+	regularRoomSaveMins: number;
 }
 
 export const serverConfiguraion: ServerConfiguration = {
@@ -19,6 +22,10 @@ export const serverConfiguraion: ServerConfiguration = {
 
 	thumbnailViewportWidth: 1920,
 	thumbnailViewportHeight: 1080,
+
+	cleanupRegistryAfterRoomInactiveSec: 10,
+	regularRoomSaveMins: 1
+
 	// generateCoolBoardNamePls: () => {
 	// 	const intensities = ['Aggressively', 'Mildly', 'Suspiciously', 'Majestically'];
 	// 	const textures = ['Damp', 'Crusty', 'Velvety', 'Greasy'];

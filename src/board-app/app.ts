@@ -19,6 +19,7 @@ import dbClient from '../db.js';
 import { ServerRendererService } from '../shared/renderer/renderer.service.js';
 import { serverConfiguraion } from '../config/server.config.js';
 import { RoomRepository } from './room/room.repository.js';
+import { RoomSchedulerService } from './room/room-scheduler.service.js';
 
 export class BoardServer {
 	private io: Server<ClientBoardEventPayloads, ServerBoardEventPayloads>;
@@ -38,18 +39,27 @@ export class BoardServer {
 			serverConfiguraion.thumbnailViewportWidth,
 			serverConfiguraion.thumbnailViewportHeight,
 		);
+		const roomSchedulerService = new RoomSchedulerService();
+
 		const roomService = new RoomService(
 			this.repositoryContainer.getInstance(RoomRepository),
 			rendererService,
 			this.appContext,
+			roomSchedulerService,
+			serverConfiguraion.cleanupRegistryAfterRoomInactiveSec * 1000,
+			serverConfiguraion.regularRoomSaveMins * 60 * 1000
 		);
 
-		this.serviceContainer = new InstanceContainer([rendererService, roomService]);
+		this.serviceContainer = new InstanceContainer([
+			rendererService, 
+			roomService,
+			roomSchedulerService
+		]);
 	}
 
 	public async run() {
 		const roomService = this.serviceContainer.getInstance(RoomService);
-		await roomService.populateRegistryFromDb();
+		// await roomService.populateRegistryFromDb();
 
 		this.io.on('connection', (socket: BoardServerSocket) => {
 			const client = new Client(socket, this.clientRegistry);

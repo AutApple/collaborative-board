@@ -16,11 +16,11 @@ export class RoomRegistry {
 		});
 	}
 
-	public get(boardId: string): Room | undefined {
-		return this.roomMap.get(boardId);
+	public get(roomId: string): Room | undefined {
+		return this.roomMap.get(roomId);
 	}
 
-	public remove(boardId: string) {
-		this.roomMap.delete(boardId);
+	public remove(roomId: string) {
+		this.roomMap.delete(roomId);
 	}
 }

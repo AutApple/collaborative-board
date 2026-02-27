@@ -23,7 +23,7 @@ export class APIRoomController {
 		res: Response<any, DtoResponseLocals<CreateRoomDTOType> & OptionalAccessTokenResponseLocals>,
 	): Promise<void> {
 		const dto = res.locals.dto;
-		const createdRoom = await this.roomService.create(dto, res.locals.jwtPayload);
+		const createdRoom = await this.roomService.create(dto, res.locals.jwtPayload?.userId);
 		res.status(201).json(OutputRoomDTO.fromModel(createdRoom));
 	}
 
