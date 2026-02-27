@@ -10,14 +10,20 @@
 			rel="stylesheet"
 			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
 		/>
-		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css" />
 	</head>
 
 	<body>
 		<div id="disconnect-overlay"></div>
 		<h1 id="disconnect-text">Disconnected from server</h1>
+
 		<div id="top-panel">
-			<button id="top-panel-save-button"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+			<button id="top-panel-save-button" class="top-panel-button">
+				<i class="fa-solid fa-floppy-disk"></i> Save
+			</button>
+			<button id="top-panel-link-button" class="top-panel-button">
+				<i class="fa-solid fa-copy"></i> Copy Link
+			</button>
 		</div>
 		<canvas id="canvas"></canvas>
 		<div id="cursors-layer"></div>

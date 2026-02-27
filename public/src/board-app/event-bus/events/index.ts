@@ -33,7 +33,9 @@ export enum SemanticEvents {
 	LocalCursorMove,
 
 	RendererRedrawBoard,
-	RendererExportBoard,
+
+	TopPanelExportBoard,
+	TopPanelCopyLink,
 }
 
 export type ToolStartUsingEvent = { screenCoords: Vec2 };
@@ -65,7 +67,9 @@ export type RendererRedrawBoardEvent = {
 	elements: BaseBoardElement[];
 	debugStats: RoomDebugStats;
 };
-export type RendererExportBoardEvent = {};
+
+export type TopPanelExportBoardEvent = {};
+export type TopPanelCopyLinkEvent = {};
 
 export type SemanticEventMap = {
 	// board
@@ -95,5 +99,7 @@ export type SemanticEventMap = {
 	[SemanticEvents.LocalCursorMove]: LocalCursorMoveEvent;
 	// renderer
 	[SemanticEvents.RendererRedrawBoard]: RendererRedrawBoardEvent;
-	[SemanticEvents.RendererExportBoard]: RendererExportBoardEvent;
+	// top panel
+	[SemanticEvents.TopPanelCopyLink]: TopPanelCopyLinkEvent;
+	[SemanticEvents.TopPanelExportBoard]: TopPanelExportBoardEvent;
 };

@@ -14,8 +14,8 @@ import { ToolboxController } from './toolbox/toolbox.controller.js';
 import { ToolboxUiAdapter } from './toolbox/toolbox.ui-adapter.js';
 import { NetworkUiAdapter } from './network/network.ui-adapter.js';
 import { RendererController } from './renderer/renderer.controller.js';
-import { RendererUiAdapter } from './renderer/renderer.ui-adapter.js';
-
+import { TopPanelController } from './top-panel/top-panel.controller.js';
+import { TopPanelUiAdapter } from './top-panel/top-panel.ui-adapter.js';
 export class BoardClient {
 	constructor(private document: Document) {}
 
@@ -45,7 +45,7 @@ export class BoardClient {
 
 		const toolboxUiAdapter = new ToolboxUiAdapter(this.document, semanticEventBus);
 		const remoteCursorUiAdapter = new RemoteCursorUIAdapter(this.document);
-		const rendererUiAdapter = new RendererUiAdapter(this.document, semanticEventBus);
+		const topPanelUiAdapter = new TopPanelUiAdapter(this.document, semanticEventBus);
 		const networkUiAdapter = new NetworkUiAdapter(this.document, window);
 		networkUiAdapter.hideDisconnectOverlay();
 
@@ -68,7 +68,8 @@ export class BoardClient {
 			remoteCursorUiAdapter,
 			networkService,
 		);
-		const rendererController = new RendererController(appContext, rendererUiAdapter);
+		const rendererController = new RendererController(appContext);
+		const topPanelController = new TopPanelController(appContext, topPanelUiAdapter);
 
 		boardController.subscribe(semanticEventBus);
 		cameraController.subscribe(semanticEventBus);
@@ -76,6 +77,7 @@ export class BoardClient {
 		boardHistoryController.subscribe(semanticEventBus);
 		cursorController.subscribe(semanticEventBus);
 		rendererController.subscribe(semanticEventBus);
+		topPanelController.subscribe(semanticEventBus);
 
 		networkService.sendHandshake(
 			this.getQueryRoommId(),
