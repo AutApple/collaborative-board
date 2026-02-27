@@ -31,14 +31,14 @@ export class NetworkingEventHandler extends BaseEventHandler {
 		const board = room.getBoard();
 
 		client.setRoomId(roomId);
-			
+
 		const cursor = {
 			clientId: client.getClientId(),
 			worldCoords: cursorWorldCoords,
 			local: false,
 		};
 		await this.roomService.registerClient(roomId, client.getClientId(), cursor);
-	
+
 		// cursorMap.addCursor(cursor);
 
 		socket.emit(
@@ -48,7 +48,7 @@ export class NetworkingEventHandler extends BaseEventHandler {
 			board.getId()!,
 			board.getElements().map((e) => e.toRaw()),
 			cursorMap.foreignToList(),
-			room.getConnectedClients()
+			room.getConnectedClients(),
 		);
 		socket.to(roomId).emit(ServerBoardEvents.ClientConnected, client.getClientId(), cursor);
 
@@ -58,13 +58,12 @@ export class NetworkingEventHandler extends BaseEventHandler {
 	public async onDisconnect(client: Client) {
 		const roomId = client.getRoomId();
 		if (!roomId) return;
-		
 
 		// await this.roomService.saveState(roomId);
 
 		const clientId = client.getClientId();
 		await this.roomService.unregisterClient(roomId, clientId);
-		
+
 		// const room = (await this.roomService.get(roomId))!;
 		// const cursorMap = room.getCursorMap();
 		// cursorMap.removeCursor(clientId);

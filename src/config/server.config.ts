@@ -24,7 +24,7 @@ export const serverConfiguraion: ServerConfiguration = {
 	thumbnailViewportHeight: 1080,
 
 	cleanupRegistryAfterRoomInactiveSec: 10,
-	regularRoomSaveMins: 1
+	regularRoomSaveMins: 1,
 
 	// generateCoolBoardNamePls: () => {
 	// 	const intensities = ['Aggressively', 'Mildly', 'Suspiciously', 'Majestically'];

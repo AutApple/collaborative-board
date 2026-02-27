@@ -47,13 +47,13 @@ export class BoardServer {
 			this.appContext,
 			roomSchedulerService,
 			serverConfiguraion.cleanupRegistryAfterRoomInactiveSec * 1000,
-			serverConfiguraion.regularRoomSaveMins * 60 * 1000
+			serverConfiguraion.regularRoomSaveMins * 60 * 1000,
 		);
 
 		this.serviceContainer = new InstanceContainer([
-			rendererService, 
+			rendererService,
 			roomService,
-			roomSchedulerService
+			roomSchedulerService,
 		]);
 	}
 

@@ -16,9 +16,8 @@ export class Room {
 	private id: string | undefined;
 	private name: string | undefined;
 	private board: Board | undefined;
-	private connectedClients: string [] | undefined;
+	private connectedClients: string[] | undefined;
 	private remoteCursorMap: RemoteCursorMap = new RemoteCursorMap();
-
 
 	constructor(private local: boolean = false) {
 		if (this.local) this.remoteCursorMap.addLocal();
@@ -31,23 +30,23 @@ export class Room {
 		this.initFlag = true;
 		this.connectedClients = connectedClients;
 	}
-	
+
 	public registerClient(clientId: string, cursor: Cursor) {
-		if (!this.connectedClients) throw new Error('Can\'t register client in uninitialzied room');
+		if (!this.connectedClients) throw new Error("Can't register client in uninitialzied room");
 		this.connectedClients.push(clientId);
 		this.remoteCursorMap.addCursor(cursor);
 	}
 	public unregisterClient(clientId: string) {
-		if (!this.connectedClients) throw new Error('Can\'t unregister client in uninitialized room');
-		this.connectedClients = this.connectedClients.filter(v => v !== clientId);
+		if (!this.connectedClients) throw new Error("Can't unregister client in uninitialized room");
+		this.connectedClients = this.connectedClients.filter((v) => v !== clientId);
 		this.remoteCursorMap.removeCursor(clientId);
 	}
 	public getClientsAmount(): number {
-		if (!this.connectedClients) throw new Error('Can\'t get clients amount in uninitialized room');		
+		if (!this.connectedClients) throw new Error("Can't get clients amount in uninitialized room");
 		return this.connectedClients.length;
 	}
 	public getConnectedClients(): string[] {
-		if (!this.connectedClients) throw new Error('Can\'t get clients in uninitialized room');		
+		if (!this.connectedClients) throw new Error("Can't get clients in uninitialized room");
 		return this.connectedClients;
 	}
 

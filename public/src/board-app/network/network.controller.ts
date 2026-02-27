@@ -63,7 +63,7 @@ export class NetworkController {
 		boardId: string,
 		raw: AnyRawBoardElement[],
 		cursors: Cursor[],
-		clients: string[]
+		clients: string[],
 	) {
 		// Initialize room
 		this.appContext.room.initialize(roomId, roomName, new Board(boardId), clients);

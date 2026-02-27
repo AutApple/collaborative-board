@@ -12,8 +12,8 @@ export class RoomService extends BaseService {
 		private rendererService: ServerRendererService,
 		private appContext: AppContext,
 		private schedulerService: RoomSchedulerService,
-		private cleanupDelayMs = 1000, 
-		private saveDelayMs = 1000 * 60 * 2
+		private cleanupDelayMs = 1000,
+		private saveDelayMs = 1000 * 60 * 2,
 	) {
 		super();
 	}
@@ -22,12 +22,12 @@ export class RoomService extends BaseService {
 		const room = await this.roomRepository.get(roomId);
 		if (!room) return undefined;
 		this.appContext.roomRegistry.register(room);
-		
+
 		this.schedulerService.scheduleRegular(
 			room.getId(),
 			'save',
 			this.saveDelayMs,
-			this.saveState.bind(this)
+			this.saveState.bind(this),
 		);
 
 		return room;
@@ -52,25 +52,27 @@ export class RoomService extends BaseService {
 		const room = await this.get(roomId);
 		if (!room) throw new Error('@RoomService.registerClient: no room with given id');
 		room.registerClient(clientId, clientCursor);
-		console.log('Client connected, now ', room.getClientsAmount())
+		console.log('Client connected, now ', room.getClientsAmount());
 	}
 	public async unregisterClient(roomId: string, clientId: string) {
 		const room = await this.get(roomId);
 		if (!room) throw new Error('@RoomService.unregisterClient: no room with given id');
 		room.unregisterClient(clientId);
-		
+
 		const clientsLeft = room.getClientsAmount();
-		if (clientsLeft === 0) 
-			this.schedulerService.schedule(roomId, 'removeFromRegistry', this.cleanupDelayMs, this.removeFromRegistry.bind(this));
-		
-
+		if (clientsLeft === 0)
+			this.schedulerService.schedule(
+				roomId,
+				'removeFromRegistry',
+				this.cleanupDelayMs,
+				this.removeFromRegistry.bind(this),
+			);
 	}
-
 
 	public async removeFromRegistry(roomId: string): Promise<void> {
 		this.schedulerService.unschedule(roomId, 'save');
 		await this.saveState(roomId);
-		
+
 		this.appContext.roomRegistry.remove(roomId);
 	}
 }
