@@ -4,6 +4,7 @@ import { ServerRendererService } from '../../shared/renderer/renderer.service.js
 import type { RoomRepository } from './room.repository.js';
 import type { Room } from '../../../shared/room/room.js';
 import type { RoomSchedulerService } from './room-scheduler.service.js';
+import type { Cursor } from '../../../shared/remote-cursor/types/cursor.js';
 
 export class RoomService extends BaseService {
 	constructor(
@@ -46,8 +47,30 @@ export class RoomService extends BaseService {
 		await this.roomRepository.save(room, this.rendererService.renderBoardToBytes(board));
 	}
 
+	public async registerClient(roomId: string, clientId: string, clientCursor: Cursor) {
+		this.schedulerService.unschedule(roomId, 'removeFromRegistry');
+		const room = await this.get(roomId);
+		if (!room) throw new Error('@RoomService.registerClient: no room with given id');
+		room.registerClient(clientId, clientCursor);
+		console.log('Client connected, now ', room.getClientsAmount())
+	}
+	public async unregisterClient(roomId: string, clientId: string) {
+		const room = await this.get(roomId);
+		if (!room) throw new Error('@RoomService.unregisterClient: no room with given id');
+		room.unregisterClient(clientId);
+		
+		const clientsLeft = room.getClientsAmount();
+		if (clientsLeft === 0) 
+			this.schedulerService.schedule(roomId, 'removeFromRegistry', this.cleanupDelayMs, this.removeFromRegistry.bind(this));
+		
+
+	}
+
+
 	public async removeFromRegistry(roomId: string): Promise<void> {
 		this.schedulerService.unschedule(roomId, 'save');
+		await this.saveState(roomId);
+		
 		this.appContext.roomRegistry.remove(roomId);
 	}
 }

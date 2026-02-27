@@ -33,11 +33,13 @@ export class NetworkController {
 		this.networkUiAdapter.showDisconnectOverlay();
 	}
 
-	public onClientConnected(_: string, cursor: Cursor) {
+	public onClientConnected(clientId: string, cursor: Cursor) {
+		this.appContext.room.registerClient(clientId, cursor);
 		this.bus.emit(SemanticEvents.RemoteCursorConnect, { cursor });
 	}
 
 	public onClientDisconnected(clientId: string) {
+		this.appContext.room.unregisterClient(clientId);
 		this.bus.emit(SemanticEvents.RemoteCursorDisconnect, { clientId });
 	}
 
@@ -61,9 +63,10 @@ export class NetworkController {
 		boardId: string,
 		raw: AnyRawBoardElement[],
 		cursors: Cursor[],
+		clients: string[]
 	) {
 		// Initialize room
-		this.appContext.room.initialize(roomId, roomName, new Board(boardId));
+		this.appContext.room.initialize(roomId, roomName, new Board(boardId), clients);
 		// Initialize toolbox
 		this.appContext.toolbox.initialize(this.appContext.room.getBoard());
 

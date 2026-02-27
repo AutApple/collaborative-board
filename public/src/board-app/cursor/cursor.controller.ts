@@ -28,8 +28,6 @@ export class CursorController {
 	}
 
 	public onRemoteCursorConnect({ cursor }: RemoteCursorConnectEvent) {
-		const cursorMap = this.appContext.room.getCursorMap();
-		cursorMap.addCursor(cursor);
 		this.uiAdapter.addCursor(
 			cursor.clientId,
 			this.appContext.camera.worldToScreen(Vec2.fromXY(cursor.worldCoords)),
@@ -37,8 +35,6 @@ export class CursorController {
 	}
 
 	public onRemoteCursorDisconnect({ clientId }: RemoteCursorDisconnectEvent) {
-		const cursorMap = this.appContext.room.getCursorMap();
-		cursorMap.removeCursor(clientId);
 		this.uiAdapter.removeCursor(clientId);
 	}
 

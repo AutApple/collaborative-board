@@ -1,6 +1,7 @@
 import type { Board, BoardDebugStats } from '../board/board.js';
 import { RemoteCursorMap } from '../remote-cursor/remote-cursor-map.js';
 import type { Cursor } from '../remote-cursor/types/cursor.js';
+import type { Vec2 } from '../utils/vec2.utils.js';
 
 export interface RoomDebugStats {
 	roomId: string;
@@ -15,18 +16,39 @@ export class Room {
 	private id: string | undefined;
 	private name: string | undefined;
 	private board: Board | undefined;
+	private connectedClients: string [] | undefined;
 	private remoteCursorMap: RemoteCursorMap = new RemoteCursorMap();
+
 
 	constructor(private local: boolean = false) {
 		if (this.local) this.remoteCursorMap.addLocal();
 	}
 
-	public initialize(id: string, name: string, board: Board) {
+	public initialize(id: string, name: string, board: Board, connectedClients: string[]) {
 		this.id = id;
 		this.name = name;
 		this.board = board;
-
 		this.initFlag = true;
+		this.connectedClients = connectedClients;
+	}
+	
+	public registerClient(clientId: string, cursor: Cursor) {
+		if (!this.connectedClients) throw new Error('Can\'t register client in uninitialzied room');
+		this.connectedClients.push(clientId);
+		this.remoteCursorMap.addCursor(cursor);
+	}
+	public unregisterClient(clientId: string) {
+		if (!this.connectedClients) throw new Error('Can\'t unregister client in uninitialized room');
+		this.connectedClients = this.connectedClients.filter(v => v !== clientId);
+		this.remoteCursorMap.removeCursor(clientId);
+	}
+	public getClientsAmount(): number {
+		if (!this.connectedClients) throw new Error('Can\'t get clients amount in uninitialized room');		
+		return this.connectedClients.length;
+	}
+	public getConnectedClients(): string[] {
+		if (!this.connectedClients) throw new Error('Can\'t get clients in uninitialized room');		
+		return this.connectedClients;
 	}
 
 	public isInitialized(): boolean {

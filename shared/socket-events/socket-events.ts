@@ -30,6 +30,7 @@ export interface ServerBoardEventPayloads {
 		boardId: string,
 		raw: AnyRawBoardElement[],
 		cursors: Cursor[],
+		clients: string[]
 	) => void;
 	[ServerBoardEvents.ClientConnected]: (clientId: string, cursor: Cursor) => void;
 	[ServerBoardEvents.ClientDisconnected]: (clientId: string) => void;
