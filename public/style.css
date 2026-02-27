@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 html,
 body {
 	margin: 0;
@@ -131,22 +132,28 @@ input:focus {
 #disconnect-text {
 	position: fixed;
 	z-index: 10000;
-	font-weight: 400; /* normal text */
-	line-height: 1.6; /* comfortable spacing */
+	font-weight: 400;
+	/* normal text */
+	line-height: 1.6;
+	/* comfortable spacing */
 	color: white;
 	text-align: center;
 	width: 100vw;
 }
 
 #disconnect-overlay {
-	position: fixed; /* cover viewport */
+	position: fixed;
+	/* cover viewport */
 	top: 0;
 	left: 0;
 	width: 100vw;
 	height: 100vh;
-	background-color: rgba(0, 0, 0, 0.5); /* base gray */
-	pointer-events: all; /* block clicks */
-	z-index: 9999; /* above all content */
+	background-color: rgba(0, 0, 0, 0.5);
+	/* base gray */
+	pointer-events: all;
+	/* block clicks */
+	z-index: 9999;
+	/* above all content */
 
 	/* Animate opacity with sine-wave-like motion */
 	animation: sineFade 2s infinite alternate;
@@ -163,15 +170,19 @@ input:focus {
 	0% {
 		opacity: 0.6;
 	}
+
 	25% {
 		opacity: 0.7;
 	}
+
 	50% {
 		opacity: 0.8;
 	}
+
 	75% {
 		opacity: 0.7;
 	}
+
 	100% {
 		opacity: 0.6;
 	}
@@ -186,7 +197,7 @@ input:focus {
 	gap: 0.5rem;
 }
 
-#top-panel-save-button {
+.top-panel-button {
 	display: flex;
 	align-items: center;
 	gap: 0.3rem;
@@ -200,7 +211,7 @@ input:focus {
 	font-size: 0.9rem;
 }
 
-#top-panel-save-button:hover {
+.top-panel-button:hover {
 	background-color: rgb(50, 50, 50);
 	color: rgb(183, 239, 183);
 }
@@ -283,7 +294,8 @@ canvas {
 #toolbox-setting-color::-webkit-color-swatch {
 	border: none;
 	border-radius: 50%;
-	background: currentColor; /* forces swatch to match input value */
+	background: currentColor;
+	/* forces swatch to match input value */
 }
 
 .toolbox-button {

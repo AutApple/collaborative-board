@@ -1,4 +1,4 @@
-import { validateAndSetAccessToken } from '../auth/middleware/validateAccessToken.js';
+import { validateAndSetAccessToken } from '../auth/middleware/validate-and-set-access-token.middleware.js';
 import { APIBaseRouter } from '../common/base.router.js';
 import type { APIUserController } from './user.controller.js';
 

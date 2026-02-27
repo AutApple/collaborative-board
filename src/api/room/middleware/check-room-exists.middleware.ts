@@ -2,6 +2,7 @@ import type { Request, Response, NextFunction } from 'express';
 import type { APIRoomService } from '../room.service.js';
 import type { Room } from '../../../board-app/generated/prisma/client.js';
 import type { AnyResponseLocals } from '../../common/types/any-response-locals.type.js';
+
 export interface RoomResponseLocals {
 	room: Room;
 }

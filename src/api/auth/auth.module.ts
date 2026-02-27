@@ -1,4 +1,3 @@
-import type { Router } from 'express';
 import dbClient from '../../db.js';
 import { APIAuthService } from './auth.service.js';
 import { APIAuthController } from './auth.controller.js';
