@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { env } from '../../../../shared/config/env.config.js';
+import { env } from '../../../config/env.config.js';
 import type { AccessTokenPayload } from '../interfaces/access-token-payload.interface.js';
 import type { AnyResponseLocals } from '../../common/types/any-response-locals.type.js';
 

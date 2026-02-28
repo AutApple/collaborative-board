@@ -7,7 +7,7 @@ import { BoardServer } from './board-app/app.js';
 import { createAndMapApiModules } from './api/index.js';
 import { initPageRoutes } from './pages.js';
 
-import { env } from '@shared/config/env.config.js';
+import { env } from 'src/config/env.config.js';
 import cookieParser from 'cookie-parser';
 import { CommandBus } from './command-bus/command-bus.js';
 

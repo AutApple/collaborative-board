@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
-import { env } from '../../../shared/config/env.config.js';
+import { env } from '../../config/env.config.js';
 import type { APIUserService } from '../user/user.service.js';
 import type { LoginDTOType } from './dto/login.dto.js';
 import type { RegisterDTOType } from './dto/register.dto.js';

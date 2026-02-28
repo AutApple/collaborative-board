@@ -1,4 +1,4 @@
-import { env } from '../../../shared/config/env.config.js';
+import { env } from '../../config/env.config.js';
 import type { RefreshToken, User } from '../../board-app/generated/prisma/client.js';
 import type { APIRefreshTokenRepository } from './refresh-token.repo.js';
 import crypto from 'crypto';

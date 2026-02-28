@@ -3,7 +3,7 @@ import { Prisma } from '../../board-app/generated/prisma/client.js';
 import type { APIAuthService } from './auth.service.js';
 import type { LoginDTOType } from './dto/login.dto.js';
 import type { RegisterDTOType } from './dto/register.dto.js';
-import { env } from '../../../shared/config/env.config.js';
+import { env } from '../../config/env.config.js';
 import type { DtoResponseLocals } from '../common/middleware/validate-dto.middleware.js';
 
 export class APIAuthController {
