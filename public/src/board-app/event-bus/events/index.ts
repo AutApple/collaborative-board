@@ -1,8 +1,7 @@
 import type { AnyRawBoardElement } from '../../../../../shared/board-elements/index.js';
 import type { BoardMutationList } from '@shared/board/board-mutation.js';
-import type { Vec2 } from '@shared/utils/vec2.utils.js';
+import type { Vec2, XY } from '@shared/utils/vec2.utils.js';
 import type { BaseBoardElement } from '../../../../../shared/board-elements/base/base.board-element.js';
-import type { Cursor } from '../../../../../shared/remote-cursor/types/cursor.js';
 import type { Tools } from '../../toolbox/enums/tools.enum.js';
 import type { RoomDebugStats } from '../../../../../shared/room/room.js';
 
@@ -58,9 +57,9 @@ export type BoardHistoryUndoActionEvent = {};
 export type BoardHistoryRedoActionEvent = {};
 export type BoardHistoryMutationsEvent = { mutations: BoardMutationList };
 
-export type RemoteCursorConnectEvent = { cursor: Cursor };
+export type RemoteCursorConnectEvent = { clientId: string, worldCoordsPosition: XY };
 export type RemoteCursorDisconnectEvent = { clientId: string };
-export type RemoteCursorMoveEvent = { cursor: Cursor };
+export type RemoteCursorMoveEvent = { clientId: string, worldCoordsPosition: XY };
 export type LocalCursorMoveEvent = { screenCoords: Vec2 };
 
 export type RendererRedrawBoardEvent = {

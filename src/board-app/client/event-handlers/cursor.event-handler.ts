@@ -1,5 +1,5 @@
 import { ServerBoardEvents } from '../../../../shared/socket-events/socket-events.js';
-import type { XY } from '../../../../shared/utils/vec2.utils.js';
+import { Vec2, type XY } from '../../../../shared/utils/vec2.utils.js';
 import type { AppContext } from '../../app-context.js';
 import type { ServiceContainer } from '../../common/instance-container.js';
 import { RoomService } from '../../room/room.service.js';
@@ -21,13 +21,14 @@ export class CursorEventHandler extends BaseEventHandler {
 		const room = await this.roomService.get(roomId);
 		if (!room) return;
 
-		socket.to(roomId).emit(ServerBoardEvents.RemoteCursorMove, {
-			clientId: socket.id,
-			worldCoords: pos,
-			local: false,
-		});
+		socket.to(roomId).emit(ServerBoardEvents.RemoteCursorMove, socket.id, pos);
 
-		const cursorMap = room.getCursorMap();
-		cursorMap.setPosition(socket.id, pos);
+		const clientDataMap = room.getClientDataMap();
+		const clientData = clientDataMap.get(socket.id); 
+		if (!clientData) {
+			console.log('Critical issue: no client data for a client with given id');
+			return;
+		}
+		clientData.cursor.position = Vec2.fromXY(pos);
 	}
 }

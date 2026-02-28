@@ -25,7 +25,7 @@ export class BoardClient {
 		return el;
 	}
 
-	private getQueryRoommId(): string {
+	private getQueryRoomId(): string {
 		const queryString = window.location.search;
 		const params = new URLSearchParams(queryString);
 		const id = params.get('id');
@@ -80,8 +80,8 @@ export class BoardClient {
 		topPanelController.subscribe(semanticEventBus);
 
 		networkService.sendHandshake(
-			this.getQueryRoommId(),
-			appContext.room.getLocalCursor()!.worldCoords,
+			this.getQueryRoomId(),
+			appContext.room.getLocalClientData()!.cursor.position,
 		);
 	}
 	run() {

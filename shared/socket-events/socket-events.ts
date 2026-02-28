@@ -3,8 +3,8 @@ import type { Socket as ServerSocket } from 'socket.io';
 import type { Server as SocketIOServer } from 'socket.io';
 import type { BoardMutationList } from '../board/board-mutation.js';
 import type { AnyRawBoardElement } from '../board-elements/index.js';
-import type { Cursor } from '../remote-cursor/types/cursor.js';
 import type { XY } from '../utils/vec2.utils.js';
+import type { ClientData } from '../client-data/client-data.js';
 
 export enum ServerBoardEvents {
 	Handshake = 'handshake', // Board object, Remote cursor array
@@ -22,28 +22,37 @@ export enum ClientBoardEvents {
 	RequestRefresh = 'requestRefresh',
 	LocalCursorMove = 'localCursorMove',
 }
-
+// server->client
 export interface ServerBoardEventPayloads {
+	// handshake
 	[ServerBoardEvents.Handshake]: (
 		roomId: string,
 		roomName: string,
 		boardId: string,
 		raw: AnyRawBoardElement[],
-		cursors: Cursor[],
-		clients: string[],
+		foreignClientData: ClientData[]
 	) => void;
-	[ServerBoardEvents.ClientConnected]: (clientId: string, cursor: Cursor) => void;
+
+	// clients
+	[ServerBoardEvents.ClientConnected]: (clientData: ClientData) => void;
 	[ServerBoardEvents.ClientDisconnected]: (clientId: string) => void;
+
+	// board actions
 	[ServerBoardEvents.BoardMutations]: (mutations: BoardMutationList) => void;
 	[ServerBoardEvents.RefreshBoard]: (raw: AnyRawBoardElement[]) => void;
-	[ServerBoardEvents.RemoteCursorMove]: (cursor: Cursor) => void;
 	[ServerBoardEvents.BoardNotFound]: () => void;
-}
 
+	// cursor
+	[ServerBoardEvents.RemoteCursorMove]: (clientId: string, position: XY) => void;
+}
+// client->server
 export interface ClientBoardEventPayloads {
+	// handshake
 	[ClientBoardEvents.Handshake]: (roomId: string, cursorWorldCoords: XY) => void;
+	// board actions
 	[ClientBoardEvents.BoardMutations]: (mutations: BoardMutationList) => void;
 	[ClientBoardEvents.RequestRefresh]: () => void;
+	// cursor
 	[ClientBoardEvents.LocalCursorMove]: (worldCoords: XY) => void;
 }
 

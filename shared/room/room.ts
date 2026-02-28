@@ -1,7 +1,8 @@
 import type { Board, BoardDebugStats } from '../board/board.js';
-import { RemoteCursorMap } from '../remote-cursor/remote-cursor-map.js';
-import type { Cursor } from '../remote-cursor/types/cursor.js';
-import type { Vec2 } from '../utils/vec2.utils.js';
+import { ClientDataMap } from '../client-data/client-data-map.js';
+import { ClientData } from '../client-data/client-data.js';
+import { Cursor } from '../cursor/cursor.js';
+import { Vec2 } from '../utils/vec2.utils.js';
 
 export interface RoomDebugStats {
 	roomId: string;
@@ -10,44 +11,48 @@ export interface RoomDebugStats {
 	boardDebugStats: BoardDebugStats;
 }
 
+export interface RoomOptions {
+	isLocal: boolean;
+}
+
+const defaultRoomOptions: RoomOptions = {
+	isLocal: false
+};
+
 export class Room {
 	private initFlag: boolean = false;
 
 	private id: string | undefined;
 	private name: string | undefined;
 	private board: Board | undefined;
-	private connectedClients: string[] | undefined;
-	private remoteCursorMap: RemoteCursorMap = new RemoteCursorMap();
 
-	constructor(private local: boolean = false) {
-		if (this.local) this.remoteCursorMap.addLocal();
+	private clients: ClientDataMap | undefined;
+	private localClientData: ClientData | undefined;
+
+	constructor(private options: RoomOptions = defaultRoomOptions) {
+		if (this.options.isLocal) this.localClientData = new ClientData('0', true, new Cursor(new Vec2(0, 0)));
 	}
 
-	public initialize(id: string, name: string, board: Board, connectedClients: string[]) {
+	public initialize(id: string, name: string, board: Board, clientData: ClientData[]) {
 		this.id = id;
 		this.name = name;
 		this.board = board;
 		this.initFlag = true;
-		this.connectedClients = connectedClients;
+		this.clients = new ClientDataMap(... clientData);
 	}
 
-	public registerClient(clientId: string, cursor: Cursor) {
-		if (!this.connectedClients) throw new Error("Can't register client in uninitialzied room");
-		this.connectedClients.push(clientId);
-		this.remoteCursorMap.addCursor(cursor);
+	public registerClient(clientData: ClientData) {
+		if (!this.clients) throw new Error("Can't register client in uninitialzied room");
+		this.clients.addClientData(clientData);
 	}
 	public unregisterClient(clientId: string) {
-		if (!this.connectedClients) throw new Error("Can't unregister client in uninitialized room");
-		this.connectedClients = this.connectedClients.filter((v) => v !== clientId);
-		this.remoteCursorMap.removeCursor(clientId);
+		if (!this.clients) throw new Error("Can't unregister client in uninitialized room");
+		this.clients.removeClientData(clientId);
 	}
+	
 	public getClientsAmount(): number {
-		if (!this.connectedClients) throw new Error("Can't get clients amount in uninitialized room");
-		return this.connectedClients.length;
-	}
-	public getConnectedClients(): string[] {
-		if (!this.connectedClients) throw new Error("Can't get clients in uninitialized room");
-		return this.connectedClients;
+		if (!this.clients) throw new Error("Can't unregister client in uninitialized room");
+		return this.clients.getClientAmount();
 	}
 
 	public isInitialized(): boolean {
@@ -73,16 +78,19 @@ export class Room {
 		return this.board!;
 	}
 
-	public getLocalCursor(): Cursor {
-		const cursor = this.remoteCursorMap.getLocal();
-		if (!cursor) throw new Error('Trying to retrieve local cursor from non-local room');
-		return cursor;
+	public getForeignClientDataList(): ClientData[] {
+		if (!this.clients) throw new Error("Can't unregister client in uninitialized room");
+		return this.clients.foreignDataToList();
 	}
-	public getCursorMap(): RemoteCursorMap {
-		return this.remoteCursorMap;
+
+	public getClientDataMap() {
+		if (!this.clients) throw new Error("Can't unregister client in uninitialized room");
+		return this.clients;		
 	}
-	public getForeignCursorList(): Cursor[] {
-		return this.remoteCursorMap.foreignToList();
+	
+	public getLocalClientData(): ClientData {
+		if (!this.localClientData) throw new Error('Can\'t get local client in non-local room instance');
+		return this.localClientData;
 	}
 
 	public getDebugStats(): RoomDebugStats {

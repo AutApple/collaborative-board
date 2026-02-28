@@ -1,6 +1,7 @@
+import { ClientData } from '../../../../shared/client-data/client-data.js';
+import { Cursor } from '../../../../shared/cursor/cursor.js';
 import { ServerBoardEvents } from '../../../../shared/socket-events/socket-events.js';
-import type { XY } from '../../../../shared/utils/vec2.utils.js';
-import type { AppContext } from '../../app-context.js';
+import { Vec2, type XY } from '../../../../shared/utils/vec2.utils.js';
 import type { ServiceContainer } from '../../common/instance-container.js';
 import { RoomService } from '../../room/room.service.js';
 import type { Client } from '../client.js';
@@ -26,20 +27,18 @@ export class NetworkingEventHandler extends BaseEventHandler {
 			return;
 		}
 
-		const cursorMap = room.getCursorMap();
+		const clients = room.getForeignClientDataList();
 		const roomName = room.getName();
 		const board = room.getBoard();
 
 		client.setRoomId(roomId);
 
-		const cursor = {
-			clientId: client.getClientId(),
-			worldCoords: cursorWorldCoords,
-			local: false,
-		};
-		await this.roomService.registerClient(roomId, client.getClientId(), cursor);
-
-		// cursorMap.addCursor(cursor);
+		const clientData = new ClientData(
+			client.getClientId(),
+			false,
+			new Cursor(Vec2.fromXY(cursorWorldCoords))
+		);
+		await this.roomService.registerClient(roomId, clientData);
 
 		socket.emit(
 			ServerBoardEvents.Handshake,
@@ -47,10 +46,10 @@ export class NetworkingEventHandler extends BaseEventHandler {
 			roomName,
 			board.getId()!,
 			board.getElements().map((e) => e.toRaw()),
-			cursorMap.foreignToList(),
-			room.getConnectedClients(),
+			clients
 		);
-		socket.to(roomId).emit(ServerBoardEvents.ClientConnected, client.getClientId(), cursor);
+		
+		socket.to(roomId).emit(ServerBoardEvents.ClientConnected, clientData);
 
 		client.markHandshakePass();
 	}

@@ -52,24 +52,26 @@ export class ToolboxController {
 		this.appContext.toolbox.changeColor(e.value);
 		this.uiAdapter.setStrokeColor(e.value);
 
-		const localCursor = this.appContext.room.getLocalCursor();
+		const localCursor = this.appContext.room.getLocalClientData().cursor;
 
 		this.appContext.renderer.setLayerDataAndRender(
 			this.appContext.camera,
 			RenderLayerType.StrokePreview,
 			this.appContext.toolbox.getCurrentStrokeData(),
-			this.appContext.camera.worldToScreen(Vec2.fromXY(localCursor.worldCoords)),
+			this.appContext.camera.worldToScreen(Vec2.fromXY(localCursor.position)),
 		);
 	}
 	public onToolboxChangeStrokeSize(e: ToolboxChangeStrokeSizeEvent) {
 		this.appContext.toolbox.changeSize(e.value);
 		this.uiAdapter.setStrokeSize(e.value);
-		const localCursor = this.appContext.room.getLocalCursor();
+
+		const localCursor = this.appContext.room.getLocalClientData().cursor;
+		
 		this.appContext.renderer.setLayerDataAndRender(
 			this.appContext.camera,
 			RenderLayerType.StrokePreview,
 			this.appContext.toolbox.getCurrentStrokeData(),
-			this.appContext.camera.worldToScreen(Vec2.fromXY(localCursor.worldCoords)),
+			this.appContext.camera.worldToScreen(Vec2.fromXY(localCursor.position)),
 		);
 	}
 

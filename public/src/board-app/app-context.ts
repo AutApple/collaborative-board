@@ -1,5 +1,3 @@
-import { Board } from '@shared/board/board.js';
-import { RemoteCursorMap } from '@shared/remote-cursor/remote-cursor-map.js';
 import { Vec2, type XY } from '@shared/utils/vec2.utils.js';
 import { BoardHistory } from './board-history/board-history.js';
 import { Camera } from '../../../shared/camera/camera.js';
@@ -25,7 +23,10 @@ export class AppContext {
 			},
 		});
 
-		this.room = new Room(true);
+		this.room = new Room({
+			isLocal: true
+		});
+		
 		this.renderer = new ClientRenderer(
 			canvas,
 			clientConfiguration.boardBackgroundColor,
