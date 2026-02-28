@@ -54,6 +54,10 @@ export class Room {
 		return this.initFlag;
 	}
 
+	public setName(name: string): void {
+		this.name = name;
+	}
+	
 	public getName(): string {
 		if (!this.initFlag) throw new Error('Calling get name on unitialized room');
 		return this.name!;

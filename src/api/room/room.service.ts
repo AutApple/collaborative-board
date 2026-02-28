@@ -3,6 +3,7 @@ import type { CreateRoomDTOType } from './dtos/create-room.dto.js';
 import type { APIBoardRepository } from '../board/board.repo.js';
 import type { CommandBus } from '../../command-bus/command-bus.js';
 import { RenderBlankCommand } from '../../command-bus/commands/renderer/render-blank.command.js';
+import { UpdateRoomCommand } from '../../command-bus/commands/room/update-room.command.js';
 
 export class APIRoomService {
 	constructor(
@@ -36,11 +37,19 @@ export class APIRoomService {
 	}
 
 	public async update(id: string, dto: CreateRoomDTOType) {
+		// Author only | admin
 		const board = await this.roomRepo.update(id, dto);
+		console.log('Command execution');
+		this.commandBus.execute(new UpdateRoomCommand({
+			roomId: id,
+			name: dto.name,
+			isPublic: dto.public
+		}));
 		if (board === null) throw new Error('Board not found');
 		return board;
 	}
 	public async delete(id: string) {
+		// Author only | admin
 		const board = await this.roomRepo.delete(id);
 		if (board === null) throw new Error('Board not found');
 		return board;

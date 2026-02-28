@@ -22,6 +22,7 @@ import { RoomRepository } from './room/room.repository.js';
 import { RoomSchedulerService } from './room/room-scheduler.service.js';
 import type { CommandBus } from '../command-bus/command-bus.js';
 import { RendererCommandHandler } from './renderer/renderer.command-handler.js';
+import { RoomCommandHandler } from './room/room.command-handler.js';
 
 export class BoardServer {
 	private io: Server<ClientBoardEventPayloads, ServerBoardEventPayloads>;
@@ -65,9 +66,14 @@ export class BoardServer {
 		// TODO: encapsulate all of bootstrap code into some different component
 		const roomService = this.serviceContainer.getInstance(RoomService);
 		const rendererService = this.serviceContainer.getInstance(ServerRendererService);
-		const rendererCommandHandler = new RendererCommandHandler(rendererService, roomService);
-		rendererCommandHandler.register(this.commandBus);
 		
+		const rendererCommandHandler = new RendererCommandHandler(rendererService, roomService);
+		const roomCommandHandler = new RoomCommandHandler(roomService);
+		
+		rendererCommandHandler.register(this.commandBus);
+		roomCommandHandler.register(this.commandBus);
+		
+
 		this.io.on('connection', (socket: BoardServerSocket) => {
 			const client = new Client(socket, this.clientRegistry);
 			const clientEventHandlers = new ClientEventHandlers(client, this.serviceContainer);

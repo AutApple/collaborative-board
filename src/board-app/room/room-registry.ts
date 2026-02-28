@@ -19,6 +19,12 @@ export class RoomRegistry {
 	public get(roomId: string): Room | undefined {
 		return this.roomMap.get(roomId);
 	}
+	
+	public update(roomId: string, name: string): void { // TODO: some kind of shared update room dto
+		const room = this.get(roomId);
+		if (!room) return;
+		room.setName(name);
+	}
 
 	public remove(roomId: string) {
 		this.roomMap.delete(roomId);

@@ -54,6 +54,7 @@ export class RoomService extends BaseService {
 		room.registerClient(clientId, clientCursor);
 		console.log('Client connected, now ', room.getClientsAmount());
 	}
+
 	public async unregisterClient(roomId: string, clientId: string) {
 		const room = await this.get(roomId);
 		if (!room) throw new Error('@RoomService.unregisterClient: no room with given id');
@@ -74,5 +75,10 @@ export class RoomService extends BaseService {
 		await this.saveState(roomId);
 
 		this.appContext.roomRegistry.remove(roomId);
+	}
+
+	public update(roomId: string, name: string) {
+		console.log('Updating room ', name);
+		this.appContext.roomRegistry.update(roomId, name);
 	}
 }
