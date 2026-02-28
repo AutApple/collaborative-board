@@ -16,10 +16,12 @@ import {
 } from './common/instance-container.js';
 import { RoomService } from './room/room.service.js';
 import dbClient from '../db.js';
-import { ServerRendererService } from '../shared/renderer/renderer.service.js';
+import { ServerRendererService } from './renderer/renderer.service.js';
 import { serverConfiguraion } from '../config/server.config.js';
 import { RoomRepository } from './room/room.repository.js';
 import { RoomSchedulerService } from './room/room-scheduler.service.js';
+import type { CommandBus } from '../command-bus/command-bus.js';
+import { RendererCommandHandler } from './renderer/renderer.command-handler.js';
 
 export class BoardServer {
 	private io: Server<ClientBoardEventPayloads, ServerBoardEventPayloads>;
@@ -29,12 +31,8 @@ export class BoardServer {
 
 	private repositoryContainer: RepositoryContainer;
 	private serviceContainer: ServiceContainer;
-
-	constructor(httpServer: HTTPServer) {
-		this.io = new Server<ClientBoardEventPayloads, ServerBoardEventPayloads>(httpServer);
-
-		this.repositoryContainer = new InstanceContainer([new RoomRepository(dbClient)]);
-
+	
+	private makeServices() {
 		const rendererService = new ServerRendererService(
 			serverConfiguraion.thumbnailViewportWidth,
 			serverConfiguraion.thumbnailViewportHeight,
@@ -49,18 +47,27 @@ export class BoardServer {
 			serverConfiguraion.cleanupRegistryAfterRoomInactiveSec * 1000,
 			serverConfiguraion.regularRoomSaveMins * 60 * 1000,
 		);
+		return [rendererService, roomSchedulerService, roomService];
+	}
+	
 
-		this.serviceContainer = new InstanceContainer([
-			rendererService,
-			roomService,
-			roomSchedulerService,
-		]);
+	constructor(httpServer: HTTPServer, private commandBus: CommandBus) {
+		this.io = new Server<ClientBoardEventPayloads, ServerBoardEventPayloads>(httpServer);
+
+		this.repositoryContainer = new InstanceContainer([new RoomRepository(dbClient)]);
+
+		this.serviceContainer = new InstanceContainer(
+			this.makeServices()
+		);
 	}
 
 	public async run() {
+		// TODO: encapsulate all of bootstrap code into some different component
 		const roomService = this.serviceContainer.getInstance(RoomService);
-		// await roomService.populateRegistryFromDb();
-
+		const rendererService = this.serviceContainer.getInstance(ServerRendererService);
+		const rendererCommandHandler = new RendererCommandHandler(rendererService, roomService);
+		rendererCommandHandler.register(this.commandBus);
+		
 		this.io.on('connection', (socket: BoardServerSocket) => {
 			const client = new Client(socket, this.clientRegistry);
 			const clientEventHandlers = new ClientEventHandlers(client, this.serviceContainer);

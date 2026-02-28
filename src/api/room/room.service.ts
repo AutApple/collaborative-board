@@ -1,13 +1,14 @@
-import type { ServerRendererService } from '../../shared/renderer/renderer.service.js';
 import type { APIRoomRepository } from './room.repo.js';
 import type { CreateRoomDTOType } from './dtos/create-room.dto.js';
 import type { APIBoardRepository } from '../board/board.repo.js';
+import type { CommandBus } from '../../command-bus/command-bus.js';
+import { RenderBlankCommand } from '../../command-bus/commands/renderer/render-blank.command.js';
 
 export class APIRoomService {
 	constructor(
 		private roomRepo: APIRoomRepository,
 		private boardRepo: APIBoardRepository,
-		private rendererService: ServerRendererService,
+		private commandBus: CommandBus
 	) {}
 
 	public async getPublic() {
@@ -19,8 +20,10 @@ export class APIRoomService {
 
 	public async create(dto: CreateRoomDTOType, userId: string | undefined) {
 		if (userId === undefined && dto.public === true) dto.public = false; // TODO: make this shitty code more elegant
-		const thumbnailPngBytes = this.rendererService.renderBlankToBytes();
 
+		// query command bus to get blank thumbnail from app renderer service
+		const thumbnailPngBytes = (await this.commandBus.execute(new RenderBlankCommand())) as Uint8Array<ArrayBuffer>; 
+		
 		// create board
 		const board = await this.boardRepo.insert({});
 

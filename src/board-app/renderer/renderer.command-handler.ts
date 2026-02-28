@@ -1,0 +1,29 @@
+import type { CommandBus } from '../../command-bus/command-bus.js';
+import { RenderBlankCommand } from '../../command-bus/commands/renderer/render-blank.command.js';
+import { RenderRoomBoardCommand } from '../../command-bus/commands/renderer/render-room-board.command.js';
+import type { RoomService } from '../room/room.service.js';
+import type { ServerRendererService } from './renderer.service.js';
+
+export class RendererCommandHandler {
+    constructor (private rendererService: ServerRendererService, private roomService: RoomService) {
+    }
+
+    private async renderRoomBoard(roomId: string): Promise<Uint8Array<ArrayBuffer>> {
+        const room = await this.roomService.get(roomId);
+        if (!room) throw new Error('Can\'t render room board: unknown room id');
+        const board = room.getBoard();
+
+        const result = this.rendererService.renderBoardToBytes(board);
+        return result;
+    }
+
+    private async renderBlank(): Promise<Uint8Array<ArrayBuffer>> {
+        return this.rendererService.renderBlankToBytes();
+    }
+
+    public register(commandBus: CommandBus) {
+        commandBus.register(RenderRoomBoardCommand.name, this.renderRoomBoard.bind(this));
+        commandBus.register(RenderBlankCommand.name, this.renderBlank.bind(this));
+    
+    }
+}

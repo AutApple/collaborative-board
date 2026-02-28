@@ -3,7 +3,7 @@ import type { Board } from '../../../shared/board/board.js';
 import { BoardElementsRenderLayer } from '../../../shared/renderer/layers/board-elements.render-layer.js';
 import { Camera } from '../../../shared/camera/camera.js';
 import { Vec2 } from '../../../shared/utils/vec2.utils.js';
-import { BaseService } from '../../board-app/common/base.service.js';
+import { BaseService } from '../common/base.service.js';
 
 export class ServerRendererService extends BaseService {
 	constructor(

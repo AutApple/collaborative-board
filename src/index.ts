@@ -9,18 +9,21 @@ import { initPageRoutes } from './pages.js';
 
 import { env } from '@shared/config/env.config.js';
 import cookieParser from 'cookie-parser';
+import { CommandBus } from './command-bus/command-bus.js';
 
 const app = express();
 const httpServer = createServer(app);
 
-const boardApp = new BoardServer(httpServer);
+const commandBus = new CommandBus();
+
+const boardApp = new BoardServer(httpServer, commandBus);
 boardApp.run();
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__rootdir, 'public-dist')));
 
-createAndMapApiModules(app);
+createAndMapApiModules(app, commandBus);
 initPageRoutes(app);
 
 httpServer.listen(env.APP_PORT || 3000, () => {
