@@ -24,9 +24,9 @@ export class AppContext {
 		});
 
 		this.room = new Room({
-			isLocal: true
+			isLocal: true,
 		});
-		
+
 		this.renderer = new ClientRenderer(
 			canvas,
 			clientConfiguration.boardBackgroundColor,

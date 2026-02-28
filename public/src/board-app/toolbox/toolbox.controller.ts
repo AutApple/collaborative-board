@@ -66,7 +66,7 @@ export class ToolboxController {
 		this.uiAdapter.setStrokeSize(e.value);
 
 		const localCursor = this.appContext.room.getLocalClientData().cursor;
-		
+
 		this.appContext.renderer.setLayerDataAndRender(
 			this.appContext.camera,
 			RenderLayerType.StrokePreview,

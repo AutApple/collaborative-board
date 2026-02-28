@@ -59,6 +59,5 @@ export class CursorController {
 			this.appContext.toolbox.getCurrentStrokeData(),
 			this.appContext.camera.worldToScreen(Vec2.fromXY(localCursor.position)),
 		);
-
 	}
 }

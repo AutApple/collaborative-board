@@ -24,7 +24,7 @@ export class CursorEventHandler extends BaseEventHandler {
 		socket.to(roomId).emit(ServerBoardEvents.RemoteCursorMove, socket.id, pos);
 
 		const clientDataMap = room.getClientDataMap();
-		const clientData = clientDataMap.get(socket.id); 
+		const clientData = clientDataMap.get(socket.id);
 		if (!clientData) {
 			console.log('Critical issue: no client data for a client with given id');
 			return;

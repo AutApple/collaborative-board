@@ -16,7 +16,7 @@ export interface RoomOptions {
 }
 
 const defaultRoomOptions: RoomOptions = {
-	isLocal: false
+	isLocal: false,
 };
 
 export class Room {
@@ -30,7 +30,8 @@ export class Room {
 	private localClientData: ClientData | undefined;
 
 	constructor(private options: RoomOptions = defaultRoomOptions) {
-		if (this.options.isLocal) this.localClientData = new ClientData('0', true, new Cursor(new Vec2(0, 0)));
+		if (this.options.isLocal)
+			this.localClientData = new ClientData('0', true, new Cursor(new Vec2(0, 0)));
 	}
 
 	public initialize(id: string, name: string, board: Board, clientData: ClientData[]) {
@@ -38,7 +39,7 @@ export class Room {
 		this.name = name;
 		this.board = board;
 		this.initFlag = true;
-		this.clients = new ClientDataMap(... clientData);
+		this.clients = new ClientDataMap(...clientData);
 	}
 
 	public registerClient(clientData: ClientData) {
@@ -49,7 +50,7 @@ export class Room {
 		if (!this.clients) throw new Error("Can't unregister client in uninitialized room");
 		this.clients.removeClientData(clientId);
 	}
-	
+
 	public getClientsAmount(): number {
 		if (!this.clients) throw new Error("Can't unregister client in uninitialized room");
 		return this.clients.getClientAmount();
@@ -62,7 +63,7 @@ export class Room {
 	public setName(name: string): void {
 		this.name = name;
 	}
-	
+
 	public getName(): string {
 		if (!this.initFlag) throw new Error('Calling get name on unitialized room');
 		return this.name!;
@@ -85,11 +86,11 @@ export class Room {
 
 	public getClientDataMap() {
 		if (!this.clients) throw new Error("Can't unregister client in uninitialized room");
-		return this.clients;		
+		return this.clients;
 	}
-	
+
 	public getLocalClientData(): ClientData {
-		if (!this.localClientData) throw new Error('Can\'t get local client in non-local room instance');
+		if (!this.localClientData) throw new Error("Can't get local client in non-local room instance");
 		return this.localClientData;
 	}
 

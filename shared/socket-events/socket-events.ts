@@ -30,7 +30,7 @@ export interface ServerBoardEventPayloads {
 		roomName: string,
 		boardId: string,
 		raw: AnyRawBoardElement[],
-		foreignClientData: ClientData[]
+		foreignClientData: ClientData[],
 	) => void;
 
 	// clients

@@ -32,7 +32,7 @@ export class BoardServer {
 
 	private repositoryContainer: RepositoryContainer;
 	private serviceContainer: ServiceContainer;
-	
+
 	private makeServices() {
 		const rendererService = new ServerRendererService(
 			serverConfiguraion.thumbnailViewportWidth,
@@ -50,29 +50,28 @@ export class BoardServer {
 		);
 		return [rendererService, roomSchedulerService, roomService];
 	}
-	
 
-	constructor(httpServer: HTTPServer, private commandBus: CommandBus) {
+	constructor(
+		httpServer: HTTPServer,
+		private commandBus: CommandBus,
+	) {
 		this.io = new Server<ClientBoardEventPayloads, ServerBoardEventPayloads>(httpServer);
 
 		this.repositoryContainer = new InstanceContainer([new RoomRepository(dbClient)]);
 
-		this.serviceContainer = new InstanceContainer(
-			this.makeServices()
-		);
+		this.serviceContainer = new InstanceContainer(this.makeServices());
 	}
 
 	public async run() {
 		// TODO: encapsulate all of bootstrap code into some different component
 		const roomService = this.serviceContainer.getInstance(RoomService);
 		const rendererService = this.serviceContainer.getInstance(ServerRendererService);
-		
+
 		const rendererCommandHandler = new RendererCommandHandler(rendererService, roomService);
 		const roomCommandHandler = new RoomCommandHandler(roomService);
-		
+
 		rendererCommandHandler.register(this.commandBus);
 		roomCommandHandler.register(this.commandBus);
-		
 
 		this.io.on('connection', (socket: BoardServerSocket) => {
 			const client = new Client(socket, this.clientRegistry);

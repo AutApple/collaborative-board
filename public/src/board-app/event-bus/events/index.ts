@@ -57,9 +57,9 @@ export type BoardHistoryUndoActionEvent = {};
 export type BoardHistoryRedoActionEvent = {};
 export type BoardHistoryMutationsEvent = { mutations: BoardMutationList };
 
-export type RemoteCursorConnectEvent = { clientId: string, worldCoordsPosition: XY };
+export type RemoteCursorConnectEvent = { clientId: string; worldCoordsPosition: XY };
 export type RemoteCursorDisconnectEvent = { clientId: string };
-export type RemoteCursorMoveEvent = { clientId: string, worldCoordsPosition: XY };
+export type RemoteCursorMoveEvent = { clientId: string; worldCoordsPosition: XY };
 export type LocalCursorMoveEvent = { screenCoords: Vec2 };
 
 export type RendererRedrawBoardEvent = {

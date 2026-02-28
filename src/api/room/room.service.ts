@@ -9,7 +9,7 @@ export class APIRoomService {
 	constructor(
 		private roomRepo: APIRoomRepository,
 		private boardRepo: APIBoardRepository,
-		private commandBus: CommandBus
+		private commandBus: CommandBus,
 	) {}
 
 	public async getPublic() {
@@ -23,8 +23,10 @@ export class APIRoomService {
 		if (userId === undefined && dto.public === true) dto.public = false; // TODO: make this shitty code more elegant
 
 		// query command bus to get blank thumbnail from app renderer service
-		const thumbnailPngBytes = (await this.commandBus.execute(new RenderBlankCommand())) as Uint8Array<ArrayBuffer>; 
-		
+		const thumbnailPngBytes = (await this.commandBus.execute(
+			new RenderBlankCommand(),
+		)) as Uint8Array<ArrayBuffer>;
+
 		// create board
 		const board = await this.boardRepo.insert({});
 
@@ -40,11 +42,13 @@ export class APIRoomService {
 		// Author only | admin
 		const board = await this.roomRepo.update(id, dto);
 		console.log('Command execution');
-		this.commandBus.execute(new UpdateRoomCommand({
-			roomId: id,
-			name: dto.name,
-			isPublic: dto.public
-		}));
+		this.commandBus.execute(
+			new UpdateRoomCommand({
+				roomId: id,
+				name: dto.name,
+				isPublic: dto.public,
+			}),
+		);
 		if (board === null) throw new Error('Board not found');
 		return board;
 	}

@@ -38,9 +38,9 @@ export class NetworkController {
 		this.appContext.room.registerClient(clientData);
 		const cursor = clientData.cursor;
 
-		this.bus.emit(SemanticEvents.RemoteCursorConnect, { 
-			clientId: clientData.clientId, 
-			worldCoordsPosition: cursor.position
+		this.bus.emit(SemanticEvents.RemoteCursorConnect, {
+			clientId: clientData.clientId,
+			worldCoordsPosition: cursor.position,
 		});
 	}
 
@@ -50,9 +50,9 @@ export class NetworkController {
 	}
 
 	public onRemoteCursorMove(clientId: string, position: XY) {
-		this.bus.emit(SemanticEvents.RemoteCursorMove, { 
-			clientId, 
-			worldCoordsPosition: position 
+		this.bus.emit(SemanticEvents.RemoteCursorMove, {
+			clientId,
+			worldCoordsPosition: position,
 		});
 	}
 
@@ -71,7 +71,7 @@ export class NetworkController {
 		roomName: string,
 		boardId: string,
 		raw: AnyRawBoardElement[],
-		clientDataList: ClientData[]
+		clientDataList: ClientData[],
 	) {
 		// Initialize room
 		this.appContext.room.initialize(roomId, roomName, new Board(boardId), clientDataList);
@@ -80,12 +80,12 @@ export class NetworkController {
 
 		// TODO: put instead of these semantic events just past elements into room constructor (as an optional argument)
 		// and same goes for the cursors - pass them into the room constructor and let room to pass merging logic to cursor map
-		for (const clientData of clientDataList) 
-			this.bus.emit(SemanticEvents.RemoteCursorConnect, { 
+		for (const clientData of clientDataList)
+			this.bus.emit(SemanticEvents.RemoteCursorConnect, {
 				clientId: clientData.clientId,
-				worldCoordsPosition: clientData.cursor.position
+				worldCoordsPosition: clientData.cursor.position,
 			});
-		
+
 		this.bus.emit(SemanticEvents.BoardRefresh, { rawData: raw });
 
 		this.appContext.renderer.setLayerData(

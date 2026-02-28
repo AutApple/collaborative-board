@@ -36,7 +36,7 @@ export class NetworkingEventHandler extends BaseEventHandler {
 		const clientData = new ClientData(
 			client.getClientId(),
 			false,
-			new Cursor(Vec2.fromXY(cursorWorldCoords))
+			new Cursor(Vec2.fromXY(cursorWorldCoords)),
 		);
 		await this.roomService.registerClient(roomId, clientData);
 
@@ -46,9 +46,9 @@ export class NetworkingEventHandler extends BaseEventHandler {
 			roomName,
 			board.getId()!,
 			board.getElements().map((e) => e.toRaw()),
-			clients
+			clients,
 		);
-		
+
 		socket.to(roomId).emit(ServerBoardEvents.ClientConnected, clientData);
 
 		client.markHandshakePass();

@@ -39,7 +39,7 @@ export class RoomRepository extends BaseRepository<Room> {
 	): Room {
 		const boardInstance = this.boardModelToInstance(roomModel.board);
 		const roomInstance = new Room({
-			isLocal: false
+			isLocal: false,
 		});
 		roomInstance.initialize(roomModel.id, roomModel.name, boardInstance, []);
 		return roomInstance;

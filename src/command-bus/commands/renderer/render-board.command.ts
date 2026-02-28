@@ -1,4 +1,4 @@
-import type { Command } from '../../command-bus'
+import type { Command } from '../../command-bus';
 export class RenderBoardCommand implements Command<void> {
-  constructor(public roomId: string) {}
+	constructor(public roomId: string) {}
 }

@@ -26,5 +26,5 @@ export class TopPanelController {
 		const link = window.location.href;
 		await navigator.clipboard.writeText(link);
 		this.appContext.notyf.success('Successfully copied link to the clipboard!');
-	} 
+	}
 }
