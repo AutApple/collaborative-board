@@ -48,7 +48,7 @@ export interface ServerBoardEventPayloads {
 // client->server
 export interface ClientBoardEventPayloads {
 	// handshake
-	[ClientBoardEvents.Handshake]: (roomId: string, cursorWorldCoords: XY) => void;
+	[ClientBoardEvents.Handshake]: (roomId: string, cursorWorldCoords: XY, accessToken?: string | undefined) => void;
 	// board actions
 	[ClientBoardEvents.BoardMutations]: (mutations: BoardMutationList) => void;
 	[ClientBoardEvents.RequestRefresh]: () => void;

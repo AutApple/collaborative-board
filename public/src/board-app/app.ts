@@ -16,6 +16,7 @@ import { NetworkUiAdapter } from './network/network.ui-adapter.js';
 import { RendererController } from './renderer/renderer.controller.js';
 import { TopPanelController } from './top-panel/top-panel.controller.js';
 import { TopPanelUiAdapter } from './top-panel/top-panel.ui-adapter.js';
+import authApi from '../api/auth/auth.client-api.js';
 export class BoardClient {
 	constructor(private document: Document) {}
 
@@ -32,7 +33,7 @@ export class BoardClient {
 		return id ?? '';
 	}
 
-	private init(socket: BoardClientSocket) {
+	private async init(socket: BoardClientSocket) {
 		const canvas = this.getCanvas('canvas');
 
 		if (!canvas) throw Error("Can't get a canvas element!");
@@ -79,9 +80,12 @@ export class BoardClient {
 		rendererController.subscribe(semanticEventBus);
 		topPanelController.subscribe(semanticEventBus);
 
+		const accessToken = await authApi.getAccessToken();
+		
 		networkService.sendHandshake(
 			this.getQueryRoomId(),
 			appContext.room.getLocalClientData()!.cursor.position,
+			accessToken ?? undefined
 		);
 	}
 	run() {

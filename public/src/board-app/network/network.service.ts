@@ -11,8 +11,8 @@ export class NetworkService {
 	sendBoardMutationList(mutations: BoardMutationList) {
 		this.socket.emit(ClientBoardEvents.BoardMutations, mutations);
 	}
-	sendHandshake(boardId: string, mousePos: XY) {
-		this.socket.emit(ClientBoardEvents.Handshake, boardId, mousePos);
+	sendHandshake(boardId: string, mousePos: XY, accessToken?: string) {
+		this.socket.emit(ClientBoardEvents.Handshake, boardId, mousePos, accessToken);
 	}
 	sendLocalCursorMove(mousePos: XY) {
 		this.socket.emit(ClientBoardEvents.LocalCursorMove, mousePos);

@@ -23,6 +23,7 @@ import { RoomSchedulerService } from './room/room-scheduler.service.js';
 import type { CommandBus } from '../command-bus/command-bus.js';
 import { RendererCommandHandler } from './renderer/renderer.command-handler.js';
 import { RoomCommandHandler } from './room/room.command-handler.js';
+import { ApplicationAuthService } from './auth/auth.service.js';
 
 export class BoardServer {
 	private io: Server<ClientBoardEventPayloads, ServerBoardEventPayloads>;
@@ -48,7 +49,9 @@ export class BoardServer {
 			serverConfiguraion.cleanupRegistryAfterRoomInactiveSec * 1000,
 			serverConfiguraion.regularRoomSaveMins * 60 * 1000,
 		);
-		return [rendererService, roomSchedulerService, roomService];
+		const authenticationService = new ApplicationAuthService();
+
+		return [rendererService, roomSchedulerService, roomService, authenticationService];
 	}
 
 	constructor(

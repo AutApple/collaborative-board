@@ -26,8 +26,8 @@ export class ClientEventHandlers {
 
 	private throttleMap: Map<(...args: any) => void, boolean> = new Map();
 	private readonly boundHandlers = {
-		onHandshake: (boardId: string, coords: XY) => {
-			this.networkingEventHandler.onHandshake(this.client, boardId, coords);
+		onHandshake: (boardId: string, coords: XY, accessToken?: string | undefined) => {
+			this.networkingEventHandler.onHandshake(this.client, boardId, coords, accessToken);
 		},
 		onDisconnect: () => {
 			this.networkingEventHandler.onDisconnect(this.client);

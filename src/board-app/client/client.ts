@@ -5,12 +5,15 @@ import {
 import { serverConfiguraion } from '../../config/server.config.js';
 import type { ClientRegistry } from './client-registry.js';
 import type { ClientEventHandlers } from './client-event-handlers.js';
+import type { ClientIdentity } from './client-identity.js';
 
 export class Client {
 	private connected = true;
 
 	private passedHandshake = false;
+	
 	private roomId: string | undefined;
+	private clientIdentity: ClientIdentity | undefined;
 
 	private handshakeTimer: NodeJS.Timeout | undefined;
 
@@ -40,6 +43,14 @@ export class Client {
 
 	public getClientId() {
 		return this.socket.id;
+	}
+
+	public setClientIdentity(clientIdentity: ClientIdentity) {
+		this.clientIdentity = clientIdentity;
+	}
+	
+	public getClientIdentity(): ClientIdentity | undefined {
+		return this.clientIdentity;
 	}
 
 	public getSocket(): BoardServerSocket {
