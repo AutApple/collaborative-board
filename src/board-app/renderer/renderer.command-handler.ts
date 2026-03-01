@@ -1,13 +1,13 @@
 import type { CommandBus } from '../../command-bus/command-bus.js';
 import { RenderBlankCommand } from '../../command-bus/commands/renderer/render-blank.command.js';
 import { RenderBoardCommand } from '../../command-bus/commands/renderer/render-board.command.js';
-import type { RoomService } from '../room/room.service.js';
-import type { ServerRendererService } from './renderer.service.js';
+import type { ApplicationRoomService } from '../room/room.service.js';
+import type { ApplicationServerRendererService } from './renderer.service.js';
 
 export class RendererCommandHandler {
 	constructor(
-		private rendererService: ServerRendererService,
-		private roomService: RoomService,
+		private rendererService: ApplicationServerRendererService,
+		private roomService: ApplicationRoomService,
 	) {}
 
 	private async renderRoomBoard(command: RenderBoardCommand): Promise<Uint8Array<ArrayBuffer>> {

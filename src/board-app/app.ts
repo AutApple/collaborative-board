@@ -14,9 +14,9 @@ import {
 	type RepositoryContainer,
 	type ServiceContainer,
 } from './common/instance-container.js';
-import { RoomService } from './room/room.service.js';
+import { ApplicationRoomService } from './room/room.service.js';
 import dbClient from '../db.js';
-import { ServerRendererService } from './renderer/renderer.service.js';
+import { ApplicationServerRendererService } from './renderer/renderer.service.js';
 import { serverConfiguraion } from '../config/server.config.js';
 import { RoomRepository } from './room/room.repository.js';
 import { RoomSchedulerService } from './room/room-scheduler.service.js';
@@ -34,13 +34,13 @@ export class BoardServer {
 	private serviceContainer: ServiceContainer;
 
 	private makeServices() {
-		const rendererService = new ServerRendererService(
+		const rendererService = new ApplicationServerRendererService(
 			serverConfiguraion.thumbnailViewportWidth,
 			serverConfiguraion.thumbnailViewportHeight,
 		);
 		const roomSchedulerService = new RoomSchedulerService();
 
-		const roomService = new RoomService(
+		const roomService = new ApplicationRoomService(
 			this.repositoryContainer.getInstance(RoomRepository),
 			rendererService,
 			this.appContext,
@@ -64,8 +64,8 @@ export class BoardServer {
 
 	public async run() {
 		// TODO: encapsulate all of bootstrap code into some different component
-		const roomService = this.serviceContainer.getInstance(RoomService);
-		const rendererService = this.serviceContainer.getInstance(ServerRendererService);
+		const roomService = this.serviceContainer.getInstance(ApplicationRoomService);
+		const rendererService = this.serviceContainer.getInstance(ApplicationServerRendererService);
 
 		const rendererCommandHandler = new RendererCommandHandler(rendererService, roomService);
 		const roomCommandHandler = new RoomCommandHandler(roomService);

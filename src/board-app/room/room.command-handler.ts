@@ -3,10 +3,10 @@ import {
 	UpdateRoomCommand,
 	type UpdateRoomCommandPayload,
 } from '../../command-bus/commands/room/update-room.command.js';
-import type { RoomService } from './room.service.js';
+import type { ApplicationRoomService } from './room.service.js';
 
 export class RoomCommandHandler {
-	constructor(private roomService: RoomService) {}
+	constructor(private roomService: ApplicationRoomService) {}
 
 	private async updateRoomData(command: UpdateRoomCommand): Promise<void> {
 		const { payload } = command;

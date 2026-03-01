@@ -3,7 +3,7 @@ import type { BoardMutationList } from '../../../shared/board/board-mutation.js'
 import type { XY } from '../../../shared/utils/vec2.utils.js';
 import type { AppContext } from '../app-context.js';
 import { serverConfiguraion } from '../../config/server.config.js';
-import type { RoomService } from '../room/room.service.js';
+import type { ApplicationRoomService } from '../room/room.service.js';
 import type { BaseEventHandler } from './event-handlers/base.event-handler.js';
 import { BoardEventHandler } from './event-handlers/board.event-handler.js';
 import { CursorEventHandler } from './event-handlers/cursor.event-handler.js';

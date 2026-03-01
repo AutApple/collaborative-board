@@ -4,15 +4,15 @@ import {
 } from '../../../../shared/board/board-mutation.js';
 import { ServerBoardEvents } from '../../../../shared/socket-events/socket-events.js';
 import type { ServiceContainer } from '../../common/instance-container.js';
-import { RoomService } from '../../room/room.service.js';
+import { ApplicationRoomService } from '../../room/room.service.js';
 import type { Client } from '../client.js';
 import { BaseEventHandler } from './base.event-handler.js';
 
 export class BoardEventHandler extends BaseEventHandler {
-	private roomService: RoomService;
+	private roomService: ApplicationRoomService;
 	constructor(serviceContainer: ServiceContainer) {
 		super(serviceContainer);
-		this.roomService = serviceContainer.getInstance(RoomService);
+		this.roomService = serviceContainer.getInstance(ApplicationRoomService);
 	}
 
 	public async onBoardMutations(client: Client, mutations: BoardMutationList) {

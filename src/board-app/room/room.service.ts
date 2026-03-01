@@ -1,15 +1,15 @@
 import type { AppContext } from '../app-context.js';
 import { BaseService } from '../common/base.service.js';
-import { ServerRendererService } from '../renderer/renderer.service.js';
+import { ApplicationServerRendererService } from '../renderer/renderer.service.js';
 import type { RoomRepository } from './room.repository.js';
 import type { Room } from '../../../shared/room/room.js';
 import type { RoomSchedulerService } from './room-scheduler.service.js';
 import type { ClientData } from '../../../shared/client-data/client-data.js';
 
-export class RoomService extends BaseService {
+export class ApplicationRoomService extends BaseService {
 	constructor(
 		private roomRepository: RoomRepository,
-		private rendererService: ServerRendererService,
+		private rendererService: ApplicationServerRendererService,
 		private appContext: AppContext,
 		private schedulerService: RoomSchedulerService,
 		private cleanupDelayMs = 1000,

@@ -3,15 +3,15 @@ import { Cursor } from '../../../../shared/cursor/cursor.js';
 import { ServerBoardEvents } from '../../../../shared/socket-events/socket-events.js';
 import { Vec2, type XY } from '../../../../shared/utils/vec2.utils.js';
 import type { ServiceContainer } from '../../common/instance-container.js';
-import { RoomService } from '../../room/room.service.js';
+import { ApplicationRoomService } from '../../room/room.service.js';
 import type { Client } from '../client.js';
 import { BaseEventHandler } from './base.event-handler.js';
 
 export class NetworkingEventHandler extends BaseEventHandler {
-	private roomService: RoomService;
+	private roomService: ApplicationRoomService;
 	constructor(serviceContainer: ServiceContainer) {
 		super(serviceContainer);
-		this.roomService = serviceContainer.getInstance(RoomService);
+		this.roomService = serviceContainer.getInstance(ApplicationRoomService);
 	}
 
 	public async onHandshake(client: Client, roomId: string, cursorWorldCoords: XY) {

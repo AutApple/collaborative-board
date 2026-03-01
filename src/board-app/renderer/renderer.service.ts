@@ -5,7 +5,7 @@ import { Camera } from '../../../shared/camera/camera.js';
 import { Vec2 } from '../../../shared/utils/vec2.utils.js';
 import { BaseService } from '../common/base.service.js';
 
-export class ServerRendererService extends BaseService {
+export class ApplicationServerRendererService extends BaseService {
 	constructor(
 		private canvasWidth: number = 1920,
 		private canvasHeight: number = 1080,
