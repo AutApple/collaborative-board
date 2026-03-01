@@ -62,7 +62,7 @@ export class NetworkingEventHandler extends BaseEventHandler {
 		
 		if (clientIdentity !== null) 
 			client.setClientIdentity(clientIdentity);
-		console.log(clientIdentity === null ? `No client identity for ${client.getClientId()}` : `Identified ${client.getClientId()} as ${clientIdentity.getEmail()}`);
+		console.log(clientIdentity === null ? `No client identity for ${client.getClientId()}` : `Identified ${client.getClientId()} as ${clientIdentity.email}`);
 
 	}
 
