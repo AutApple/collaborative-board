@@ -15,6 +15,7 @@ export class APIRoomController {
 			id: room.id,
 			name: room.name,
 			pngBase64: Buffer.from(room.thumbnailPngBytes).toString('base64'),
+			protectedMode: room.protectedMode,
 			public: room.public,
 		};
 	}

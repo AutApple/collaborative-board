@@ -27,6 +27,7 @@ export class NetworkController {
 		socket.on(ServerBoardEvents.ClientDisconnected, this.onClientDisconnected.bind(this));
 		socket.on(ServerBoardEvents.RemoteCursorMove, this.onRemoteCursorMove.bind(this));
 		socket.on(ServerBoardEvents.BoardNotFound, this.onBoardNotFound.bind(this));
+		socket.on(ServerBoardEvents.BoardMutationsRejected, this.onBoardMutationsRejected.bind(this));
 		socket.on('disconnect', this.onDisconnect.bind(this));
 	}
 
@@ -62,6 +63,11 @@ export class NetworkController {
 	public onBoardMutations(mutations: BoardMutationList) {
 		this.bus.emit(SemanticEvents.BoardMutations, { mutations });
 	}
+	public onBoardMutationsRejected(message: string) {
+		this.appContext.notyf.error(`Board edit rejected. Reason: ${message}`);
+		this.bus.emit(SemanticEvents.BoardHistoryUndoAction, {});
+	}
+
 	public onBoardNotFound() {
 		this.networkUiAdapter.redirectTo404();
 	}
@@ -74,7 +80,12 @@ export class NetworkController {
 		clientDataList: ClientData[],
 	) {
 		// Initialize room
-		this.appContext.room.initialize(roomId, roomName, new Board(boardId), clientDataList);
+		this.appContext.room.initialize({
+			id: roomId,
+			name: roomName,
+			board: new Board(boardId),
+			clientData: clientDataList,
+		});
 		// Initialize toolbox
 		this.appContext.toolbox.initialize(this.appContext.room.getBoard());
 

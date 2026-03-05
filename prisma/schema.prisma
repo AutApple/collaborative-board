@@ -45,7 +45,10 @@ model Room {
   board Board  @relation(fields: [boardId], references: [id], onDelete: Cascade)
 
   authorId String? @db.Uuid
-  author User? @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  author User? @relation("RoomAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+
+  protectedMode  Boolean @default(false)
+  editors        User[] @relation("RoomEditor")
 }
 
 
@@ -60,7 +63,8 @@ model User {
 
   createdAt      DateTime @default(now())
 
-  rooms Room[]
+  createdRooms Room[] @relation("RoomAuthor") // TODO: make this part of one join table with different roles assigned
+  editableRooms Room[] @relation("RoomEditor") 
 }
 
 // use refresh token as seperate model for future multi-device support

@@ -24,6 +24,7 @@ export class RoomRegistry {
 		if (!room) return;
 
 		if (dto.name !== undefined) room.setName(dto.name);
+		if (dto.protectedMode !== undefined) room.setProtection(dto.protectedMode);
 
 		console.log(`Update finished! Now room protection mode is set to ${room.isProtected()}`);
 	}

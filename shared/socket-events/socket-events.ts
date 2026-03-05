@@ -10,10 +10,13 @@ export enum ServerBoardEvents {
 	Handshake = 'handshake', // Board object, Remote cursor array
 	ClientConnected = 'clientConnected', // Client ID, cursor info
 	ClientDisconnected = 'clientDisconnected', // Client ID
+
 	RemoteCursorMove = 'remoteCursorMove',
+
 	BoardMutations = 'boardMutations',
 	RefreshBoard = 'refreshBoard',
 	BoardNotFound = 'boardNotFound',
+	BoardMutationsRejected = 'rejectMutations',
 }
 
 export enum ClientBoardEvents {
@@ -40,6 +43,8 @@ export interface ServerBoardEventPayloads {
 	// board actions
 	[ServerBoardEvents.BoardMutations]: (mutations: BoardMutationList) => void;
 	[ServerBoardEvents.RefreshBoard]: (raw: AnyRawBoardElement[]) => void;
+	[ServerBoardEvents.BoardMutationsRejected]: (message: string) => void;
+
 	[ServerBoardEvents.BoardNotFound]: () => void;
 
 	// cursor
@@ -48,7 +53,11 @@ export interface ServerBoardEventPayloads {
 // client->server
 export interface ClientBoardEventPayloads {
 	// handshake
-	[ClientBoardEvents.Handshake]: (roomId: string, cursorWorldCoords: XY, accessToken?: string | undefined) => void;
+	[ClientBoardEvents.Handshake]: (
+		roomId: string,
+		cursorWorldCoords: XY,
+		accessToken?: string | undefined,
+	) => void;
 	// board actions
 	[ClientBoardEvents.BoardMutations]: (mutations: BoardMutationList) => void;
 	[ClientBoardEvents.RequestRefresh]: () => void;

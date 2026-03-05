@@ -23,6 +23,31 @@ export class BoardEventHandler extends BaseEventHandler {
 		const room = await this.roomService.get(roomId);
 		if (!room) return;
 
+		// TODO: encapsulate this code somewhere else
+		const isProtected = room.isProtected();
+		if (isProtected) {
+			const clientIdentity = client.getClientIdentity();
+			if (clientIdentity === undefined) {
+				socket.emit(
+					ServerBoardEvents.BoardMutationsRejected,
+					'you are not allowed to edit this room',
+				);
+				return;
+			}
+
+			const ownerId = room.getOwnerId();
+			const editorIds = room.getEditorIds();
+			editorIds.push(ownerId); // TODO: merge it in the room.ts code
+
+			if (editorIds.find((id) => id === clientIdentity.userId) === null) {
+				socket.emit(
+					ServerBoardEvents.BoardMutationsRejected,
+					'you are not allowed to edit this room',
+				);
+				return;
+			}
+		}
+
 		const board = room.getBoard();
 
 		mutations = optimizeMutations(mutations);
