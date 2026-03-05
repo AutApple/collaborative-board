@@ -8,6 +8,7 @@ import { ToolResult } from '../tool-result.js';
 import { BaseTool } from './base.tool.js';
 import { OvalEraserStrategy } from './eraser-strategy/oval.eraser-strategy.js';
 import { StrokeEraserStrategy } from './eraser-strategy/stroke.eraser-strategy.js';
+import { RectangleEraserStrategy } from './eraser-strategy/rectangle.eraser-strategy.js';
 
 export class EraserTool extends BaseTool {
 	private erasing: boolean = false;
@@ -23,7 +24,6 @@ export class EraserTool extends BaseTool {
 	private erase(worldCoords: Vec2, eraserRadius: number): BoardMutationList {
 		const closestElement = this.board.findClosestElementTo(worldCoords);
 		if (!closestElement) return [];
-
 		const distance = closestElement.distanceTo(worldCoords);
 		if (distance > eraserRadius) return [];
 
@@ -37,7 +37,7 @@ export class EraserTool extends BaseTool {
 			case BoardElementType.Oval:
 				return OvalEraserStrategy.apply(closestElement, this.localToolResult);
 			case BoardElementType.Rectangle:
-				return OvalEraserStrategy.apply(closestElement, this.localToolResult);
+				return RectangleEraserStrategy.apply(closestElement, this.localToolResult);
 		}
 	}
 
