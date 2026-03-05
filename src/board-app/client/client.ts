@@ -11,7 +11,7 @@ export class Client {
 	private connected = true;
 
 	private passedHandshake = false;
-	
+
 	private roomId: string | undefined;
 	private clientIdentity: ClientIdentity | undefined;
 
@@ -48,7 +48,7 @@ export class Client {
 	public setClientIdentity(clientIdentity: ClientIdentity) {
 		this.clientIdentity = clientIdentity;
 	}
-	
+
 	public getClientIdentity(): ClientIdentity | undefined {
 		return this.clientIdentity;
 	}

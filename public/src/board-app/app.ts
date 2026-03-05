@@ -81,11 +81,11 @@ export class BoardClient {
 		topPanelController.subscribe(semanticEventBus);
 
 		const accessToken = await authApi.getAccessToken();
-		
+
 		networkService.sendHandshake(
 			this.getQueryRoomId(),
 			appContext.room.getLocalClientData()!.cursor.position,
-			accessToken ?? undefined
+			accessToken ?? undefined,
 		);
 	}
 	run() {
