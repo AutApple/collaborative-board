@@ -2,9 +2,9 @@ import type { AppContext } from '../app-context.js';
 import { BaseService } from '../common/base.service.js';
 import { ApplicationServerRendererService } from '../renderer/renderer.service.js';
 import type { RoomRepository } from './room.repository.js';
-import type { Room } from '../../../shared/room/room.js';
 import type { RoomSchedulerService } from './room-scheduler.service.js';
 import type { ClientData } from '../../../shared/client-data/client-data.js';
+import type { ServerRoom } from './server-room.js';
 
 export class ApplicationRoomService extends BaseService {
 	constructor(
@@ -18,7 +18,7 @@ export class ApplicationRoomService extends BaseService {
 		super();
 	}
 
-	private async loadIntoRegistryAndGet(roomId: string): Promise<Room | undefined> {
+	private async loadIntoRegistryAndGet(roomId: string): Promise<ServerRoom | undefined> {
 		const room = await this.roomRepository.get(roomId);
 		if (!room) return undefined;
 		this.appContext.roomRegistry.register(room);
@@ -33,7 +33,7 @@ export class ApplicationRoomService extends BaseService {
 		return room;
 	}
 
-	public async get(roomId: string): Promise<Room | undefined> {
+	public async get(roomId: string): Promise<ServerRoom | undefined> {
 		let room = this.appContext.roomRegistry.get(roomId);
 		if (room !== undefined) return room;
 		room = await this.loadIntoRegistryAndGet(roomId);
@@ -79,8 +79,8 @@ export class ApplicationRoomService extends BaseService {
 		this.appContext.roomRegistry.remove(roomId);
 	}
 
-	public update(roomId: string, name: string) {
+	public update(roomId: string, name: string, protectedMode: boolean) {
 		console.log('Updating room ', name);
-		this.appContext.roomRegistry.update(roomId, name);
+		this.appContext.roomRegistry.update(roomId, name, protectedMode);
 	}
 }

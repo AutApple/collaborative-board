@@ -6,9 +6,9 @@ import { BaseRepository } from '../common/base.repository.js';
 import { BoardElementFactory } from '../../../shared/board-elements/board-element-factory.js';
 import type { BaseBoardElement } from '../../../shared/board-elements/index.js';
 import { validate as isUuid } from 'uuid';
-import { Room } from '../../../shared/room/room.js';
+import { ServerRoom } from './server-room.js';
 
-export class RoomRepository extends BaseRepository<Room> {
+export class RoomRepository extends BaseRepository<ServerRoom> {
 	private boardModelToInstance(model: BoardModel & { elements?: BoardElementModel[] }): Board {
 		const board = new Board(model.id);
 		if (!model.elements) return board;
@@ -35,37 +35,51 @@ export class RoomRepository extends BaseRepository<Room> {
 	}
 
 	private roomModelToInstance(
-		roomModel: RoomModel & { board: BoardModel & { elements?: BoardElementModel[] } },
-	): Room {
+		roomModel: RoomModel & { board: BoardModel & { elements?: BoardElementModel[] } } & {
+			editors: {
+				id: string;
+			}[];
+		},
+	): ServerRoom {
 		const boardInstance = this.boardModelToInstance(roomModel.board);
-		const roomInstance = new Room({
-			isLocal: false,
+		const roomInstance = new ServerRoom();
+		roomInstance.initialize({
+			id: roomModel.id,
+			name: roomModel.name,
+			board: boardInstance,
+			clientData: [],
+			ownerId: roomModel.authorId ?? undefined,
+			protectedMode: roomModel.protectedMode,
+			editorIds: roomModel.editors.map((e) => e.id),
 		});
-		roomInstance.initialize(roomModel.id, roomModel.name, boardInstance, []);
+		console.log('Protected mode ', roomInstance.isProtected());
 		return roomInstance;
 	}
 
-	public async get(id: string): Promise<Room | null> {
+	public async get(id: string): Promise<ServerRoom | null> {
 		if (!isUuid(id)) return null;
 		const roomModel = await this.client.room.findUnique({
 			where: { id },
-			include: { board: { include: { elements: true } } },
+			include: { board: { include: { elements: true } }, editors: true },
 		});
 		if (!roomModel) return null;
 
 		return this.roomModelToInstance(roomModel);
 	}
 
-	public async getAll(): Promise<Room[]> {
+	public async getAll(): Promise<ServerRoom[]> {
 		const roomModels = await this.client.room.findMany({
-			include: { board: { include: { elements: true } } },
+			include: { board: { include: { elements: true } }, editors: true },
 		});
 
 		const rooms = roomModels.map((r) => this.roomModelToInstance(r));
 		return rooms;
 	}
 
-	private async update(room: Room, thumbnailPngBytes: Uint8Array<ArrayBuffer>): Promise<Room> {
+	private async update(
+		room: ServerRoom,
+		thumbnailPngBytes: Uint8Array<ArrayBuffer>,
+	): Promise<ServerRoom> {
 		const roomId = room.getId();
 
 		const roomModel = await this.client.room.findFirst({
@@ -97,15 +111,10 @@ export class RoomRepository extends BaseRepository<Room> {
 		return room;
 	}
 
-	public async save(room: Room, thumbnailPngBytes: Uint8Array<ArrayBuffer>): Promise<Room> {
-		//     const boardId = board.getId();
-		//     if (boardId === undefined) return this.insert(board);
-
-		//     const boardModel = await this.client.board.findUnique({
-		//         where: { id: boardId },
-		//     });
-		//     if (!boardModel) return this.insert(board);
-		//     return this.update(board);
+	public async save(
+		room: ServerRoom,
+		thumbnailPngBytes: Uint8Array<ArrayBuffer>,
+	): Promise<ServerRoom> {
 		return this.update(room, thumbnailPngBytes);
 	}
 }

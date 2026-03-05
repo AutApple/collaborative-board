@@ -10,7 +10,6 @@ export class RoomCommandHandler {
 
 	private async updateRoomData(command: UpdateRoomCommand): Promise<void> {
 		const { payload } = command;
-		console.log(payload);
 
 		if (!payload.name) return;
 		this.roomService.update(payload.roomId, payload.name);

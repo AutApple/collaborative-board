@@ -6,7 +6,7 @@ import { RenderLayerType } from './enums/render-layer.enum.js';
 import { BoardElementsRenderLayer } from '../../../../shared/renderer/layers/board-elements.render-layer.js';
 import { DebugStatsRenderLayer } from './layers/debug-stats.render-layer.js';
 import { StrokePreviewRenderLayer } from './layers/stroke-preview.render-layer.js';
-import type { RoomDebugStats } from '../../../../shared/room/room.js';
+import type { RoomDebugStats } from '../../../../shared/room/base-room.js';
 
 export class ClientRenderer {
 	private ctx: CanvasRenderingContext2D;

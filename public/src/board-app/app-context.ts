@@ -4,15 +4,15 @@ import { Camera } from '../../../shared/camera/camera.js';
 import { ClientRenderer } from './renderer/renderer.js';
 import { Toolbox } from './toolbox/toolbox.js';
 import { clientConfiguration } from './config/client.config.js';
-import { Room } from '../../../shared/room/room.js';
 import { Notyf } from 'notyf';
+import { ClientRoom } from '../room/client-room.js';
 
 export class AppContext {
 	public renderer: ClientRenderer;
 	public camera: Camera;
 	public toolbox: Toolbox;
 	public boardHistory: BoardHistory;
-	public room: Room;
+	public room: ClientRoom;
 	public notyf: Notyf;
 
 	constructor(canvas: HTMLCanvasElement) {
@@ -23,9 +23,7 @@ export class AppContext {
 			},
 		});
 
-		this.room = new Room({
-			isLocal: true,
-		});
+		this.room = new ClientRoom();
 
 		this.renderer = new ClientRenderer(
 			canvas,

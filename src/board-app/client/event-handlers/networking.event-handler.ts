@@ -16,7 +16,12 @@ export class NetworkingEventHandler extends BaseEventHandler {
 		this.roomService = serviceContainer.getInstance(ApplicationRoomService);
 	}
 
-	public async onHandshake(client: Client, roomId: string, cursorWorldCoords: XY, accessToken?: string | undefined) {
+	public async onHandshake(
+		client: Client,
+		roomId: string,
+		cursorWorldCoords: XY,
+		accessToken?: string | undefined,
+	) {
 		if (client.didPassHandshake() === true) return;
 
 		const socket = client.getSocket();
@@ -29,7 +34,7 @@ export class NetworkingEventHandler extends BaseEventHandler {
 			return;
 		}
 
-		const clients = room.getForeignClientDataList();
+		const clients = room.getClientDataMap().foreignDataToList();
 		const roomName = room.getName();
 		const board = room.getBoard();
 
@@ -52,18 +57,19 @@ export class NetworkingEventHandler extends BaseEventHandler {
 		);
 
 		socket.to(roomId).emit(ServerBoardEvents.ClientConnected, clientData);
-	
+
 		client.markHandshakePass();
-		
-		if (accessToken === undefined) 
-			return;
+
+		if (accessToken === undefined) return;
 		const authService = this.serviceContainer.getInstance(ApplicationAuthService);
 		const clientIdentity: ClientIdentity | null = authService.authenticate(accessToken);
-		
-		if (clientIdentity !== null) 
-			client.setClientIdentity(clientIdentity);
-		console.log(clientIdentity === null ? `No client identity for ${client.getClientId()}` : `Identified ${client.getClientId()} as ${clientIdentity.email}`);
 
+		if (clientIdentity !== null) client.setClientIdentity(clientIdentity);
+		console.log(
+			clientIdentity === null
+				? `No client identity for ${client.getClientId()}`
+				: `Identified ${client.getClientId()} as ${clientIdentity.email}`,
+		);
 	}
 
 	public async onDisconnect(client: Client) {

@@ -3,7 +3,7 @@ import type { BoardMutationList } from '@shared/board/board-mutation.js';
 import type { Vec2, XY } from '@shared/utils/vec2.utils.js';
 import type { BaseBoardElement } from '../../../../../shared/board-elements/base/base.board-element.js';
 import type { Tools } from '../../toolbox/enums/tools.enum.js';
-import type { RoomDebugStats } from '../../../../../shared/room/room.js';
+import type { RoomDebugStats } from '../../../../../shared/room/base-room.js';
 
 export enum SemanticEvents {
 	ToolStartUsing,
