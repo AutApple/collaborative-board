@@ -39,7 +39,7 @@ export class BoardEventHandler extends BaseEventHandler {
 			const editorIds = room.getEditorIds();
 			editorIds.push(ownerId); // TODO: merge it in the room.ts code
 
-			if (editorIds.find((id) => id === clientIdentity.userId) === null) {
+			if (editorIds.find((id) => id === clientIdentity.userId) === undefined) {
 				socket.emit(
 					ServerBoardEvents.BoardMutationsRejected,
 					'you are not allowed to edit this room',

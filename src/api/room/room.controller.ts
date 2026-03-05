@@ -6,6 +6,7 @@ import type { OptionalAccessTokenResponseLocals } from '../auth/middleware/safe-
 import type { OutputRoomDTOType } from '../../../shared/room/dto/output-room.dto.js';
 import type { CreateRoomDTOType } from '../../../shared/room/dto/create-room.dto.js';
 import type { UpdateRoomDTOType } from '../../../shared/room/dto/update-room.dto.js';
+import type { UpdateRoomEditorsDTOType } from './dto/update-editors.dto.js';
 
 export class APIRoomController {
 	constructor(public readonly roomService: APIRoomService) {}
@@ -53,7 +54,16 @@ export class APIRoomController {
 		const room = await this.roomService.update(id, dto);
 		res.status(200).json(this.outputRoomDtoFromModel(room));
 	}
-	public put(req: Request, res: Response): void {
+
+	public async updateEditors(
+		req: Request<{ param: string }>,
+		res: Response<any, DtoResponseLocals<UpdateRoomEditorsDTOType>>,
+	) {
+		const room = await this.roomService.updateEditors(req.params.param, res.locals.dto);
+		res.status(200).json(this.outputRoomDtoFromModel(room));
+	}
+
+	public put(_: Request, res: Response): void {
 		res.status(405).json({ message: 'PUT method not supported. Use PATCH instead.' });
 	}
 	public async delete(req: Request<{ param: string }>, res: Response): Promise<void> {

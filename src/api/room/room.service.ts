@@ -5,11 +5,15 @@ import { RenderBlankCommand } from '../../command-bus/commands/renderer/render-b
 import { UpdateRoomCommand } from '../../command-bus/commands/room/update-room.command.js';
 import type { CreateRoomDTOType } from '../../../shared/room/dto/create-room.dto.js';
 import type { UpdateRoomDTOType } from '../../../shared/room/dto/update-room.dto.js';
+import type { APIUserService } from '../user/user.service.js';
+import type { UpdateRoomEditorsDTOType } from './dto/update-editors.dto.js';
+import { UpdateRoomEditorsCommand } from '../../command-bus/commands/room/update-room-editors.command.js';
 
 export class APIRoomService {
 	constructor(
 		private roomRepo: APIRoomRepository,
 		private boardRepo: APIBoardRepository,
+		private userService: APIUserService,
 		private commandBus: CommandBus,
 	) {}
 
@@ -43,7 +47,7 @@ export class APIRoomService {
 
 	public async update(id: string, dto: UpdateRoomDTOType) {
 		// Author only | admin
-		const board = await this.roomRepo.update(id, dto);
+		const room = await this.roomRepo.update(id, dto);
 		this.commandBus.execute(
 			new UpdateRoomCommand({
 				roomId: id,
@@ -51,9 +55,34 @@ export class APIRoomService {
 				protectedMode: dto.protectedMode,
 			}),
 		);
-		if (board === null) throw new Error('Board not found');
-		return board;
+		if (room === null) throw new Error('Board not found');
+		return room;
 	}
+
+	public async updateEditors(id: string, dto: UpdateRoomEditorsDTOType) {
+		let addUserIds: string[] = [];
+		let removeUserIds: string[] = [];
+
+		if (dto.add) {
+			const users = await this.userService.getManyByUsernames(dto.add);
+			addUserIds = users.map((u) => u.id);
+		}
+		if (dto.remove) {
+			const users = await this.userService.getManyByUsernames(dto.remove);
+			removeUserIds = users.map((u) => u.id);
+		}
+
+		const res = await this.roomRepo.updateEditorIds(id, addUserIds, removeUserIds);
+		this.commandBus.execute(
+			new UpdateRoomEditorsCommand({
+				roomId: id,
+				addIds: addUserIds,
+				removeIds: removeUserIds,
+			}),
+		);
+		return res;
+	}
+
 	public async delete(id: string) {
 		// Author only | admin
 		const board = await this.roomRepo.delete(id);

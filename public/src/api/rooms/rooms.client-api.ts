@@ -11,7 +11,7 @@ class ClientRoomsAPI {
 		if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 		const boards = await response.json();
 
-		for (const board of boards)
+		for (const board of boards) // TODO: validate against OutputRoomDto
 			if (!board.name || !board.createdAt || !board.id)
 				throw new Error(
 					`Didn\'t retrieve proper board object on GET boards. Got instead: ${board}`,
@@ -31,7 +31,7 @@ class ClientRoomsAPI {
 				'Content-Type': 'application/json',
 				Authorization: `Bearer ${accessToken}`,
 			},
-			body: JSON.stringify({ name: name.trim(), public: isPublic }),
+			body: JSON.stringify({ name: name.trim(), public: isPublic, protectedMode: false }), // TODO: validate against CreateRoomDTO
 		});
 
 		if (!response.ok) {

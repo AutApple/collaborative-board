@@ -67,6 +67,18 @@ export class ServerRoom extends BaseRoom {
 		this.roomState.protectedMode = protectedMode;
 	}
 
+	public addEditor(id: string): void {
+		this.ensureInitializedServer();
+		if (!this.roomState.editorIds.find((editorId) => editorId === id))
+			// prevent duplicates
+			this.roomState.editorIds.push(id);
+	}
+
+	public removeEditor(id: string): void {
+		this.ensureInitializedServer();
+		this.roomState.editorIds = this.roomState.editorIds.filter((editorId) => editorId !== id);
+	}
+
 	public getEditorIds(): string[] {
 		this.ensureInitializedServer();
 		if (!this.roomState.protectedMode)

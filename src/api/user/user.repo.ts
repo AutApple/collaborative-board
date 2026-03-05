@@ -1,4 +1,8 @@
-import type { PrismaClient, RefreshToken, User } from '../../board-app/generated/prisma/client.js';
+import {
+	PrismaClient,
+	type RefreshToken,
+	type User,
+} from '../../board-app/generated/prisma/client.js';
 import type { CreateUserDTOType } from './dto/create-user.dto.js';
 
 export class APIUserRepository {
@@ -18,6 +22,18 @@ export class APIUserRepository {
 		const users = await this.dbClient.user.findMany();
 		return users;
 	}
+
+	public async findManyByUsernames(usernames: string[]): Promise<User[]> {
+		const users = await this.dbClient.user.findMany({
+			where: {
+				username: {
+					in: usernames,
+				},
+			},
+		});
+		return users;
+	}
+
 	public async insert(data: CreateUserDTOType): Promise<User> {
 		return await this.dbClient.user.create({ data: data });
 	}

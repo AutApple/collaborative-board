@@ -34,6 +34,22 @@ export class APIRoomRepository {
 		return await this.dbClient.room.update({ where: { id }, data: updateFields });
 	}
 
+	public async updateEditorIds(roomId: string, addIds: string[], removeIds: string[]) {
+		return await this.dbClient.room.update({
+			where: { id: roomId },
+			data: {
+				editors: {
+					connect: addIds.map((v) => {
+						return { id: v };
+					}),
+					disconnect: removeIds.map((v) => {
+						return { id: v };
+					}),
+				},
+			},
+		});
+	}
+
 	public async delete(id: string): Promise<Room | null> {
 		const board = await this.find(id);
 		if (!board) return null;

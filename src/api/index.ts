@@ -6,7 +6,7 @@ import type { CommandBus } from '../command-bus/command-bus.js';
 
 export function createAndMapApiModules(app: Express, commandBus: CommandBus) {
 	const apiUserModule = createUserApiModule();
-	const apiRoomModule = createRoomApiModule(commandBus);
+	const apiRoomModule = createRoomApiModule(commandBus, apiUserModule.service);
 	const apiAuthModule = createAuthApiModule(apiUserModule.service);
 
 	app.use('/api/users', apiUserModule.router);

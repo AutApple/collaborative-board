@@ -11,6 +11,11 @@ export class APIUserService {
 		return user;
 	}
 
+	public async getManyByUsernames(usernames: string[]): Promise<User[]> {
+		const users = await this.userRepo.findManyByUsernames(usernames);
+		return users;
+	}
+
 	public async getUserSafe(email: string): Promise<Partial<User> | null> {
 		const user = await this.userRepo.find(email);
 		if (!user) return null;
