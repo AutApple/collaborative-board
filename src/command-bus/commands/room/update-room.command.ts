@@ -1,9 +1,7 @@
+import type { UpdateRoomDTOType } from '../../../../shared/room/dto/update-room.dto.js';
 import type { Command } from '../../command-bus';
-export interface UpdateRoomCommandPayload {
-	// TODO: define some kind of shared dtos for rooms or something
+export interface UpdateRoomCommandPayload extends UpdateRoomDTOType {
 	roomId: string;
-	name: string | undefined;
-	isPublic: boolean | undefined;
 }
 export class UpdateRoomCommand implements Command<void> {
 	constructor(public payload: UpdateRoomCommandPayload) {}

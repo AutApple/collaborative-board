@@ -1,5 +1,6 @@
+import type { CreateRoomDTOType } from '../../../shared/room/dto/create-room.dto.js';
+import type { UpdateRoomDTOType } from '../../../shared/room/dto/update-room.dto.js';
 import type { PrismaClient, Room } from '../../board-app/generated/prisma/client.js';
-import type { CreateRoomDTOType } from './dtos/create-room.dto.js';
 
 export class APIRoomRepository {
 	constructor(private dbClient: PrismaClient) {}
@@ -23,10 +24,14 @@ export class APIRoomRepository {
 		return await this.dbClient.room.create({ data: dto });
 	}
 
-	public async update(id: string, dto: CreateRoomDTOType): Promise<Room | null> {
+	public async update(id: string, dto: UpdateRoomDTOType): Promise<Room | null> {
 		const board = await this.find(id);
 		if (!board) return null;
-		return await this.dbClient.room.update({ where: { id }, data: dto });
+		const updateFields = Object.fromEntries(
+			Object.entries(dto).filter(([_, v]) => v !== undefined),
+		);
+
+		return await this.dbClient.room.update({ where: { id }, data: updateFields });
 	}
 
 	public async delete(id: string): Promise<Room | null> {

@@ -1,3 +1,4 @@
+import type { UpdateRoomDTOType } from '../../../shared/room/dto/update-room.dto.js';
 import type { ServerRoom } from './server-room.js';
 
 export class RoomRegistry {
@@ -18,12 +19,13 @@ export class RoomRegistry {
 		return this.roomMap.get(roomId);
 	}
 
-	public update(roomId: string, name: string, protectedMode: boolean): void {
-		// TODO: some kind of shared update room dto
+	public update(roomId: string, dto: UpdateRoomDTOType): void {
 		const room = this.get(roomId);
 		if (!room) return;
-		room.setName(name);
-		room.setProtection(protectedMode);
+
+		if (dto.name !== undefined) room.setName(dto.name);
+
+		console.log(`Update finished! Now room protection mode is set to ${room.isProtected()}`);
 	}
 
 	public remove(roomId: string) {

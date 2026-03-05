@@ -10,9 +10,8 @@ export class RoomCommandHandler {
 
 	private async updateRoomData(command: UpdateRoomCommand): Promise<void> {
 		const { payload } = command;
-
-		if (!payload.name) return;
-		this.roomService.update(payload.roomId, payload.name);
+		const { roomId, ...dto } = payload;
+		this.roomService.update(roomId, dto); // TODO: SHARED ROOM UPDATE DTO TYPE AND ALL DTOS ARE SHARED
 	}
 
 	public register(commandBus: CommandBus) {

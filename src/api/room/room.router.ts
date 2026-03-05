@@ -2,9 +2,10 @@ import { APIBaseRouter } from '../common/base.router.js';
 import { validateDTO } from '../common/middleware/validate-dto.middleware.js';
 import { validateUUIDParam } from '../common/middleware/validate-uuid-param.middleware.js';
 import type { APIRoomController } from './room.controller.js';
-import { CreateRoomDTO, type CreateRoomDTOType } from './dtos/create-room.dto.js';
 import { checkRoomExists } from './middleware/check-room-exists.middleware.js';
 import { safeValidateAndSetAccessToken } from '../auth/middleware/safe-validate-and-set-access-token.middleware.js';
+import { CreateRoomDTO } from '../../../shared/room/dto/create-room.dto.js';
+import { UpdateRoomDTO } from '../../../shared/room/dto/update-room.dto.js';
 
 export class APIRoomRouter extends APIBaseRouter {
 	constructor(protected controller: APIRoomController) {
@@ -22,7 +23,7 @@ export class APIRoomRouter extends APIBaseRouter {
 		);
 		this.router.patch(
 			'/:param',
-			validateDTO(CreateRoomDTO),
+			validateDTO(UpdateRoomDTO),
 			validateUUIDParam,
 			checkRoomExists(this.controller.roomService),
 			this.controller.patch.bind(this.controller),

@@ -1,9 +1,10 @@
 import type { APIRoomRepository } from './room.repo.js';
-import type { CreateRoomDTOType } from './dtos/create-room.dto.js';
 import type { APIBoardRepository } from '../board/board.repo.js';
 import type { CommandBus } from '../../command-bus/command-bus.js';
 import { RenderBlankCommand } from '../../command-bus/commands/renderer/render-blank.command.js';
 import { UpdateRoomCommand } from '../../command-bus/commands/room/update-room.command.js';
+import type { CreateRoomDTOType } from '../../../shared/room/dto/create-room.dto.js';
+import type { UpdateRoomDTOType } from '../../../shared/room/dto/update-room.dto.js';
 
 export class APIRoomService {
 	constructor(
@@ -20,7 +21,9 @@ export class APIRoomService {
 	}
 
 	public async create(dto: CreateRoomDTOType, userId: string | undefined) {
-		if (userId === undefined && dto.public === true) dto.public = false; // TODO: make this shitty code more elegant
+		if (userId === undefined && dto.public === true) {
+			return null;
+		}
 
 		// query command bus to get blank thumbnail from app renderer service
 		const thumbnailPngBytes = (await this.commandBus.execute(
@@ -38,15 +41,14 @@ export class APIRoomService {
 		});
 	}
 
-	public async update(id: string, dto: CreateRoomDTOType) {
+	public async update(id: string, dto: UpdateRoomDTOType) {
 		// Author only | admin
 		const board = await this.roomRepo.update(id, dto);
-		console.log('Command execution');
 		this.commandBus.execute(
 			new UpdateRoomCommand({
 				roomId: id,
 				name: dto.name,
-				isPublic: dto.public,
+				protectedMode: dto.protectedMode,
 			}),
 		);
 		if (board === null) throw new Error('Board not found');

@@ -5,6 +5,7 @@ import type { RoomRepository } from './room.repository.js';
 import type { RoomSchedulerService } from './room-scheduler.service.js';
 import type { ClientData } from '../../../shared/client-data/client-data.js';
 import type { ServerRoom } from './server-room.js';
+import type { UpdateRoomDTOType } from '../../../shared/room/dto/update-room.dto.js';
 
 export class ApplicationRoomService extends BaseService {
 	constructor(
@@ -79,8 +80,8 @@ export class ApplicationRoomService extends BaseService {
 		this.appContext.roomRegistry.remove(roomId);
 	}
 
-	public update(roomId: string, name: string, protectedMode: boolean) {
-		console.log('Updating room ', name);
-		this.appContext.roomRegistry.update(roomId, name, protectedMode);
+	public update(roomId: string, dto: UpdateRoomDTOType) {
+		console.log('Updating room ', roomId);
+		this.appContext.roomRegistry.update(roomId, dto);
 	}
 }
