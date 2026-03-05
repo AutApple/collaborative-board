@@ -3,7 +3,10 @@ import { z } from 'zod';
 export const RegisterDTO = z
 	.object({
 		email: z.email({ error: 'Invalid email' }),
-		username: z.string().max(20, { message: "Username can't exceed 20 characters" }),
+		username: z
+			.string()
+			.max(20, { message: "Username can't exceed 20 characters" })
+			.regex(/^[A-Za-z0-9_]+$/, 'Username can only contain letters, numbers, and underscores'),
 		password: z
 			.string()
 			.min(8, { message: 'Password must be at least 8 characters' })
