@@ -7,12 +7,14 @@ import type { OutputRoomDTOType } from '../../../shared/room/dto/output-room.dto
 import type { CreateRoomDTOType } from '../../../shared/room/dto/create-room.dto.js';
 import type { UpdateRoomDTOType } from '../../../shared/room/dto/update-room.dto.js';
 import type { UpdateRoomEditorsDTOType } from './dto/update-editors.dto.js';
+import type { RoomResponseLocals } from './middleware/check-room-exists.middleware.js';
+import type { AccessTokenResponseLocals } from '../auth/middleware/validate-and-set-access-token.middleware.js';
 
 export class APIRoomController {
 	constructor(public readonly roomService: APIRoomService) {}
 	private outputRoomDtoFromModel(room: Room): OutputRoomDTOType {
 		return {
-			createdAt: room.createdAt,
+			createdAt: room.createdAt.toDateString(),
 			id: room.id,
 			name: room.name,
 			pngBase64: Buffer.from(room.thumbnailPngBytes).toString('base64'),
@@ -37,7 +39,7 @@ export class APIRoomController {
 		const dto = res.locals.dto;
 		const createdRoom = await this.roomService.create(dto, res.locals.jwtPayload?.userId);
 		if (!createdRoom) {
-			res.status(401).json({ message: 'Bad request' });
+			res.status(400).json({ message: 'Bad request' });
 			return;
 		}
 
@@ -46,9 +48,9 @@ export class APIRoomController {
 
 	public async patch(
 		req: Request<{ param: string }>,
-		res: Response<any, DtoResponseLocals<UpdateRoomDTOType>>, // TODO: make updateRoomDtoType
+		res: Response<any, DtoResponseLocals<UpdateRoomDTOType>>,
 	): Promise<void> {
-		// TODO: make UpdateBoardDTOType when board dto grows
+		// TODO: use res.locals.room in services
 		const dto = res.locals.dto;
 		const id = req.params['param'];
 		const room = await this.roomService.update(id, dto);
@@ -59,6 +61,7 @@ export class APIRoomController {
 		req: Request<{ param: string }>,
 		res: Response<any, DtoResponseLocals<UpdateRoomEditorsDTOType>>,
 	) {
+		// TODO: pass actual .room local for every service call
 		const room = await this.roomService.updateEditors(req.params.param, res.locals.dto);
 		res.status(200).json(this.outputRoomDtoFromModel(room));
 	}
