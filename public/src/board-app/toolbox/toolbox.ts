@@ -10,7 +10,7 @@ import type { ToolResult } from './tool-result.js';
 import { EyedropperTool } from './tools/eyedropper.tool.js';
 import { RectangleTool } from './tools/rectangle.tool.js';
 import { OvalTool } from './tools/oval.tool.js';
-import { clientConfiguration } from '../config/client.config.js';
+import { clientConfiguration } from '../../config/client.config.js';
 
 export class Toolbox {
 	private currentTool: BaseTool | undefined;

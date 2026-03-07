@@ -1,5 +1,5 @@
-import type { StrokeData } from '../../../../shared/board-elements/types/stroke-data.type.js';
-import { Tools } from '../toolbox/enums/tools.enum.js';
+import type { StrokeData } from '../../../shared/board-elements/types/stroke-data.type.js';
+import { Tools } from '../board-app/toolbox/enums/tools.enum.js';
 
 export interface ClientConfiguration {
 	defaultStrokeData: StrokeData;

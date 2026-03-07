@@ -1,6 +1,6 @@
 import { Vec2 } from '../../../../shared/utils/vec2.utils.js';
 import type { AppContext } from '../app-context.js';
-import { clientConfiguration } from '../config/client.config.js';
+import { clientConfiguration } from '../../config/client.config.js';
 import type { EventBus } from '../event-bus/event-bus.js';
 import {
 	SemanticEvents,

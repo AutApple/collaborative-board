@@ -9,7 +9,7 @@ import {
 } from '@shared/board/board-mutation.js';
 import type { StrokeData } from '@shared/board-elements/types/stroke-data.type.js';
 import { ToolResult } from '../tool-result.js';
-import { clientConfiguration } from '../../config/client.config.js';
+import { clientConfiguration } from '../../../config/client.config.js';
 
 export class StrokeTool extends BaseTool {
 	constructor(readonly board: ReadonlyBoard) {

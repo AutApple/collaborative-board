@@ -6,7 +6,7 @@ import type { Board, ReadonlyBoard } from '../../../../../shared/board/board.js'
 import { StrokeBoardElement } from '../../../../../shared/board-elements/stroke.board-element.js';
 import type { StrokeData } from '../../../../../shared/board-elements/types/stroke-data.type.js';
 import { Vec2 } from '../../../../../shared/utils/vec2.utils.js';
-import { clientConfiguration } from '../../config/client.config.js';
+import { clientConfiguration } from '../../../config/client.config.js';
 import { ToolResult } from '../tool-result.js';
 import { BaseTool } from './base.tool.js';
 import { OvalBoardElement } from '../../../../../shared/board-elements/oval.board-element.js';

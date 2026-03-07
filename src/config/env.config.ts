@@ -8,7 +8,7 @@ if (process.env.NODE_ENV !== 'PROD') {
 
 const envSchema = z.object({
 	NODE_ENV: z.enum(['DEV', 'PROD']),
-	APP_PORT: z.coerce.number().default(3000),
+	APP_PORT: z.coerce.number().default(80),
 	DATABASE_URL: z.string(),
 	JWT_ACCESS_EXPIRATION_SECONDS: z.coerce.number(),
 	JWT_REFRESH_EXPIRATION_DAYS: z.coerce.number(),

@@ -1,4 +1,4 @@
-import { clientConfiguration } from '../config/client.config.js';
+import { clientConfiguration } from '../../config/client.config.js';
 import { SemanticEvents, type EventBus, type SemanticEventMap } from '../event-bus/index.js';
 import { Tools } from './enums/tools.enum.js';
 

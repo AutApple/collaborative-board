@@ -3,7 +3,7 @@ import { BoardHistory } from './board-history/board-history.js';
 import { Camera } from '../../../shared/camera/camera.js';
 import { ClientRenderer } from './renderer/renderer.js';
 import { Toolbox } from './toolbox/toolbox.js';
-import { clientConfiguration } from './config/client.config.js';
+import { clientConfiguration } from '../config/client.config.js';
 import { Notyf } from 'notyf';
 import { ClientRoom } from '../room/client-room.js';
 

@@ -11,23 +11,23 @@ import { env } from 'src/config/env.config.js';
 import cookieParser from 'cookie-parser';
 import { CommandBus } from './command-bus/command-bus.js';
 
-const publicApp = express();
+const app = express();
 
-const httpServer = createServer(publicApp);
+const httpServer = createServer(app);
 
 const commandBus = new CommandBus();
 
 const boardApp = new BoardServer(httpServer, commandBus);
 
-publicApp.use(express.json());
-publicApp.use(cookieParser());
-createAndMapApiModules(publicApp, commandBus);
+app.use(express.json());
+app.use(cookieParser());
+createAndMapApiModules(app, commandBus);
 
 
 boardApp.run();
-publicApp.use(express.static(path.join(__rootdir, 'public-dist')));
-initPageRoutes(publicApp);
+app.use(express.static(path.join(__rootdir, 'public-dist')));
+initPageRoutes(app);
 
-httpServer.listen(env.APP_PORT || 3000, () => {
-	console.log(`Server running on port ${env.APP_PORT || 3000}`);
+httpServer.listen(env.APP_PORT || 80, '0.0.0.0', () => {
+	console.log(`Server running on port ${env.APP_PORT || 80}`);
 });
