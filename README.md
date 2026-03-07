@@ -2,7 +2,7 @@
 
 > A multiplayer whiteboard with public room sharing and real-time collaboration 
 
-![demo](./assets/demo.gif)
+![demo](./assets/preview.gif)
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)
