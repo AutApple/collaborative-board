@@ -33,7 +33,12 @@ export class APIRoomRepository {
 
 		return await this.dbClient.room.update({ where: { id }, data: updateFields });
 	}
-
+	public async getEditors(roomId: string) {
+		return await this.dbClient.room.findUnique({
+			where: {id: roomId},
+			select: 
+			{editors: {select: {username: true, id: true, email: true}}}});
+	}
 	public async updateEditorIds(roomId: string, addIds: string[], removeIds: string[]) {
 		return await this.dbClient.room.update({
 			where: { id: roomId },

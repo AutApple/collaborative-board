@@ -8,12 +8,12 @@ import { Notyf } from 'notyf';
 import { ClientRoom } from '../room/client-room.js';
 
 export class AppContext {
-	public renderer: ClientRenderer;
-	public camera: Camera;
-	public toolbox: Toolbox;
-	public boardHistory: BoardHistory;
-	public room: ClientRoom;
-	public notyf: Notyf;
+	public readonly renderer: ClientRenderer;
+	public readonly camera: Camera;
+	public readonly toolbox: Toolbox;
+	public readonly boardHistory: BoardHistory;
+	public readonly room: ClientRoom;
+	public readonly notyf: Notyf;
 
 	constructor(canvas: HTMLCanvasElement) {
 		this.notyf = new Notyf({
@@ -22,7 +22,7 @@ export class AppContext {
 				y: 'top',
 			},
 		});
-
+		
 		this.room = new ClientRoom();
 
 		this.renderer = new ClientRenderer(

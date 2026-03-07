@@ -54,5 +54,11 @@ export class APIRoomRouter extends APIBaseRouter {
 			validateDTO(UpdateRoomEditorsDTO),
 			this.controller.updateEditors.bind(this.controller),
 		);
+		this.router.get(
+			'/:param/editors',
+			validateUUIDParam,
+			checkRoomExists(this.controller.roomService),
+			this.controller.retrieveEditors.bind(this.controller)
+		);
 	}
 }

@@ -78,6 +78,7 @@ export class NetworkController {
 		boardId: string,
 		raw: AnyRawBoardElement[],
 		clientDataList: ClientData[],
+		isRoomOwner: boolean
 	) {
 		// Initialize room
 		this.appContext.room.initialize({
@@ -98,7 +99,10 @@ export class NetworkController {
 			});
 
 		this.bus.emit(SemanticEvents.BoardRefresh, { rawData: raw });
-
+	
+		if (isRoomOwner)
+			this.bus.emit(SemanticEvents.TopPanelRevealRoomSettings, {});
+	
 		this.appContext.renderer.setLayerData(
 			RenderLayerType.DebugStats,
 			this.appContext.room.getDebugStats(),

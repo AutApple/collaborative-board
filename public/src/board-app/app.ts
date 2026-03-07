@@ -17,6 +17,7 @@ import { RendererController } from './renderer/renderer.controller.js';
 import { TopPanelController } from './top-panel/top-panel.controller.js';
 import { TopPanelUiAdapter } from './top-panel/top-panel.ui-adapter.js';
 import authApi from '../api/auth/auth.client-api.js';
+
 export class BoardClient {
 	constructor(private document: Document) {}
 

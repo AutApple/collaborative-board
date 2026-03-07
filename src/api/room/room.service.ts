@@ -55,8 +55,14 @@ export class APIRoomService {
 				protectedMode: dto.protectedMode,
 			}),
 		);
-		if (room === null) throw new Error('Board not found');
+		if (room === null) throw new Error('Room not found');
 		return room;
+	}
+
+	public async getEditors(id: string): Promise<string[]> {
+		const room = await this.roomRepo.getEditors(id);
+		if (!room) throw new Error('Room not found');
+		return room.editors.map(e => e.username);
 	}
 
 	public async updateEditors(id: string, dto: UpdateRoomEditorsDTOType) {

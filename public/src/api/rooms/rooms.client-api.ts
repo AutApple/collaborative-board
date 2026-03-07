@@ -1,5 +1,6 @@
 import { OutputRoomDTO, type OutputRoomDTOType } from '@shared/room/dto/output-room.dto.js';
 import { type CreateRoomDTOType } from '@shared/room/dto/create-room.dto.js';
+import { type UpdateRoomDTOType } from '@shared/room/dto/update-room.dto.js';
 
 function parseData(data: unknown): OutputRoomDTOType {
 	const parsed = OutputRoomDTO.safeParse(data);
@@ -36,6 +37,16 @@ class ClientRoomsAPI {
 		return data.map((room) => parseData(room));
 	}
 
+	async updateRoom(roomId: string, dto: UpdateRoomDTOType, accessToken: string) {
+		const response = await fetch(`${this.url}/${roomId}`, {
+			method: 'PATCH',
+			headers: this.buildHeaders(accessToken),
+			body: JSON.stringify(dto),
+		});	
+		const data = await this.parseResponse(response);
+		const output = parseData(data);
+		return output;
+	}
 	async addRoom(dto: CreateRoomDTOType, accessToken?: string): Promise<OutputRoomDTOType> {
 		const response = await fetch(this.url, {
 			method: 'POST',
