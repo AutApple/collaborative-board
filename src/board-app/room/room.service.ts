@@ -82,12 +82,12 @@ export class ApplicationRoomService extends BaseService {
 
 	public addEditor(roomId: string, editorId: string): void {
 		const room = this.appContext.roomRegistry.get(roomId);
-		if (!room) throw new Error('no room with given id');
+		if (!room) return;
 		room.addEditor(editorId);
 	}
 	public removeEditor(roomId: string, editorId: string): void {
 		const room = this.appContext.roomRegistry.get(roomId);
-		if (!room) throw new Error('no room with given id');
+		if (!room) return;
 		room.removeEditor(editorId);
 	}
 

@@ -15,6 +15,43 @@ const protectedOffButton = document.getElementById('board-protected-off-input') 
 
 const boardVisibilityWarning = document.getElementById('board-visibility-warning');
 const boardProtectionWarning = document.getElementById('board-protection-warning');
+const boardEditorsWarning = document.getElementById('board-editors-warning');
+
+let editorUsernames: string[] = [];
+const editorUsernameInput = document.getElementById('new-editor') as HTMLInputElement;
+const addEditorButton = document.getElementById('add-editor') as HTMLButtonElement;
+const editorList = document.getElementById('editor-list') as HTMLUListElement;
+
+function removeUsernameElement(el: HTMLLIElement, span: HTMLSpanElement) {
+	editorUsernames = editorUsernames.filter(e => e !== span.textContent);
+	el.remove();
+}
+
+addEditorButton.addEventListener('click', () => {
+	const username = editorUsernameInput.value; 
+	const li = document.createElement('li');
+	const span = document.createElement('span');
+	const rm = document.createElement('i');
+	rm.classList.add('fa-solid', 'fa-remove');
+	
+	rm.style.color = '#ec5a5a';
+	rm.style.cursor = 'pointer';
+
+	
+	span.textContent = username; 
+	
+	rm.addEventListener('click', () => {
+		removeUsernameElement(li, span);
+	});
+	
+	li.appendChild(span);
+	li.appendChild(rm);
+	editorList.appendChild(li);
+	editorUsernames.push(username);
+	editorUsernameInput.value = '';
+});
+
+
 
 async function visibilityButtonsInit(): Promise<void> {
 	const accessToken = await authApi.getAccessToken();
@@ -24,9 +61,15 @@ async function visibilityButtonsInit(): Promise<void> {
 	publicOffButton.disabled = false;
 	protectedOffButton.disabled = false;
 	protectedOnButton.disabled = false;
+	
+	editorUsernameInput.disabled = false;
+	addEditorButton.disabled = false;
 
 	boardVisibilityWarning!.textContent = '';
 	boardProtectionWarning!.textContent = '';
+	boardEditorsWarning!.textContent = '';
+
+	
 }
 
 if (!publicOnButton || !publicOffButton || !boardVisibilityWarning)
@@ -49,7 +92,7 @@ createButton.addEventListener('click', async () => {
 	createInputErrorBox.classList.add('invisible');
 	try {
 		const accessToken = await authApi.getAccessToken();
-		const newBoard = await clientRoomsApi.addRoom(
+		const newRoom = await clientRoomsApi.addRoom(
 			{
 				name: boardName,
 				public: publicOnButton.checked,
@@ -58,7 +101,11 @@ createButton.addEventListener('click', async () => {
 
 			accessToken ?? undefined,
 		);
-		window.location.href = `/board?id=${newBoard.id}`;
+
+		if (accessToken !== null && editorUsernames.length !== 0) 
+			await clientRoomsApi.manageEditors(editorUsernames, [], newRoom.id, accessToken);
+		
+		window.location.href = `/board?id=${newRoom.id}`;
 	} catch (err: any) {
 		createInputErrorBox.classList.remove('invisible');
 		createInputErrorBoxText.textContent = err.message ?? 'Unexpected error';

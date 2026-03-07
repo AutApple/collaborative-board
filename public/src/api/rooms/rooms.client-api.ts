@@ -51,6 +51,23 @@ class ClientRoomsAPI {
 		const output = parseData(data);
 		return output;
 	}
+
+	async manageEditors(
+		usersToAdd: string[],
+		usersToRemove: string[],
+		roomId: string,
+		accessToken: string,
+	): Promise<void> {
+		const response = await fetch(`${this.url}/${roomId}/editors`, {
+			method: 'PATCH',
+			headers: this.buildHeaders(accessToken),
+			body: JSON.stringify({
+				add: usersToAdd,
+				remove: usersToRemove,
+			}),
+		});
+		if (!response.ok) throw new Error('error on managing editors');
+	}
 }
 
 const clientRoomsApi = new ClientRoomsAPI('/api/rooms');
