@@ -27,7 +27,7 @@ export const validateAndSetAccessToken = async (
 	try {
 		jwtPayload = jwt.verify(accessToken, env.JWT_ACCESS_SECRET) as AccessTokenPayload;
 	} catch (err: any) {
-		return res.status(401).json({ message: 'Invalid credentials ' });
+		return res.status(401).json({ message: 'Invalid credentials' });
 	}
 
 	if (jwtPayload === undefined) return res.status(401).json({ message: 'Invalid credentials' });
