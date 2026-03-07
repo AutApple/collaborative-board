@@ -1,48 +1,55 @@
-export interface ClientAPIRoom {
-	id: string;
-	name: string;
-	createdAt: Date;
-	pngBase64: string;
+import { OutputRoomDTO, type OutputRoomDTOType } from '@shared/room/dto/output-room.dto.js';
+import { type CreateRoomDTOType } from '@shared/room/dto/create-room.dto.js';
+
+function parseData(data: unknown): OutputRoomDTOType {
+	const parsed = OutputRoomDTO.safeParse(data);
+
+	if (!parsed.success) throw new Error(`Invalid room object ${parsed.error}`);
+	return parsed.data;
 }
+
 class ClientRoomsAPI {
-	constructor(private url: string) {}
-	async getPublicRooms(): Promise<Array<ClientAPIRoom>> {
-		const response = await fetch(this.url);
-		if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-		const boards = await response.json();
+	constructor(private readonly url: string) {}
 
-		for (const board of boards) // TODO: validate against OutputRoomDto
-			if (!board.name || !board.createdAt || !board.id)
-				throw new Error(
-					`Didn\'t retrieve proper board object on GET boards. Got instead: ${board}`,
-				);
-
-		return boards;
+	private buildHeaders(accessToken?: string): HeadersInit {
+		const headers: Record<string, string> = {
+			'Content-Type': 'application/json',
+		};
+		if (accessToken) headers['Authorization'] = `Bearer ${accessToken}`;
+		return headers;
 	}
 
-	async addRoom(
-		name: string,
-		isPublic: boolean,
-		accessToken?: string | undefined,
-	): Promise<ClientAPIRoom> {
+	private async parseResponse(response: Response): Promise<unknown> {
+		if (!response.ok) {
+			const message = await response.text();
+			throw new Error(message || `HTTP error! status: ${response.status}`);
+		}
+		return response.json();
+	}
+
+	async getPublicRooms(): Promise<OutputRoomDTOType[]> {
+		const response = await fetch(this.url);
+		const data = await this.parseResponse(response);
+
+		if (!Array.isArray(data)) throw new Error('Expected an array of rooms');
+
+		return data.map((room) => parseData(room));
+	}
+
+	async addRoom(dto: CreateRoomDTOType, accessToken?: string): Promise<OutputRoomDTOType> {
 		const response = await fetch(this.url, {
 			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${accessToken}`,
-			},
-			body: JSON.stringify({ name: name.trim(), public: isPublic, protectedMode: false }), // TODO: validate against CreateRoomDTO
+			headers: this.buildHeaders(accessToken),
+			body: JSON.stringify({
+				name: dto.name.trim(),
+				public: dto.public,
+				protectedMode: dto.protectedMode,
+			}),
 		});
 
-		if (!response.ok) {
-			const error = await response.text();
-			throw new Error(error || 'Failed to create room');
-		}
-
-		const data = await response.json();
-		if (!data.name || !data.createdAt || !data.id)
-			throw new Error(`Didn\'t retrieve proper board object on POST boards. Got instead: ${data}`);
-		return data;
+		const data = await this.parseResponse(response);
+		const output = parseData(data);
+		return output;
 	}
 }
 

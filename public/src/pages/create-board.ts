@@ -7,22 +7,29 @@ const createInput = document.getElementById('board-name-input') as HTMLInputElem
 const createInputErrorBox = document.getElementById('board-name-input-errors');
 const createInputErrorBoxText = document.getElementById('board-name-input-error-content');
 
-const publicVisibilityButton = document.getElementById('board-public-input') as HTMLInputElement;
-const privateVisibilityButton = document.getElementById('board-private-input') as HTMLInputElement;
+const publicOnButton = document.getElementById('board-public-input') as HTMLInputElement;
+const publicOffButton = document.getElementById('board-private-input') as HTMLInputElement;
+
+const protectedOnButton = document.getElementById('board-protected-on-input') as HTMLInputElement;
+const protectedOffButton = document.getElementById('board-protected-off-input') as HTMLInputElement;
 
 const boardVisibilityWarning = document.getElementById('board-visibility-warning');
+const boardProtectionWarning = document.getElementById('board-protection-warning');
 
 async function visibilityButtonsInit(): Promise<void> {
 	const accessToken = await authApi.getAccessToken();
 	if (!accessToken) return;
 
-	publicVisibilityButton.disabled = false;
-	privateVisibilityButton.disabled = false;
+	publicOnButton.disabled = false;
+	publicOffButton.disabled = false;
+	protectedOffButton.disabled = false;
+	protectedOnButton.disabled = false;
 
 	boardVisibilityWarning!.textContent = '';
+	boardProtectionWarning!.textContent = '';
 }
-console.log(publicVisibilityButton, privateVisibilityButton, boardVisibilityWarning);
-if (!publicVisibilityButton || !privateVisibilityButton || !boardVisibilityWarning)
+
+if (!publicOnButton || !publicOffButton || !boardVisibilityWarning)
 	throw new Error('Undefined element');
 
 visibilityButtonsInit();
@@ -43,8 +50,12 @@ createButton.addEventListener('click', async () => {
 	try {
 		const accessToken = await authApi.getAccessToken();
 		const newBoard = await clientRoomsApi.addRoom(
-			boardName,
-			publicVisibilityButton.checked,
+			{
+				name: boardName,
+				public: publicOnButton.checked,
+				protectedMode: protectedOnButton.checked,
+			},
+
 			accessToken ?? undefined,
 		);
 		window.location.href = `/board?id=${newBoard.id}`;

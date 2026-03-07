@@ -53,6 +53,33 @@
 					>Sign up in order to create public boards</span
 				>
 			</div>
+			<div style="display: flex; align-items: center; gap: 1rem">
+				<b>Board protection:</b>
+				<input id="board-protected-on-input" name="board-protection" type="radio" disabled />
+				<label for="board-protected-on-input" style="white-space: nowrap"> On </label>
+				<input
+					id="board-protected-off-input"
+					name="board-protection"
+					type="radio"
+					checked
+					disabled
+				/>
+				<label for="board-protected-off-input" style="white-space: nowrap"> Off </label>
+				<span id="board-protection-warning" style="color: red"
+					>Sign up in order to create protected boards</span
+				>
+			</div>
+			<!-- <div style="display: flex; flex-direction: column; justify-content: center; gap: 1rem">
+				<b>Editor list:</b>
+				<ul id="editorList"></ul>
+				<div style="display: flex; flex-direction: row">
+					<input id="newItem" placeholder="Enter username" disabled />
+					<button id="addBtn" disabled>Add</button>
+				</div>
+				<span id="board-editors-warning" style="color: red"
+					>Sign up in order to manage editors</span
+				>
+			</div> -->
 			<button id="board-create-input">Create board</button>
 		</div>
 		<script type="module" src="src/pages/create-board.js"></script>

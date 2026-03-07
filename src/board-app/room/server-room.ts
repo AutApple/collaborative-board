@@ -70,7 +70,6 @@ export class ServerRoom extends BaseRoom {
 	public addEditor(id: string): void {
 		this.ensureInitializedServer();
 		if (!this.roomState.editorIds.find((editorId) => editorId === id))
-			// prevent duplicates
 			this.roomState.editorIds.push(id);
 	}
 
