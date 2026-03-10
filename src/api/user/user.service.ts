@@ -6,6 +6,8 @@ import bcrypt from 'bcrypt';
 export class APIUserService {
 	constructor(private userRepo: APIUserRepository) {}
 
+
+
 	public async getUser(email: string): Promise<User | null> {
 		const user = await this.userRepo.find(email);
 		return user;
