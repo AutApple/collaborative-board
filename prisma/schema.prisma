@@ -64,7 +64,10 @@ model User {
   createdAt      DateTime @default(now())
 
   createdRooms Room[] @relation("RoomAuthor") // TODO: make this part of one join table with different roles assigned
-  editableRooms Room[] @relation("RoomEditor") 
+  editableRooms Room[] @relation("RoomEditor")
+
+  isAdmin Boolean @default(false)
+  isBanned Boolean @default(false) 
 }
 
 // use refresh token as seperate model for future multi-device support
