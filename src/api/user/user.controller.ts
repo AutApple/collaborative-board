@@ -8,4 +8,10 @@ export class APIUserController {
 		if (!user) res.status(404).json({ message: 'user not found' });
 		res.status(200).json(user);
 	}
+
+	public async findByEmail(req: Request<{ param: string }>, res: Response) {
+		const user = await this.userService.getUser(req.params.param);
+		if (!user) res.status(404).json({ message: 'user not found' });
+		res.status(200).json(user);
+	}
 }

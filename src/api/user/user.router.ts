@@ -1,3 +1,4 @@
+import { checkAdmin } from '../auth/middleware/check-admin.middleware.js';
 import { validateAndSetAccessToken } from '../auth/middleware/validate-and-set-access-token.middleware.js';
 import { APIBaseRouter } from '../common/base.router.js';
 import type { APIUserController } from './user.controller.js';
@@ -10,5 +11,6 @@ export class APIUserRouter extends APIBaseRouter {
 
 	private bindRoutes() {
 		this.router.get('/me', validateAndSetAccessToken, this.controller.me.bind(this.controller));
+		this.router.get('/:param', checkAdmin(this.controller.userService), this.controller.findByEmail.bind(this.controller));
 	}
 }
