@@ -23,7 +23,6 @@ app.use(express.json());
 app.use(cookieParser());
 createAndMapApiModules(app, commandBus);
 
-
 boardApp.run();
 app.use(express.static(path.join(__rootdir, 'public-dist')));
 initPageRoutes(app);

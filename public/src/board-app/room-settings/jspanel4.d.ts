@@ -1,4 +1,4 @@
 declare module 'jspanel4' {
-    const jsPanel: any;
-    export { jsPanel };
+	const jsPanel: any;
+	export { jsPanel };
 }

@@ -65,16 +65,12 @@ export class APIRoomController {
 		const room = await this.roomService.updateEditors(req.params.param, res.locals.dto);
 		res.status(200).json(this.outputRoomDtoFromModel(room));
 	}
-	public async retrieveEditors(
-		req: Request<{param: string}>,
-		res: Response
-	) {
+	public async retrieveEditors(req: Request<{ param: string }>, res: Response) {
 		const editors = await this.roomService.getEditors(req.params.param);
 		res.status(200).json({
-			editors
+			editors,
 		});
 	}
-
 
 	public put(_: Request, res: Response): void {
 		res.status(405).json({ message: 'PUT method not supported. Use PATCH instead.' });

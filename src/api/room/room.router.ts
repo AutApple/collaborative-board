@@ -58,7 +58,7 @@ export class APIRoomRouter extends APIBaseRouter {
 			'/:param/editors',
 			validateUUIDParam,
 			checkRoomExists(this.controller.roomService),
-			this.controller.retrieveEditors.bind(this.controller)
+			this.controller.retrieveEditors.bind(this.controller),
 		);
 	}
 }

@@ -23,35 +23,32 @@ const addEditorButton = document.getElementById('add-editor') as HTMLButtonEleme
 const editorList = document.getElementById('editor-list') as HTMLUListElement;
 
 function removeUsernameElement(el: HTMLLIElement, span: HTMLSpanElement) {
-	editorUsernames = editorUsernames.filter(e => e !== span.textContent);
+	editorUsernames = editorUsernames.filter((e) => e !== span.textContent);
 	el.remove();
 }
 
 addEditorButton.addEventListener('click', () => {
-	const username = editorUsernameInput.value; 
+	const username = editorUsernameInput.value;
 	const li = document.createElement('li');
 	const span = document.createElement('span');
 	const rm = document.createElement('i');
 	rm.classList.add('fa-solid', 'fa-remove');
-	
+
 	rm.style.color = '#ec5a5a';
 	rm.style.cursor = 'pointer';
 
-	
-	span.textContent = username; 
-	
+	span.textContent = username;
+
 	rm.addEventListener('click', () => {
 		removeUsernameElement(li, span);
 	});
-	
+
 	li.appendChild(span);
 	li.appendChild(rm);
 	editorList.appendChild(li);
 	editorUsernames.push(username);
 	editorUsernameInput.value = '';
 });
-
-
 
 async function visibilityButtonsInit(): Promise<void> {
 	const accessToken = await authApi.getAccessToken();
@@ -61,15 +58,13 @@ async function visibilityButtonsInit(): Promise<void> {
 	publicOffButton.disabled = false;
 	protectedOffButton.disabled = false;
 	protectedOnButton.disabled = false;
-	
+
 	editorUsernameInput.disabled = false;
 	addEditorButton.disabled = false;
 
 	boardVisibilityWarning!.textContent = '';
 	boardProtectionWarning!.textContent = '';
 	boardEditorsWarning!.textContent = '';
-
-	
 }
 
 if (!publicOnButton || !publicOffButton || !boardVisibilityWarning)
@@ -102,9 +97,9 @@ createButton.addEventListener('click', async () => {
 			accessToken ?? undefined,
 		);
 
-		if (accessToken !== null && editorUsernames.length !== 0) 
+		if (accessToken !== null && editorUsernames.length !== 0)
 			await clientRoomsApi.manageEditors(editorUsernames, [], newRoom.id, accessToken);
-		
+
 		window.location.href = `/board?id=${newRoom.id}`;
 	} catch (err: any) {
 		createInputErrorBox.classList.remove('invisible');

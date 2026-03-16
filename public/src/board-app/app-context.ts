@@ -22,7 +22,7 @@ export class AppContext {
 				y: 'top',
 			},
 		});
-		
+
 		this.room = new ClientRoom();
 
 		this.renderer = new ClientRenderer(

@@ -36,7 +36,7 @@ export enum SemanticEvents {
 	TopPanelExportBoard,
 	TopPanelCopyLink,
 	TopPanelOpenRoomSettings,
-	TopPanelRevealRoomSettings
+	TopPanelRevealRoomSettings,
 }
 
 export type ToolStartUsingEvent = { screenCoords: Vec2 };
@@ -75,7 +75,6 @@ export type TopPanelOpenRoomSettingsEvent = {};
 
 export type TopPanelRevealRoomSettingsEvent = {};
 
-
 export type SemanticEventMap = {
 	// board
 	[SemanticEvents.ToolStartUsing]: ToolStartUsingEvent;
@@ -108,6 +107,6 @@ export type SemanticEventMap = {
 	[SemanticEvents.TopPanelCopyLink]: TopPanelCopyLinkEvent;
 	[SemanticEvents.TopPanelExportBoard]: TopPanelExportBoardEvent;
 	[SemanticEvents.TopPanelOpenRoomSettings]: TopPanelOpenRoomSettingsEvent;
-	
+
 	[SemanticEvents.TopPanelRevealRoomSettings]: TopPanelRevealRoomSettingsEvent;
 };

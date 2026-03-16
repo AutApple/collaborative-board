@@ -32,7 +32,7 @@ export class TopPanelController {
 		this.appContext.notyf.success('Successfully copied link to the clipboard!');
 	}
 	onTopPanelOpenRoomSettings(_: TopPanelOpenRoomSettingsEvent) {
-		try{
+		try {
 			this.uiAdapter.showSettingsWindow(this.appContext.room.getId(), this.appContext.notyf);
 		} catch (err: any) {
 			if (err instanceof Error) {

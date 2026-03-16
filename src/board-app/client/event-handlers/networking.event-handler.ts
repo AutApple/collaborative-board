@@ -56,7 +56,7 @@ export class NetworkingEventHandler extends BaseEventHandler {
 			new Cursor(Vec2.fromXY(cursorWorldCoords)),
 		);
 		await this.roomService.registerClient(roomId, clientData);
-		
+
 		socket.emit(
 			ServerBoardEvents.Handshake,
 			roomId,
@@ -64,14 +64,12 @@ export class NetworkingEventHandler extends BaseEventHandler {
 			board.getId()!,
 			board.getElements().map((e) => e.toRaw()),
 			clients,
-			room.getOwnerId() === client.getClientIdentity()?.userId
+			room.getOwnerId() === client.getClientIdentity()?.userId,
 		);
 
 		socket.to(roomId).emit(ServerBoardEvents.ClientConnected, clientData);
 
 		client.markHandshakePass();
-
-	
 	}
 
 	public async onDisconnect(client: Client) {

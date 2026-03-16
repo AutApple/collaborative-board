@@ -42,7 +42,7 @@ class ClientRoomsAPI {
 			method: 'PATCH',
 			headers: this.buildHeaders(accessToken),
 			body: JSON.stringify(dto),
-		});	
+		});
 		const data = await this.parseResponse(response);
 		const output = parseData(data);
 		return output;

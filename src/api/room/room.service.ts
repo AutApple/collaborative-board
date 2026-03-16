@@ -62,7 +62,7 @@ export class APIRoomService {
 	public async getEditors(id: string): Promise<string[]> {
 		const room = await this.roomRepo.getEditors(id);
 		if (!room) throw new Error('Room not found');
-		return room.editors.map(e => e.username);
+		return room.editors.map((e) => e.username);
 	}
 
 	public async updateEditors(id: string, dto: UpdateRoomEditorsDTOType) {
