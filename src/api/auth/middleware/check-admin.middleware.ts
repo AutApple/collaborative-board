@@ -9,7 +9,7 @@ export interface AccessTokenResponseLocals {
 	jwtPayload: AccessTokenPayload;
 }
 
-export const checkAdmin = async (userService: APIUserService) => async (
+export const checkAdmin = (userService: APIUserService) => async (
 	req: Request,
 	res: Response,
 	next: NextFunction,
