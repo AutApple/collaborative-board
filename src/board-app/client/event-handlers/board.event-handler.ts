@@ -25,8 +25,14 @@ export class BoardEventHandler extends BaseEventHandler {
 
 		// TODO: encapsulate this code somewhere else
 		const isProtected = room.isProtected();
-		if (isProtected) {
-			const clientIdentity = client.getClientIdentity();
+		const clientIdentity = client.getClientIdentity();
+		// TODO: think about making this shitty if-else sphagetti cleaner
+		if (clientIdentity?.isBanned) {
+			socket.emit(ServerBoardEvents.BoardMutationsRejected, 'Your account has been suspended');
+			return;
+		}
+
+		if (isProtected) {	
 			if (clientIdentity === undefined) {
 				socket.emit(
 					ServerBoardEvents.BoardMutationsRejected,

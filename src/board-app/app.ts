@@ -24,6 +24,8 @@ import type { CommandBus } from '../command-bus/command-bus.js';
 import { RendererCommandHandler } from './renderer/renderer.command-handler.js';
 import { RoomCommandHandler } from './room/room.command-handler.js';
 import { ApplicationAuthService } from './auth/auth.service.js';
+import { UserRepository } from './user/user.repository.js';
+import { ApplicationUserService } from './user/user.service.js';
 
 export class BoardServer {
 	private io: Server<ClientBoardEventPayloads, ServerBoardEventPayloads>;
@@ -51,7 +53,9 @@ export class BoardServer {
 		);
 		const authenticationService = new ApplicationAuthService();
 
-		return [rendererService, roomSchedulerService, roomService, authenticationService];
+		const userService = new ApplicationUserService(this.repositoryContainer.getInstance(UserRepository));
+
+		return [rendererService, roomSchedulerService, roomService, authenticationService, userService];
 	}
 
 	constructor(
@@ -60,7 +64,7 @@ export class BoardServer {
 	) {
 		this.io = new Server<ClientBoardEventPayloads, ServerBoardEventPayloads>(httpServer);
 
-		this.repositoryContainer = new InstanceContainer([new RoomRepository(dbClient)]);
+		this.repositoryContainer = new InstanceContainer([new RoomRepository(dbClient), new UserRepository(dbClient)]);
 
 		this.serviceContainer = new InstanceContainer(this.makeServices());
 	}

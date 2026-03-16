@@ -8,7 +8,7 @@ import type { BaseBoardElement } from '../../../shared/board-elements/index.js';
 import { validate as isUuid } from 'uuid';
 import { ServerRoom } from './server-room.js';
 
-export class RoomRepository extends BaseRepository<ServerRoom> {
+export class RoomRepository extends BaseRepository {
 	private boardModelToInstance(model: BoardModel & { elements?: BoardElementModel[] }): Board {
 		const board = new Board(model.id);
 		if (!model.elements) return board;

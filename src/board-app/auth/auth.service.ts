@@ -4,13 +4,13 @@ import { ClientIdentity } from '../client/client-identity.js';
 
 export class ApplicationAuthService {
 	constructor() {}
-	public authenticate(accessToken: string): ClientIdentity | null {
+	public authenticate(accessToken: string): { userId: string, email: string } | null {
 		try {
 			const user = jwt.verify(accessToken, env.JWT_ACCESS_SECRET) as {
 				userId: string; // extract just user id and email, nothing else is needed for now
 				email: string;
 			};
-			return new ClientIdentity(user.userId, user.email);
+			return user;
 		} catch (err: any) {
 			return null;
 		}

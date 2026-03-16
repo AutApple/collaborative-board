@@ -5,6 +5,7 @@ import { Vec2, type XY } from '../../../../shared/utils/vec2.utils.js';
 import { ApplicationAuthService } from '../../auth/auth.service.js';
 import type { ServiceContainer } from '../../common/instance-container.js';
 import { ApplicationRoomService } from '../../room/room.service.js';
+import { ApplicationUserService } from '../../user/user.service.js';
 import { ClientIdentity } from '../client-identity.js';
 import type { Client } from '../client.js';
 import { BaseEventHandler } from './base.event-handler.js';
@@ -29,9 +30,12 @@ export class NetworkingEventHandler extends BaseEventHandler {
 
 		if (accessToken !== undefined) {
 			const authService = this.serviceContainer.getInstance(ApplicationAuthService);
-			const clientIdentity: ClientIdentity | null = authService.authenticate(accessToken);
+			
+			const credentials = authService.authenticate(accessToken);
+			const clientIdentity: ClientIdentity | null = (credentials === null) ? null : await this.serviceContainer.getInstance(ApplicationUserService).getUser(credentials.email);
 
 			if (clientIdentity !== null) client.setClientIdentity(clientIdentity);
+			
 			console.log(
 				clientIdentity === null
 					? `No client identity for ${client.getClientId()}`

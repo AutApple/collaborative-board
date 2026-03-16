@@ -12,5 +12,5 @@ export class InstanceContainer<B> {
 	}
 }
 
-export type RepositoryContainer = InstanceContainer<BaseRepository<any>>;
+export type RepositoryContainer = InstanceContainer<BaseRepository>;
 export type ServiceContainer = InstanceContainer<BaseService>;

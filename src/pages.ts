@@ -10,10 +10,10 @@ export function initPageRoutes(app: Application) {
 		res.sendFile(path.join(__rootdir, 'public-dist', 'create-board.html'));
 	});
 	app.get('/sign-up', (req, res) => {
-		if (req.cookies.refresh_token) {
-			res.sendFile(path.join(__rootdir, 'public-dist', 'index.html'));
-			return;
-		}
+		// if (req.cookies.refresh_token) {
+		// 	res.sendFile(path.join(__rootdir, 'public-dist', 'index.html'));
+		// 	return;
+		// }
 		// Page only for unauthorized users
 		res.sendFile(path.join(__rootdir, 'public-dist', 'sign-up.html'));
 	});
