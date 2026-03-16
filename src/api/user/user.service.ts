@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 
 export class APIUserService {
 	constructor(private userRepo: APIUserRepository) {}
-	
+
 	public async getUser(email: string): Promise<User | null> {
 		const user = await this.userRepo.find(email);
 		return user;
@@ -29,5 +29,11 @@ export class APIUserService {
 
 	public async create(dto: CreateUserDTOType): Promise<User> {
 		return await this.userRepo.insert(dto);
+	}
+
+	public async ban(email: string): Promise<User | null> {
+		const user = await this.getUserSafe(email);
+		if (!user) return null;
+		return await this.userRepo.update(email, { isBanned: true });
 	}
 }

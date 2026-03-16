@@ -4,6 +4,7 @@ import {
 	type User,
 } from '../../board-app/generated/prisma/client.js';
 import type { CreateUserDTOType } from './dto/create-user.dto.js';
+import type { UpdateUserDTOType } from './dto/update-user.dto.js';
 
 export class APIUserRepository {
 	constructor(private dbClient: PrismaClient) {}
@@ -38,11 +39,16 @@ export class APIUserRepository {
 		return await this.dbClient.user.create({ data: data });
 	}
 
-	public async update(email: string, data: CreateUserDTOType): Promise<User | null> {
+	public async update(email: string, data: UpdateUserDTOType): Promise<User | null> {
 		// TODO: make update dto
 		const user = await this.find(email);
 		if (!user) return null;
-		return await this.dbClient.user.update({ where: { email }, data });
+
+		const updateFields = Object.fromEntries(
+			Object.entries(data).filter(([_, v]) => v !== undefined),
+		);
+
+		return await this.dbClient.user.update({ where: { email }, data: updateFields });
 	}
 
 	public async delete(email: string): Promise<User | null> {

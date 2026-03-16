@@ -11,6 +11,15 @@ export class APIUserRouter extends APIBaseRouter {
 
 	private bindRoutes() {
 		this.router.get('/me', validateAndSetAccessToken, this.controller.me.bind(this.controller));
-		this.router.get('/:param', checkAdmin(this.controller.userService), this.controller.findByEmail.bind(this.controller));
+		this.router.get(
+			'/:param',
+			checkAdmin(this.controller.userService),
+			this.controller.findByEmail.bind(this.controller),
+		);
+		this.router.post(
+			'/:param/ban',
+			checkAdmin(this.controller.userService),
+			this.controller.ban.bind(this.controller),
+		);
 	}
 }
